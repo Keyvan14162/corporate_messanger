@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/chat/chat_methods.dart';
-import 'package:flutter_firebase_auth/helpers/firebase_helper.dart';
+import 'package:flutter_firebase_auth/helpers/firebase_helpers.dart';
 import 'package:flutter_firebase_auth/models/message_model.dart';
 
 class ChatRoom extends StatefulWidget {

@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/widgets/giris/giris_ekrani.dart';
-import 'package:flutter_firebase_auth/widgets/giris/giris_metodlari.dart';
+import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class TelefonNumarasiGiris extends StatefulWidget {
@@ -106,7 +105,7 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
         // firebase'e giris
         await auth.signInWithCredential(credential);
 
-        GirisMetodlari().firebaseUserConfig(auth);
+        firebaseUserConfig(auth);
 
         _showMessage(
             "verificationCompleted tetiklendi ${credential.toString()}");
@@ -140,7 +139,7 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
 
           _showMessage("${auth.currentUser!.phoneNumber} kayit oldu ");
 
-          GirisMetodlari().firebaseUserConfig(auth);
+          firebaseUserConfig(auth);
 
           Navigator.of(context).pushNamed("/anaSayfa");
         } catch (e) {

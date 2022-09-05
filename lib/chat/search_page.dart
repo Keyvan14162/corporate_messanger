@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/models/user_model.dart';
-import 'package:flutter_firebase_auth/helpers/firebase_helper.dart';
+import 'package:flutter_firebase_auth/helpers/firebase_helpers.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({required this.friends, Key? key}) : super(key: key);
@@ -153,27 +152,7 @@ class _SearchPageState extends State<SearchPage> {
                                           return Text("nope");
                                         }
                                       },
-                                    )
-                                    /*
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: widget.friends.contains(userId)
-                                        ? const Icon(
-                                            Icons.check,
-                                            color: Colors.green,
-                                            size: 34,
-                                          )
-                                        : IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                addUserToFriends(userId);
-                                              });
-                                            },
-                                            icon: Icon(Icons.person_add_alt),
-                                          ),
-                                  ),
-                                  */
-                                    ),
+                                    )),
                               ),
                             )
                           : const SizedBox()
@@ -185,14 +164,5 @@ class _SearchPageState extends State<SearchPage> {
         },
       ),
     );
-  }
-
-  addUserToFriends(String addUserId) {
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc("${FirebaseAuth.instance.currentUser!.uid}")
-        .update({
-      "friends": FieldValue.arrayUnion([addUserId])
-    });
   }
 }

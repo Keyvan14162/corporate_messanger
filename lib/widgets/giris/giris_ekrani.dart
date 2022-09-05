@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/widgets/giris/giris_metodlari.dart';
+import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
 
 class GirisEkrani extends StatefulWidget {
   GirisEkrani({Key? key}) : super(key: key);
@@ -177,10 +177,10 @@ class _GirisEkraniState extends State<GirisEkrani> {
                                       formKey.currentState!.save();
 
                                       // FIREBASE CREATE USER WITH EMAIL AND PASSWORD
-                                      await GirisMetodlari().createEmailAndPass(
+                                      await createEmailAndPass(
                                           auth, _email, _pass, context);
 
-                                      GirisMetodlari().firebaseUserConfig(auth);
+                                      firebaseUserConfig(auth);
                                     }
                                   },
                                   child: Row(
@@ -234,14 +234,12 @@ class _GirisEkraniState extends State<GirisEkrani> {
                                       formKey.currentState!.save();
 
                                       // FIREBASE SIGN IN GIRIS YAP
-                                      var user = await GirisMetodlari()
-                                          .loginEmailAndPass(
-                                              auth, _email, _pass, context);
+                                      var user = await loginEmailAndPass(
+                                          auth, _email, _pass, context);
 
                                       // sadece email verified ise bir user doner
                                       if (user != null) {
-                                        GirisMetodlari()
-                                            .firebaseUserConfig(auth);
+                                        firebaseUserConfig(auth);
 
                                         Navigator.of(context).pushNamed(
                                             "/anaSayfa",
@@ -334,10 +332,9 @@ class _GirisEkraniState extends State<GirisEkrani> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    var userCredential =
-                                        await GirisMetodlari().googleileGiris();
+                                    var userCredential = await googleileGiris();
                                     // useri yollayabilin arguments ile eklersen
-                                    GirisMetodlari().firebaseUserConfig(auth);
+                                    firebaseUserConfig(auth);
                                     Navigator.of(context)
                                         .pushNamed("/anaSayfa");
                                   },

@@ -86,3 +86,12 @@ Future<String> getUserName(String userId) async {
 
   return name;
 }
+
+addUserToFriends(String addUserId) {
+  FirebaseFirestore.instance
+      .collection("users")
+      .doc("${FirebaseAuth.instance.currentUser!.uid}")
+      .update({
+    "friends": FieldValue.arrayUnion([addUserId])
+  });
+}
