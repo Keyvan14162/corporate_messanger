@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileImg extends StatefulWidget {
@@ -46,7 +47,9 @@ class _ProfileImgState extends State<ProfileImg> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return GestureDetector(
-                onTap: changeCoverImg,
+                onTap: () {
+                  changeCoverImg(widget.userId);
+                },
                 child: Container(
                   color: Colors.grey,
                   child: Image.network(
@@ -78,7 +81,9 @@ class _ProfileImgState extends State<ProfileImg> {
                 // neden 3 bilmiyom
                 right: MediaQuery.of(context).size.width / 2,
                 child: GestureDetector(
-                  onTap: changeProfileImg,
+                  onTap: () {
+                    changeProfileImg(context, widget.userId);
+                  },
                   child: CircleAvatar(
                     radius: widget.profileHeight / 2 + 10,
                     backgroundColor: Colors.white,
@@ -129,79 +134,5 @@ class _ProfileImgState extends State<ProfileImg> {
         ),
       ],
     );
-  }
-
-  changeProfileImg() async {
-    // firestore'a id ile isimlendirip resmi atsın
-    // firebase de userin profileImg download urlsini degistrisin
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Uyarı"),
-          content: const Text("Profil resminiz değiştirmek ister misiniz ?"),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                final ImagePicker picker = ImagePicker();
-                XFile? file =
-                    await picker.pickImage(source: ImageSource.camera);
-
-                var profileRef = FirebaseStorage.instance
-                    .ref("users/profilePics/${widget.userId}");
-
-                var task = profileRef.putFile(File(file!.path));
-
-                task.whenComplete(() async {
-                  var url = await profileRef.getDownloadURL();
-                  // dbye url yi yazdircaz
-
-                  FirebaseFirestore.instance
-                      .doc("users/${widget.userId}")
-                      .update({"profileImg": url.toString()});
-                });
-              },
-              child: const Text("Evet"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Hayır"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  changeCoverImg() async {
-    // firestore'a id ile isimlendirip resmi atsın
-    // firebase de userin profileImg download urlsini degistrisin
-    final ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: ImageSource.camera);
-
-    var profileRef =
-        FirebaseStorage.instance.ref("users/coverPics/${widget.userId}");
-
-    var task = profileRef.putFile(File(file!.path));
-
-    task.whenComplete(() async {
-      var url = await profileRef.getDownloadURL();
-      // dbye url yi yazdircaz
-
-      FirebaseFirestore.instance
-          .doc("users/${widget.userId}")
-          .update({"coverImg": url.toString()});
-    });
-  }
-
-  // user fieldalrinda kayitli olan coverImg ve profileImg aliyor
-  Future<String> getDownloadUrl(String userId, String img) async {
-    // one time read
-    var url = (await FirebaseFirestore.instance.doc("users/${userId}").get())
-        .data()![img];
-
-    return url;
   }
 }

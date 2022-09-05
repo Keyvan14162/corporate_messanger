@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
 import 'package:flutter_firebase_auth/models/user_model.dart';
 
 class KullaniciGuncelle extends StatefulWidget {
@@ -107,7 +108,7 @@ class _KullaniciGuncelleState extends State<KullaniciGuncelle> {
                               onPressed: () {
                                 // on save metodlari calisir
                                 formKey.currentState!.save();
-                                saveUserToFirestore();
+                                updateUser(_name, _age, widget.userId);
 
                                 // savelendikten sonra reset, initial value verdiklerin
                                 // resetlenmez
@@ -129,23 +130,5 @@ class _KullaniciGuncelleState extends State<KullaniciGuncelle> {
         ),
       ),
     );
-  }
-
-  Future saveUserToFirestore() async {
-    var user =
-        // profile pic url
-        UserModel(name: _name, age: _age, friends: []);
-
-    Map<String, dynamic> eklenecekUser = <String, dynamic>{};
-    eklenecekUser["name"] = user.name;
-    eklenecekUser["age"] = user.age;
-    eklenecekUser["createdAt"] = FieldValue.serverTimestamp();
-    eklenecekUser["friends"] = user.friends;
-
-    // kullaniciyi guncelleme
-    await FirebaseFirestore.instance.doc("users/${widget.userId}").set(
-          eklenecekUser,
-          SetOptions(merge: true),
-        );
   }
 }

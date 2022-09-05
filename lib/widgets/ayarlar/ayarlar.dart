@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar_menu_items.dart';
 
 import 'profileImg.dart';
@@ -42,7 +42,7 @@ class _AyarlarState extends State<Ayarlar> {
                   top: top,
                   profileHeight: profileHeight,
                   userId: auth.currentUser!.uid,
-                  userName: getUserName(),
+                  userName: getUserName(auth.currentUser!.uid),
                 ),
                 const SizedBox(height: 100),
                 Text("Name : ${auth.currentUser!.uid}"),
@@ -56,15 +56,5 @@ class _AyarlarState extends State<Ayarlar> {
         ),
       ),
     );
-  }
-
-  Future<String> getUserName() async {
-    // one time read
-    var name = (await FirebaseFirestore.instance
-            .doc("users/${auth.currentUser!.uid}")
-            .get())
-        .data()!["name"];
-
-    return name;
   }
 }

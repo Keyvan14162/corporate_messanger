@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
 
 class MailDegistir extends StatefulWidget {
   const MailDegistir({Key? key, required this.auth}) : super(key: key);
@@ -77,8 +78,10 @@ class _MailDegistirState extends State<MailDegistir> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  showMessage("yeni mail : $_yeniMail");
-                                  changeMail(_yeniMail);
+                                  showMessage(
+                                      "yeni mail : $_yeniMail", context);
+
+                                  changeMail(_yeniMail, widget.auth, context);
                                   Navigator.of(context).pushNamed("/ayarlar");
                                 },
                                 child: const Text("Evet"),
@@ -108,38 +111,5 @@ class _MailDegistirState extends State<MailDegistir> {
         ),
       ),
     );
-  }
-
-  void changeMail(String yeniMail) async {
-    // auth uzerinden current user'a eriselim.
-    try {
-      await widget.auth.currentUser!.updateEmail(yeniMail);
-      await widget.auth.signOut();
-      showMessage("İlk try Yeni mailinizle giris yapabilirsiniz");
-      Navigator.of(context).pushNamed("/girisKontrol");
-      // hassas islem, firebase bidaha oturum ac once diyo
-      // hata fırlatıyo bunun icin
-      // bende olmadı tabı
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "requires-recent-login") {
-        // eski email_sifre_girisde aldıgımız email sifre, tekrar giris yapmış gibi
-        var credietial = EmailAuthProvider.credential(
-            email: "ismailkyvsn2000@gmail.com", password: "kamilkoc14162");
-        await widget.auth.currentUser!.reauthenticateWithCredential(credietial);
-        await widget.auth.currentUser!.updateEmail(yeniMail);
-        await widget.auth.signOut();
-        showMessage("Yeni mailinizle giris yapabilirsiniz");
-        Navigator.of(context).pushNamed("/girisKontrol");
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message, style: const TextStyle(fontSize: 20)),
-      backgroundColor: Colors.black,
-    ));
   }
 }

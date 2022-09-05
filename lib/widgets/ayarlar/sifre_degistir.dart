@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
 
 class SifreDegistir extends StatefulWidget {
   SifreDegistir({Key? key, required this.auth}) : super(key: key);
@@ -99,7 +100,8 @@ class _SifreDegistirState extends State<SifreDegistir> {
                               TextButton(
                                   onPressed: () {
                                     changePassword(_yeniSifre);
-                                    showMessage("yeni sifre : $_yeniSifre");
+                                    showMessage(
+                                        "yeni sifre : $_yeniSifre", context);
                                     Navigator.of(context).pushNamed("/ayarlar");
                                   },
                                   child: const Text("Evet")),
@@ -135,7 +137,7 @@ class _SifreDegistirState extends State<SifreDegistir> {
     try {
       await widget.auth.currentUser!.updatePassword(yeniSifre);
       await widget.auth.signOut();
-      showMessage("İlk try Yeni sifrenizle giris yapabilirsiniz");
+      // showMessage("İlk try Yeni sifrenizle giris yapabilirsiniz");
       Navigator.of(context).pop();
       // hassas islem, firebase bidaha oturum ac once diyo
       // hata fırlatıyo bunun icin
@@ -152,18 +154,11 @@ class _SifreDegistirState extends State<SifreDegistir> {
         await widget.auth.currentUser!.reauthenticateWithCredential(credietial);
         await widget.auth.currentUser!.updatePassword(_yeniSifre);
         await widget.auth.signOut();
-        showMessage("Yeni sifrenizle giris yapabilirsiniz");
+        // showMessage("Yeni sifrenizle giris yapabilirsiniz");
         Navigator.of(context).pop();
       }
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message, style: TextStyle(fontSize: 20)),
-      backgroundColor: Colors.black,
-    ));
   }
 }

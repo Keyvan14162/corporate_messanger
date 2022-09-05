@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AyarlarMenuItems extends StatefulWidget {
@@ -48,7 +49,8 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
                   onPressed: () {
                     signOutUser();
                     Navigator.of(context).pop();
-                    showMessage("${auth.currentUser!.email} çıkış yaptı");
+                    showMessage(
+                        "${auth.currentUser!.email} çıkış yaptı", context);
                   },
                   child: const Text("Evet"),
                 ),
@@ -73,10 +75,10 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    var sonuc = await deleteUser();
+                    var sonuc = await deleteUser(context);
                     if (sonuc) {
                       Navigator.of(context).pop();
-                      showMessage("silindi");
+                      showMessage("silindi", context);
                     }
                   },
                   child: const Text("Evet"),
@@ -88,7 +90,9 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
 
         // Hesap Doğrulama
         createButton("Hesap Dogrulama", Icons.account_box, () async {
-          hesapDogrula();
+          setState(() {
+            hesapDogrula(context);
+          });
         }),
 
         // Password Change 141622
@@ -143,114 +147,6 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
           ),
         ),
       ],
-    );
-  }
-
-  void hesapDogrula() async {
-    // hesabı dogrulayınca anlamıyo tekra giriş yapınca oluyo****
-    if (auth.currentUser != null) {
-      if (auth.currentUser!.emailVerified) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("${auth.currentUser!.email} hesabı dogrulanmıstır  ",
-              style: TextStyle(fontSize: 20)),
-          backgroundColor: Colors.black,
-        ));
-      } else {
-        try {
-          await auth.currentUser!.sendEmailVerification();
-
-          showMessage(
-              "Mailinize gonderilen linke tıklayarak hesabınızı dogrulaynız. Hesabın dogrulandıgını gormke icin uygulamaya tekrar giris yapınız");
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(e.toString(), style: const TextStyle(fontSize: 20)),
-            backgroundColor: Colors.black,
-          ));
-          await auth.signOut();
-
-          Navigator.of(context).pop();
-        }
-      }
-    }
-
-    setState(() {});
-  }
-
-  void signOutUser() async {
-    // current userdan cikis yapar,
-    // email_sifre_giris initstatedeki authstatelisten calisir
-    // firebase kısmından cıkıs yapar
-
-    await auth.signOut();
-
-    // google ile giris yapildiysa cıkıs yapar, yoksa googledan cikmaz
-    // bu syaede eposta sifre ile girerse googledan cıkmaya calısmaz
-    var user = GoogleSignIn().currentUser;
-    if (user != null) {
-      await GoogleSignIn().signOut();
-    }
-  }
-
-  Future<bool> deleteUser() async {
-    // bu sayfaya geldiyse zaten oturm acmis olcak da olsun
-    // kontrol edelim
-    // google ile giriis icin degistirmedi calisiyo galiba
-
-    // kullanici hesabi silse de attiği ve aldiği mesajlari silmiyom
-
-    if (auth.currentUser != null) {
-      var uid = auth.currentUser!.uid;
-      try {
-        // databaseden de silsin
-
-        await auth.currentUser!.delete();
-
-        await FirebaseFirestore.instance.doc("users/$uid").delete();
-
-        // storageden silsin
-        final coverImgRef =
-            FirebaseStorage.instance.ref().child("users/coverPics/$uid");
-        await coverImgRef.delete();
-
-        final profileImgRef =
-            FirebaseStorage.instance.ref().child("users/profilePics/$uid");
-        await profileImgRef.delete();
-
-        Navigator.of(context).pushNamed("/girisEkrani");
-
-        return true;
-      } catch (e) {
-        // requires login again
-        showMessage(
-            "Bu kritik bir işlemdir, silmek icin hesabınıza tekrar giris yapınız.");
-      }
-    } else if (auth.currentUser == null) {
-      print("Once oturum ac");
-      return false;
-    }
-    return false;
-  }
-
-  void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message, style: TextStyle(fontSize: 20)),
-      backgroundColor: Colors.black,
-    ));
-  }
-
-// BUNU KULLANIRSAN HER FONKTA AYNI ISI YAPMALISIN
-// TEK TEK USTTE TANIMLICAN ARTIK
-  void showMyAlertDialog(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(onPressed: () {}, child: const Text("data")),
-          TextButton(onPressed: () {}, child: const Text("data")),
-        ],
-      ),
     );
   }
 }

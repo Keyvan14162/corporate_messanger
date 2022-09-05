@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/firebase_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
