@@ -1,6 +1,6 @@
-# flutter_firebase_auth
+# message
 
-A new Flutter project.
+A message app for companies. App will save logs and more...
 
 ## Getting Started
 
