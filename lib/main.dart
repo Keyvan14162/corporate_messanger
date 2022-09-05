@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.routeGenrator,
-      title: "xd",
+      title: "sirket-ici-mesajlasma",
       theme: ThemeData(primarySwatch: Colors.blue),
     );
   }
