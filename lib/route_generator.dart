@@ -6,13 +6,13 @@ import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/kullanici_guncelle.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/mail_degistir.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/sifre_degistir.dart';
-import 'package:flutter_firebase_auth/widgets/chat_room.dart';
+import 'package:flutter_firebase_auth/chat/chat_room.dart';
 import 'package:flutter_firebase_auth/widgets/giris/giris_ekrani.dart';
 import 'package:flutter_firebase_auth/main_page.dart';
 import 'package:flutter_firebase_auth/widgets/giris/giris_kontrol.dart';
 import 'package:flutter_firebase_auth/widgets/ana_sayfa.dart';
-import 'package:flutter_firebase_auth/widgets/personal_chat.dart';
-import 'package:flutter_firebase_auth/widgets/search_page.dart';
+import 'package:flutter_firebase_auth/chat/personal_chat.dart';
+import 'package:flutter_firebase_auth/chat/search_page.dart';
 import 'package:flutter_firebase_auth/widgets/tel_no_dogrulama/tel_no_dogrulama.dart';
 import 'package:flutter_firebase_auth/widgets/tel_no_dogrulama/tel_no_giris.dart';
 

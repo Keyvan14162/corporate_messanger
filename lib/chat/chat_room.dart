@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/chat/chat_methods.dart';
 import 'package:flutter_firebase_auth/model/message_model.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ChatRoom extends StatefulWidget {
   const ChatRoom({Key? key}) : super(key: key);
@@ -179,7 +177,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       padding: const EdgeInsets.only(right: 10),
                       child: FloatingActionButton(
                         onPressed: () async {
-                          _sendMessage(
+                          sendMessage(
                               FirebaseAuth.instance.currentUser!.uid.toString(),
                               _message);
                           _textController.clear();
@@ -205,24 +203,24 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Future<String> getUserName(String userId) async {
     // one time read
-    var name = (await FirebaseFirestore.instance.doc("users/$userId").get())
-        .data()!["name"];
+    var name = (await firestore.doc("users/$userId").get()).data()!["name"];
 
     return name;
   }
 
 // perssonal_chatden bakarak ekleme yap
-  _sendMessage(String senderId, String message) async {
+  sendMessage(String senderId, String message) async {
     if (message.isNotEmpty) {
       // dbye mesajı yazdır
       var messageModel = MessageModel(
-          reciverId: "reciverId",
-          senderId: senderId,
-          message: message,
-          date: Timestamp.now(),
-          imgurl: "",
-          isImg: false,
-          messageId: FirebaseFirestore.instance.collection("chat").doc().id);
+        reciverId: "reciverId",
+        senderId: senderId,
+        message: message,
+        date: Timestamp.now(),
+        imgurl: "",
+        isImg: false,
+        messageId: FirebaseFirestore.instance.collection("chat").doc().id,
+      );
 
       Map<String, dynamic> newMessage = <String, dynamic>{};
       newMessage["message"] = messageModel.message;

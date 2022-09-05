@@ -23,8 +23,8 @@ class _PersonalChatState extends State<PersonalChat> {
   StreamSubscription? userSubscribe;
   late TextEditingController _textController;
   bool hoverd = false;
-
   String _message = "";
+  Set<String> selectedMessages = {};
 
   @override
   void initState() {
@@ -61,6 +61,56 @@ class _PersonalChatState extends State<PersonalChat> {
             }
           },
         ),
+        actions: [
+          hoverd
+              ? const SizedBox()
+              : Container(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: PopupMenuButton(
+                    icon: const Icon(Icons.more_vert),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        onTap: () async {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("AAAAAAAAAAA"),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: ThemeData().primaryColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        onTap: () async {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text("BBBBBBBBB"),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: ThemeData().primaryColor,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+          hoverd
+              ? IconButton(
+                  onPressed: () {
+                    _deleteSelectedMessages();
+                  },
+                  icon: const Icon(Icons.delete))
+              : const SizedBox()
+        ],
       ),
       body: Container(
         // color: Colors.green.shade100,
@@ -109,6 +159,12 @@ class _PersonalChatState extends State<PersonalChat> {
                               .data()["senderId"]
                               .toString();
 
+                          var messageId = (snapshot.data
+                                  as QuerySnapshot<Map<String, dynamic>>)
+                              .docs[index]
+                              .data()["messageId"]
+                              .toString();
+
                           var isSender =
                               FirebaseAuth.instance.currentUser!.uid ==
                                   senderId;
@@ -125,99 +181,8 @@ class _PersonalChatState extends State<PersonalChat> {
                               .data()["imgUrl"]
                               .toString();
 
-                          return Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Container(
-                              alignment: isSender
-                                  ? Alignment.topRight
-                                  : Alignment.topLeft,
-                              child: Column(
-                                crossAxisAlignment: isSender
-                                    ? CrossAxisAlignment.end
-                                    : CrossAxisAlignment.start,
-                                children: [
-                                  FutureBuilder(
-                                      future: getUserField(senderId, "name"),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(snapshot.data.toString());
-                                        } else {
-                                          return const Text("No Name Found");
-                                        }
-                                      }),
-                                  Text("sender id - $senderId"),
-                                  isImg == "true"
-                                      ? Container(
-                                          padding: const EdgeInsets.all(8.0),
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                          ),
-                                          child: Image.network(
-                                            imgUrl,
-                                          ),
-                                        )
-                                      : Column(
-                                          crossAxisAlignment: isSender
-                                              ? CrossAxisAlignment.end
-                                              : CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topRight: isSender
-                                                      ? const Radius.circular(0)
-                                                      : const Radius.circular(
-                                                          8),
-                                                  topLeft: isSender
-                                                      ? const Radius.circular(8)
-                                                      : const Radius.circular(
-                                                          0),
-                                                  bottomLeft:
-                                                      const Radius.circular(8),
-                                                  bottomRight:
-                                                      const Radius.circular(8),
-                                                ),
-                                                color: (isSender
-                                                    ? Colors.blue.shade300
-                                                    : Colors.grey.shade300),
-                                              ),
-                                              child: AnimatedSwitcher(
-                                                duration:
-                                                    const Duration(seconds: 3),
-                                                child: GestureDetector(
-                                                  onLongPress: () {
-                                                    setState(() {});
-                                                  },
-                                                  child: Container(
-                                                    key: const ValueKey(2),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      left: 10,
-                                                      right: 10,
-                                                      top: 5,
-                                                      bottom: 5,
-                                                    ),
-                                                    child: Text(
-                                                      message,
-                                                      style: const TextStyle(
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                  Text(
-                                    date.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 10, color: Colors.grey),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
+                          return messageWidget(isSender, senderId, isImg,
+                              imgUrl, message, date, messageId);
                         },
                       ),
                     );
@@ -338,6 +303,132 @@ class _PersonalChatState extends State<PersonalChat> {
     );
   }
 
+  Padding messageWidget(
+    bool isSender,
+    String senderId,
+    String isImg,
+    String imgUrl,
+    String message,
+    String date,
+    String messageId,
+  ) {
+    bool checkboxValue = false;
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        alignment: isSender ? Alignment.topRight : Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment:
+              isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            FutureBuilder(
+                future: getUserField(senderId, "name"),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data.toString());
+                  } else {
+                    return const Text("No Name Found");
+                  }
+                }),
+            Text("sender id - $senderId"),
+            isImg == "true"
+                ? Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Image.network(
+                      imgUrl,
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: isSender
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onLongPress: () {
+                              setState(() {
+                                hoverd = !hoverd;
+                              });
+                            },
+                            onTap: () {
+                              if (hoverd) {
+                                setState(() {
+                                  hoverd = !hoverd;
+                                });
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topRight: isSender
+                                      ? const Radius.circular(0)
+                                      : const Radius.circular(8),
+                                  topLeft: isSender
+                                      ? const Radius.circular(8)
+                                      : const Radius.circular(0),
+                                  bottomLeft: const Radius.circular(8),
+                                  bottomRight: const Radius.circular(8),
+                                ),
+                                color: (isSender
+                                    ? Colors.blue.shade300
+                                    : Colors.grey.shade300),
+                              ),
+                              child: Container(
+                                key: const ValueKey(2),
+                                margin: const EdgeInsets.only(
+                                  left: 10,
+                                  right: 10,
+                                  top: 5,
+                                  bottom: 5,
+                                ),
+                                child: Text(
+                                  message,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          hoverd
+                              ? StatefulBuilder(builder: (context, setState) {
+                                  return Checkbox(
+                                      value: checkboxValue,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          checkboxValue = val!;
+                                          if (checkboxValue) {
+                                            selectedMessages.add(messageId);
+                                          } else {
+                                            selectedMessages.remove(messageId);
+                                          }
+                                          print(selectedMessages);
+                                        });
+                                      });
+                                })
+                              : const SizedBox(),
+                        ],
+                      ),
+                    ],
+                  ),
+            Text(
+              date.toString(),
+              style: const TextStyle(
+                fontSize: 10,
+                color: Colors.grey,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   _kameraOnTap(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     XFile? file = await picker.pickImage(source: source);
@@ -425,5 +516,45 @@ class _PersonalChatState extends State<PersonalChat> {
         .snapshots();
 
     return messageStream;
+  }
+
+  _deleteSelectedMessages() async {
+    if (selectedMessages.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text("Uyarı"),
+          content: Text("Seçilen Mesajlar silinsin mi ?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Hayır"),
+            ),
+            TextButton(
+              onPressed: () {
+                selectedMessages.forEach((messageId) async {
+                  await firestore
+                      .collection("personal_chat")
+                      .doc("${widget.senderId + "-" + widget.reciverId}")
+                      .collection("messages")
+                      .doc(messageId)
+                      .delete();
+                  await firestore
+                      .collection("personal_chat")
+                      .doc("${widget.reciverId + "-" + widget.senderId}")
+                      .collection("messages")
+                      .doc(messageId)
+                      .delete();
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text("Evet"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
