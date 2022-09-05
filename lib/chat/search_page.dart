@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/model/user_model.dart';
+import 'package:flutter_firebase_auth/streamler.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  SearchPage({required this.friends, Key? key}) : super(key: key);
+  List<dynamic> friends;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -67,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: StreamBuilder(
-        stream: getFilteredUsers(),
+        stream: Streamler().getAllUsers(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -113,17 +115,65 @@ class _SearchPageState extends State<SearchPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(4),
                                 child: ListTile(
-                                  leading: profileImgUrl.contains("null")
-                                      ? const Icon(Icons.person)
-                                      : CircleAvatar(
-                                          backgroundImage:
-                                              NetworkImage(profileImgUrl),
-                                        ),
-                                  title: Text(
-                                    name,
+                                    leading: profileImgUrl.contains("null")
+                                        ? const Icon(Icons.person)
+                                        : CircleAvatar(
+                                            backgroundImage:
+                                                NetworkImage(profileImgUrl),
+                                          ),
+                                    title: Text(
+                                      name,
+                                    ),
+                                    subtitle: Text(userId),
+                                    trailing: StreamBuilder(
+                                      stream: Streamler().getFriends(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return IconButton(
+                                            onPressed: () {},
+                                            icon: (snapshot.data
+                                                            as DocumentSnapshot)[
+                                                        "friends"]
+                                                    .contains(userId)
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: Colors.green,
+                                                    size: 34,
+                                                  )
+                                                : IconButton(
+                                                    onPressed: () {
+                                                      addUserToFriends(userId);
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.person_add_alt,
+                                                    ),
+                                                  ),
+                                          );
+                                        } else {
+                                          return Text("nope");
+                                        }
+                                      },
+                                    )
+                                    /*
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: widget.friends.contains(userId)
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.green,
+                                            size: 34,
+                                          )
+                                        : IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                addUserToFriends(userId);
+                                              });
+                                            },
+                                            icon: Icon(Icons.person_add_alt),
+                                          ),
                                   ),
-                                  subtitle: Text(userId),
-                                ),
+                                  */
+                                    ),
                               ),
                             )
                           : const SizedBox()
@@ -137,16 +187,12 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  getFilteredUsers() {
-    var userStream = FirebaseFirestore.instance.collection("users").snapshots();
-    return userStream;
-  }
-
-  Future<String> getUserName(String userId) async {
-    // one time read
-    var name = (await FirebaseFirestore.instance.doc("users/$userId").get())
-        .data()!["name"];
-
-    return name;
+  addUserToFriends(String addUserId) {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc("${FirebaseAuth.instance.currentUser!.uid}")
+        .update({
+      "friends": FieldValue.arrayUnion([addUserId])
+    });
   }
 }

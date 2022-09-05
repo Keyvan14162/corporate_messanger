@@ -140,7 +140,9 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
 
           _showMessage("${auth.currentUser!.phoneNumber} kayit oldu ");
 
-          Navigator.of(context).pushNamed("/mainPage");
+          GirisMetodlari().firebaseUserConfig(auth);
+
+          Navigator.of(context).pushNamed("/anaSayfa");
         } catch (e) {
           _showMessage(e.toString());
         }

@@ -17,6 +17,7 @@ class GirisMetodlari {
     eklenecekUser["name"] = user.name;
     eklenecekUser["age"] = user.age;
     eklenecekUser["createdAt"] = FieldValue.serverTimestamp();
+    // eklenecekUser["friends"] = user.friends;
 
     // kullaniciyi guncelleme
     await FirebaseFirestore.instance.doc("users/$userId").set(
@@ -120,6 +121,7 @@ class GirisMetodlari {
       eklenecekUser["name"] = user.name;
       eklenecekUser["age"] = user.age;
       eklenecekUser["createdAt"] = FieldValue.serverTimestamp();
+      eklenecekUser["friends"] = user.friends;
 
       // kullaniciyi guncelleme
       await FirebaseFirestore.instance

@@ -57,7 +57,11 @@ class RouteGenerator {
 
       case "/searchPage":
         return CupertinoPageRoute(
-            builder: (context) => SearchPage(), settings: settings);
+          builder: (context) => SearchPage(
+            friends: settings.arguments as List<dynamic>,
+          ),
+          settings: settings,
+        );
       case "/kullaniciGuncelle":
         return _generateRoute(
             KullaniciGuncelle(

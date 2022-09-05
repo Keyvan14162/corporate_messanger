@@ -2,7 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/chat/chat_room.dart';
-import 'package:flutter_firebase_auth/widgets/tum_kullanicilar.dart';
+import 'package:flutter_firebase_auth/widgets/friends.dart';
 
 import 'ayarlar/ayarlar.dart';
 
@@ -46,7 +46,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
               color: Colors.red,
             ),
             ChatRoom(),
-            TumKullanicilar(),
+            Friends(),
             Ayarlar(),
           ],
         ),
