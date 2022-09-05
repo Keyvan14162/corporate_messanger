@@ -9,7 +9,7 @@ class GirisMetodlari {
   void saveUserToFirestore(String name, int age, String userId) async {
     var user =
         // profile pic url
-        UserModel(name: name, age: age);
+        UserModel(name: name, age: age, friends: []);
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -112,7 +112,7 @@ class GirisMetodlari {
       // yani boyle bi user yoksa, ilk kaytsa firebasede defaukt bi user olustursun
       var user =
           // profile pic url
-          UserModel(name: "Name", age: 0);
+          UserModel(name: "Name", age: 0, friends: []);
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 

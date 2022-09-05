@@ -27,6 +27,14 @@ class _TumKullanicilarState extends State<TumKullanicilar> {
           // Navigate to the Search Screen
 
           IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.person,
+              color: ThemeData().primaryColor,
+            ),
+          ),
+
+          IconButton(
             onPressed: () => Navigator.of(context).pushNamed("/searchPage"),
             icon: Icon(
               Icons.search,

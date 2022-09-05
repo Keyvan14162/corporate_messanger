@@ -24,7 +24,8 @@ class _PersonalChatState extends State<PersonalChat> {
   late TextEditingController _textController;
   bool hoverd = false;
   String _message = "";
-  Set<String> selectedMessages = {};
+  Set<String> selectedMessagesId = {};
+  Set<String> selectedMessagesImgUrl = {};
 
   @override
   void initState() {
@@ -63,7 +64,29 @@ class _PersonalChatState extends State<PersonalChat> {
         ),
         actions: [
           hoverd
-              ? const SizedBox()
+              ? Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        _deleteSelectedMessages();
+                      },
+                      icon: const Icon(Icons.delete),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          hoverd = !hoverd;
+                          selectedMessagesId = {};
+                          selectedMessagesImgUrl = {};
+                        });
+                      },
+                      child: const Text(
+                        "İptal",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                )
               : Container(
                   padding: const EdgeInsets.only(right: 10),
                   child: PopupMenuButton(
@@ -103,13 +126,6 @@ class _PersonalChatState extends State<PersonalChat> {
                     ],
                   ),
                 ),
-          hoverd
-              ? IconButton(
-                  onPressed: () {
-                    _deleteSelectedMessages();
-                  },
-                  icon: const Icon(Icons.delete))
-              : const SizedBox()
         ],
       ),
       body: Container(
@@ -332,15 +348,54 @@ class _PersonalChatState extends State<PersonalChat> {
                 }),
             Text("sender id - $senderId"),
             isImg == "true"
-                ? Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Image.network(
-                      imgUrl,
-                    ),
-                  )
+                ? GestureDetector(
+                    onLongPress: () {
+                      setState(() {
+                        hoverd = !hoverd;
+                      });
+                    },
+                    onTap: () {
+                      if (hoverd) {
+                        setState(() {
+                          hoverd = !hoverd;
+                        });
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            child: Image.network(
+                              imgUrl,
+                            ),
+                          ),
+                        ),
+                        hoverd
+                            ? StatefulBuilder(builder: (context, setState) {
+                                return Checkbox(
+                                    value: checkboxValue,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        checkboxValue = val!;
+                                        if (checkboxValue) {
+                                          selectedMessagesId.add(messageId);
+                                          selectedMessagesImgUrl.add(imgUrl);
+                                        } else {
+                                          selectedMessagesId.remove(messageId);
+                                          selectedMessagesImgUrl.remove(imgUrl);
+                                        }
+                                        print(selectedMessagesId);
+                                        print(selectedMessagesImgUrl.length);
+                                      });
+                                    });
+                              })
+                            : const SizedBox(),
+                      ],
+                    ))
                 : Column(
                     crossAxisAlignment: isSender
                         ? CrossAxisAlignment.end
@@ -402,12 +457,14 @@ class _PersonalChatState extends State<PersonalChat> {
                                       onChanged: (val) {
                                         setState(() {
                                           checkboxValue = val!;
+                                          // img degil
                                           if (checkboxValue) {
-                                            selectedMessages.add(messageId);
+                                            selectedMessagesId.add(messageId);
                                           } else {
-                                            selectedMessages.remove(messageId);
+                                            selectedMessagesId
+                                                .remove(messageId);
                                           }
-                                          print(selectedMessages);
+                                          print(selectedMessagesId);
                                         });
                                       });
                                 })
@@ -519,7 +576,7 @@ class _PersonalChatState extends State<PersonalChat> {
   }
 
   _deleteSelectedMessages() async {
-    if (selectedMessages.isNotEmpty) {
+    if (selectedMessagesId.isNotEmpty) {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -534,7 +591,16 @@ class _PersonalChatState extends State<PersonalChat> {
             ),
             TextButton(
               onPressed: () {
-                selectedMessages.forEach((messageId) async {
+                // delete from storage
+                if (selectedMessagesImgUrl.isNotEmpty) {
+                  selectedMessagesImgUrl.forEach((url) async {
+                    if (url != "imgUrl") {
+                      await FirebaseStorage.instance.refFromURL(url).delete();
+                    }
+                  });
+                }
+                // delete from firebase
+                selectedMessagesId.forEach((messageId) async {
                   await firestore
                       .collection("personal_chat")
                       .doc("${widget.senderId + "-" + widget.reciverId}")
@@ -548,6 +614,13 @@ class _PersonalChatState extends State<PersonalChat> {
                       .doc(messageId)
                       .delete();
                 });
+
+                setState(() {
+                  hoverd = !hoverd;
+                  selectedMessagesId = {};
+                  selectedMessagesImgUrl = {};
+                });
+
                 Navigator.of(context).pop();
               },
               child: const Text("Evet"),

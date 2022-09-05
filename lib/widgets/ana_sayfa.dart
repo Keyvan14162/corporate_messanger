@@ -67,7 +67,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             icon: const Icon(Icons.chat),
           ),
           BottomNavyBarItem(
-            title: const Text('All Users'),
+            title: const Text('Friends'),
             icon: const Icon(Icons.person),
           ),
           BottomNavyBarItem(

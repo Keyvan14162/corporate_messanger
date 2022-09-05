@@ -7,8 +7,10 @@ class UserModel {
   // final List positions;
   // final int loginCount;
   // default img
+  List<String> friends;
 
   UserModel({
+    required this.friends,
     required this.name,
     required this.age,
     // required this.positions,

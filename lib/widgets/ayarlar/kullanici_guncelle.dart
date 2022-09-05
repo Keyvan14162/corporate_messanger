@@ -134,12 +134,13 @@ class _KullaniciGuncelleState extends State<KullaniciGuncelle> {
   Future saveUserToFirestore() async {
     var user =
         // profile pic url
-        UserModel(name: _name, age: _age);
+        UserModel(name: _name, age: _age, friends: []);
 
     Map<String, dynamic> eklenecekUser = <String, dynamic>{};
     eklenecekUser["name"] = user.name;
     eklenecekUser["age"] = user.age;
     eklenecekUser["createdAt"] = FieldValue.serverTimestamp();
+    eklenecekUser["friends"] = user.friends;
 
     // kullaniciyi guncelleme
     await FirebaseFirestore.instance.doc("users/${widget.userId}").set(
