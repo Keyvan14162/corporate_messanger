@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/model/user_model.dart';
-import 'package:flutter_firebase_auth/streamler.dart';
+import 'package:flutter_firebase_auth/models/user_model.dart';
+import 'package:flutter_firebase_auth/helpers/firebase_helper.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({required this.friends, Key? key}) : super(key: key);
@@ -69,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: StreamBuilder(
-        stream: Streamler().getAllUsers(),
+        stream: getAllUsers(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -126,7 +126,7 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                     subtitle: Text(userId),
                                     trailing: StreamBuilder(
-                                      stream: Streamler().getFriends(),
+                                      stream: getFriends(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           return IconButton(

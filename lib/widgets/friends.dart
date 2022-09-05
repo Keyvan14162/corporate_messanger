@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/streamler.dart';
+import 'package:flutter_firebase_auth/helpers/firebase_helper.dart';
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -49,12 +47,12 @@ class _FriendsState extends State<Friends> {
         ],
       ),
       body: StreamBuilder(
-        stream: Streamler().getFriends(),
+        stream: getFriends(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             friends = (snapshot.data as DocumentSnapshot)["friends"];
             return StreamBuilder(
-              stream: Streamler().getAllUsers(),
+              stream: getAllUsers(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());

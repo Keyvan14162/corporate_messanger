@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/model/message_model.dart';
+import 'package:flutter_firebase_auth/helpers/firebase_helper.dart';
+import 'package:flutter_firebase_auth/models/message_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PersonalChat extends StatefulWidget {
@@ -235,7 +236,8 @@ class _PersonalChatState extends State<PersonalChat> {
                               _message = value.toString();
                             },
                             onSubmitted: (value) {
-                              sendMessage(_message, false, "imgUrl");
+                              sendMessage(_message, false, "imgUrl",
+                                  widget.senderId, widget.reciverId);
                               _textController.clear();
                             },
                           ),
@@ -297,7 +299,8 @@ class _PersonalChatState extends State<PersonalChat> {
                       child: FloatingActionButton(
                         heroTag: "btn2",
                         onPressed: () {
-                          sendMessage(_message, false, "imgUrl");
+                          sendMessage(_message, false, "imgUrl",
+                              widget.senderId, widget.reciverId);
                           _textController.clear();
                         },
                         backgroundColor: Colors.blue,
@@ -497,7 +500,8 @@ class _PersonalChatState extends State<PersonalChat> {
     task.whenComplete(() async {
       var url = await profileRef.getDownloadURL();
 
-      await sendMessage("message", true, url);
+      await sendMessage(
+          "message", true, url, widget.senderId, widget.reciverId);
     });
   }
 
@@ -509,58 +513,6 @@ class _PersonalChatState extends State<PersonalChat> {
         (await FirebaseFirestore.instance.doc("users/$userId").get()).data()!;
 
     return data[fieldName];
-  }
-
-  sendMessage(String message, bool isImg, String imgUrl) async {
-    if (message.isNotEmpty) {
-      // dbye mesajı yazdır
-
-      // IKI MESSAGENIN DE IDSI AYNI , SILME SISTEMINI EKLE
-      var messageId = firestore
-          .collection("personal_chat")
-          .doc("${widget.senderId + "-" + widget.reciverId}")
-          .collection("messages")
-          .doc()
-          .id;
-
-      var messageModel = MessageModel(
-        reciverId: widget.reciverId,
-        senderId: widget.senderId,
-        message: message,
-        date: Timestamp.now(),
-        imgurl: imgUrl,
-        isImg: isImg,
-        messageId: messageId,
-      );
-
-      Map<String, dynamic> newMessage = <String, dynamic>{};
-      newMessage["message"] = messageModel.message;
-      newMessage["senderId"] = messageModel.senderId;
-      newMessage["date"] = messageModel.date;
-      newMessage["reciverId"] = messageModel.reciverId;
-      newMessage["isImg"] = messageModel.isImg;
-      newMessage["imgUrl"] = messageModel.imgurl;
-      newMessage["messageId"] = messageModel.messageId;
-
-      //   await firestore.collection("chat").add(newMessage);
-
-      // her mesajda ilk once hangi id gelmedigini bilmedigim icin
-      // iki ihtimale karsı iki ekleme yapıyor.
-      // kısa yolu var mı bulamadım.
-      await firestore
-          .collection("personal_chat")
-          .doc("${widget.senderId + "-" + widget.reciverId}")
-          .collection("messages")
-          .doc(messageId)
-          .set(newMessage);
-
-      await firestore
-          .collection("personal_chat")
-          .doc("${widget.reciverId + "-" + widget.senderId}")
-          .collection("messages")
-          .doc(messageId)
-          .set(newMessage);
-    }
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {

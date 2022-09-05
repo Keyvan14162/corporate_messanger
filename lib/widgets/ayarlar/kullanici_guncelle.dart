@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/model/user_model.dart';
+import 'package:flutter_firebase_auth/models/user_model.dart';
 
 class KullaniciGuncelle extends StatefulWidget {
   final String userId;

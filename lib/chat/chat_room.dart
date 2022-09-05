@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/chat/chat_methods.dart';
-import 'package:flutter_firebase_auth/model/message_model.dart';
+import 'package:flutter_firebase_auth/helpers/firebase_helper.dart';
+import 'package:flutter_firebase_auth/models/message_model.dart';
 
 class ChatRoom extends StatefulWidget {
   const ChatRoom({Key? key}) : super(key: key);
@@ -178,8 +179,12 @@ class _ChatRoomState extends State<ChatRoom> {
                       child: FloatingActionButton(
                         onPressed: () async {
                           sendMessage(
-                              FirebaseAuth.instance.currentUser!.uid.toString(),
-                              _message);
+                            _message,
+                            false,
+                            "imgUrl",
+                            FirebaseAuth.instance.currentUser!.uid.toString(),
+                            "reciverId",
+                          );
                           _textController.clear();
                         },
                         backgroundColor: Colors.blue,
@@ -199,43 +204,5 @@ class _ChatRoomState extends State<ChatRoom> {
         ),
       ),
     );
-  }
-
-  Future<String> getUserName(String userId) async {
-    // one time read
-    var name = (await firestore.doc("users/$userId").get()).data()!["name"];
-
-    return name;
-  }
-
-// perssonal_chatden bakarak ekleme yap
-  sendMessage(String senderId, String message) async {
-    if (message.isNotEmpty) {
-      // dbye mesajı yazdır
-      var messageModel = MessageModel(
-        reciverId: "reciverId",
-        senderId: senderId,
-        message: message,
-        date: Timestamp.now(),
-        imgurl: "",
-        isImg: false,
-        messageId: FirebaseFirestore.instance.collection("chat").doc().id,
-      );
-
-      Map<String, dynamic> newMessage = <String, dynamic>{};
-      newMessage["message"] = messageModel.message;
-      newMessage["senderId"] = messageModel.senderId;
-      newMessage["date"] = messageModel.date;
-
-      await firestore.collection("chat").add(newMessage);
-    }
-  }
-
-  getAllMessages() {
-    var messageStream = firestore
-        .collection("chat")
-        .orderBy("date", descending: true)
-        .snapshots();
-    return messageStream;
   }
 }
