@@ -112,14 +112,39 @@ class _PersonalChatState extends State<PersonalChat> {
                               .data()["imgUrl"]
                               .toString();
 
+                          /*
+                          bool didISendLastMessage = false;
+                          try {
+                            var previusMessageSenderId = (snapshot.data
+                                    as QuerySnapshot<Map<String, dynamic>>)
+                                .docs[index - 1]
+                                .data()["senderId"]
+                                .toString();
+                            if (previusMessageSenderId == senderId) {
+                              didISendLastMessage = false;
+                            } else {
+                              didISendLastMessage = true;
+                            }
+                          } catch (e) {}
+                          print(didISendLastMessage);
+                          */
+
                           if (!isSender) {
                             // karsıdan gelen mesajlar isreaded olsun
                             setMessagesReaded(
                                 widget.senderId, widget.reciverId, messageId);
                           }
 
-                          return messageWidget(isSender, senderId, isImg,
-                              imgUrl, message, date, messageId, isReaded);
+                          return messageWidget(
+                            isSender,
+                            senderId,
+                            isImg,
+                            imgUrl,
+                            message,
+                            date,
+                            messageId,
+                            isReaded,
+                          );
                         },
                       ),
                     );
@@ -225,7 +250,6 @@ class _PersonalChatState extends State<PersonalChat> {
               width: 55,
               padding: const EdgeInsets.only(right: 10),
               child: FloatingActionButton(
-                heroTag: "btn2",
                 onPressed: () {
                   sendMessage(_message, false, "imgUrl", widget.senderId,
                       widget.reciverId);
@@ -370,6 +394,7 @@ class _PersonalChatState extends State<PersonalChat> {
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
+            /*
             FutureBuilder(
                 future: getUserField(senderId, "name"),
                 builder: (context, snapshot) {
@@ -379,7 +404,8 @@ class _PersonalChatState extends State<PersonalChat> {
                     return const Text("No Name Found");
                   }
                 }),
-            Text("sender id - $senderId"),
+                */
+            //Text("sender id - $senderId"),
             isImg == "true"
                 ? GestureDetector(
                     onLongPress: () {
@@ -488,11 +514,43 @@ class _PersonalChatState extends State<PersonalChat> {
                                     top: 5,
                                     bottom: 5,
                                   ),
-                                  child: Text(
-                                    message,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        message,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            date.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 8,
+                                              //color: Colors.grey,
+                                            ),
+                                          ),
+                                          isSender
+                                              ? isReaded == "true"
+                                                  ? const Icon(
+                                                      Icons.double_arrow,
+                                                      color: Colors.red,
+                                                      size: 12,
+                                                    )
+                                                  : const Icon(
+                                                      Icons.double_arrow,
+                                                      color: Colors.grey,
+                                                      size: 12,
+                                                    )
+                                              : const SizedBox(),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -523,32 +581,6 @@ class _PersonalChatState extends State<PersonalChat> {
                       ),
                     ],
                   ),
-            Row(
-              mainAxisAlignment:
-                  isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
-              children: [
-                Text(
-                  date.toString(),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey,
-                  ),
-                ),
-                isSender
-                    ? isReaded == "true"
-                        ? const Icon(
-                            Icons.double_arrow,
-                            color: Colors.red,
-                            size: 12,
-                          )
-                        : const Icon(
-                            Icons.double_arrow,
-                            color: Colors.grey,
-                            size: 12,
-                          )
-                    : const SizedBox(),
-              ],
-            ),
           ],
         ),
       ),
@@ -648,13 +680,16 @@ class _PersonalChatState extends State<PersonalChat> {
     }
   }
 
+  // OKUNDU KISMI, COK FAZLA WRITE HARCADIGI ICIN YORUMA ALDIM
   setMessagesReaded(String senderId, String reciverId, String messageId) async {
+/*
     var messageDocRef = await FirebaseFirestore.instance
         .collection('personal_chat')
         .doc("${reciverId + "-" + senderId}")
         .collection("messages")
         .doc(messageId);
 
+    // karsının mesajalrı okudugu yerden mesajı alalım
     var myMessageDocRef = await FirebaseFirestore.instance
         .collection('personal_chat')
         .doc("${senderId + "-" + reciverId}")
@@ -664,14 +699,14 @@ class _PersonalChatState extends State<PersonalChat> {
 
     // her seferinde 1 write yapacagına 1 read yapsın
     // gerekliyse bide write yapsın
+    // karsının okudugu mesaj okunmus mu 
     var messageIsReaded = await myMessageDocRef.data()!["isReaded"];
-    print("-----------------------------------------");
-    print(messageDocRef);
 
+    // okunmamıssa okunmus yap
     if (!messageIsReaded) {
       await messageDocRef.update({
         'isReaded': true,
       });
-    }
+    }*/
   }
 }

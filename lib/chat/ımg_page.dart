@@ -28,7 +28,6 @@ class _ImgPageState extends State<ImgPage> {
               // splashColor: Colors.blue,
               splashRadius: 30,
               onPressed: () async {
-                print(widget.imgUrl);
                 await shareImage();
               },
               icon: const Icon(
@@ -38,14 +37,11 @@ class _ImgPageState extends State<ImgPage> {
           )
         ],
       ),
-      body: Container(
-        color: Colors.black,
-        child: Hero(
-          tag: widget.imgUrl,
-          child: Center(
-            child: PhotoView(
-              imageProvider: NetworkImage(widget.imgUrl),
-            ),
+      body: Hero(
+        tag: widget.imgUrl,
+        child: Center(
+          child: PhotoView(
+            imageProvider: NetworkImage(widget.imgUrl),
           ),
         ),
       ),
