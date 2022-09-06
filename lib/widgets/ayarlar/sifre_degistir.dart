@@ -100,7 +100,7 @@ class _SifreDegistirState extends State<SifreDegistir> {
                               TextButton(
                                   onPressed: () {
                                     changePassword(_yeniSifre);
-                                    showMessage(
+                                    showMessageAyarlar(
                                         "yeni sifre : $_yeniSifre", context);
                                     Navigator.of(context).pushNamed("/ayarlar");
                                   },

@@ -379,22 +379,25 @@ class _PersonalChatState extends State<PersonalChat> {
                         ),
                         hoverd
                             ? StatefulBuilder(builder: (context, setState) {
-                                return Checkbox(
-                                    value: checkboxValue,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        checkboxValue = val!;
-                                        if (checkboxValue) {
-                                          selectedMessagesId.add(messageId);
-                                          selectedMessagesImgUrl.add(imgUrl);
-                                        } else {
-                                          selectedMessagesId.remove(messageId);
-                                          selectedMessagesImgUrl.remove(imgUrl);
-                                        }
-                                        print(selectedMessagesId);
-                                        print(selectedMessagesImgUrl.length);
-                                      });
-                                    });
+                                return isSender
+                                    ? Checkbox(
+                                        value: checkboxValue,
+                                        onChanged: (val) {
+                                          setState(() {
+                                            checkboxValue = val!;
+                                            if (checkboxValue) {
+                                              selectedMessagesId.add(messageId);
+                                              selectedMessagesImgUrl
+                                                  .add(imgUrl);
+                                            } else {
+                                              selectedMessagesId
+                                                  .remove(messageId);
+                                              selectedMessagesImgUrl
+                                                  .remove(imgUrl);
+                                            }
+                                          });
+                                        })
+                                    : const SizedBox();
                               })
                             : const SizedBox(),
                       ],
@@ -405,7 +408,9 @@ class _PersonalChatState extends State<PersonalChat> {
                         : CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: isSender
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
                         children: [
                           GestureDetector(
                             onLongPress: () {
@@ -467,7 +472,6 @@ class _PersonalChatState extends State<PersonalChat> {
                                             selectedMessagesId
                                                 .remove(messageId);
                                           }
-                                          print(selectedMessagesId);
                                         });
                                       });
                                 })

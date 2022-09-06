@@ -12,18 +12,18 @@ void hesapDogrula(BuildContext context) async {
   // hesabı dogrulayınca anlamıyo tekra giriş yapınca oluyo****
   if (FirebaseAuth.instance.currentUser != null) {
     if (FirebaseAuth.instance.currentUser!.emailVerified) {
-      showMessage(
+      showMessageAyarlar(
           "${FirebaseAuth.instance.currentUser!.email} hesabı dogrulanmıstır  ",
           context);
     } else {
       try {
         await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
-        showMessage(
+        showMessageAyarlar(
             "Mailinize gonderilen linke tıklayarak hesabınızı dogrulaynız. Hesabın dogrulandıgını gormke icin uygulamaya tekrar giris yapınız",
             context);
       } catch (e) {
-        showMessage(e.toString(), context);
+        showMessageAyarlar(e.toString(), context);
         await FirebaseAuth.instance.signOut();
 
         Navigator.of(context).pop();
@@ -77,7 +77,7 @@ Future<bool> deleteUser(BuildContext context) async {
       return true;
     } catch (e) {
       // requires login again
-      showMessage(
+      showMessageAyarlar(
           "Bu kritik bir işlemdir, silmek icin hesabınıza tekrar giris yapınız.",
           context);
     }
@@ -113,7 +113,7 @@ void changeMail(
   try {
     await auth.currentUser!.updateEmail(yeniMail);
     await auth.signOut();
-    showMessage("İlk try Yeni mailinizle giris yapabilirsiniz", context);
+    showMessageAyarlar("İlk try Yeni mailinizle giris yapabilirsiniz", context);
     Navigator.of(context).pushNamed("/girisKontrol");
     // hassas islem, firebase bidaha oturum ac once diyo
     // hata fırlatıyo bunun icin
@@ -126,7 +126,7 @@ void changeMail(
       await auth.currentUser!.reauthenticateWithCredential(credietial);
       await auth.currentUser!.updateEmail(yeniMail);
       await auth.signOut();
-      showMessage("Yeni mailinizle giris yapabilirsiniz", context);
+      showMessageAyarlar("Yeni mailinizle giris yapabilirsiniz", context);
       Navigator.of(context).pushNamed("/girisKontrol");
     }
   } catch (e) {
@@ -206,7 +206,7 @@ Future<String> getDownloadUrl(String userId, String img) async {
   return url;
 }
 
-void showMessage(String message, BuildContext context) {
+void showMessageAyarlar(String message, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(message, style: const TextStyle(fontSize: 20)),
     backgroundColor: Colors.black,

@@ -49,7 +49,7 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
                   onPressed: () {
                     signOutUser();
                     Navigator.of(context).pop();
-                    showMessage(
+                    showMessageAyarlar(
                         "${auth.currentUser!.email} çıkış yaptı", context);
                   },
                   child: const Text("Evet"),
@@ -78,7 +78,7 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
                     var sonuc = await deleteUser(context);
                     if (sonuc) {
                       Navigator.of(context).pop();
-                      showMessage("silindi", context);
+                      showMessageAyarlar("silindi", context);
                     }
                   },
                   child: const Text("Evet"),

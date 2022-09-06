@@ -78,7 +78,7 @@ class _MailDegistirState extends State<MailDegistir> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  showMessage(
+                                  showMessageAyarlar(
                                       "yeni mail : $_yeniMail", context);
 
                                   changeMail(_yeniMail, widget.auth, context);

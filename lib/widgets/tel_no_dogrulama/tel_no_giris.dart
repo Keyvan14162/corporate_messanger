@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/tel_no_helpers.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class TelefonNumarasiGiris extends StatefulWidget {
@@ -107,13 +108,14 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
 
         firebaseUserConfig(auth);
 
-        _showMessage(
-            "verificationCompleted tetiklendi ${credential.toString()}");
+        showMessageTelNo(
+            "verificationCompleted tetiklendi ${credential.toString()}",
+            context);
       },
       // hata
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          _showMessage("The provided phone number is not valid.");
+          showMessageTelNo("The provided phone number is not valid.", context);
         }
       },
       // kullaniciya 6 karakterli numara yollaniyo, burda o kodu iste
@@ -123,7 +125,8 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
           // ui ile kulanicidan girilen kodu al, bu kullanicin girdigi kod
           String smsCode = "";
 
-          _showMessage("Lutfen numaranıza gönderilen kodu giriniz");
+          showMessageTelNo(
+              "Lutfen numaranıza gönderilen kodu giriniz", context);
 
           await Navigator.of(context)
               .pushNamed("/telNoDogrulama")
@@ -137,24 +140,17 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
           // Sign the user in (or link) with the credential
           await auth.signInWithCredential(credential);
 
-          _showMessage("${auth.currentUser!.phoneNumber} kayit oldu ");
+          showMessageTelNo(
+              "${auth.currentUser!.phoneNumber} kayit oldu ", context);
 
           firebaseUserConfig(auth);
 
           Navigator.of(context).pushNamed("/anaSayfa");
         } catch (e) {
-          _showMessage(e.toString());
+          showMessageTelNo(e.toString(), context);
         }
       },
       codeAutoRetrievalTimeout: (String verificationId) async {},
     );
-  }
-
-  void _showMessage(String mesaj) {
-    String result = " $mesaj";
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(result, style: TextStyle(fontSize: 20)),
-      backgroundColor: Colors.black,
-    ));
   }
 }

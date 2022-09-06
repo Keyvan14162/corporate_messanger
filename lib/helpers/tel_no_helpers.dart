@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
-/*
-void telNoGiris(String telNo) async {
+
+void telNoGiris(String telNo, BuildContext context) async {
   await FirebaseAuth.instance.verifyPhoneNumber(
     phoneNumber: telNo,
     // default 30 sn bekle, cihaz kod gelsin de isleyim diye bekliyo
@@ -12,14 +14,16 @@ void telNoGiris(String telNo) async {
       // firebase'e giris
       await FirebaseAuth.instance.signInWithCredential(credential);
 
-      firebaseUserConfig(auth);
+      firebaseUserConfig(FirebaseAuth.instance);
 
-      _showMessage("verificationCompleted tetiklendi ${credential.toString()}");
+      showMessageTelNo(
+          "verificationCompleted tetiklendi ${credential.toString()},",
+          context);
     },
     // hata
     verificationFailed: (FirebaseAuthException e) {
       if (e.code == 'invalid-phone-number') {
-        _showMessage("The provided phone number is not valid.");
+        showMessageTelNo("The provided phone number is not valid.", context);
       }
     },
     // kullaniciya 6 karakterli numara yollaniyo, burda o kodu iste
@@ -29,7 +33,7 @@ void telNoGiris(String telNo) async {
         // ui ile kulanicidan girilen kodu al, bu kullanicin girdigi kod
         String smsCode = "";
 
-        _showMessage("Lutfen numaranıza gönderilen kodu giriniz");
+        showMessageTelNo("Lutfen numaranıza gönderilen kodu giriniz", context);
 
         await Navigator.of(context).pushNamed("/telNoDogrulama").then((value) {
           smsCode = value as String;
@@ -39,18 +43,27 @@ void telNoGiris(String telNo) async {
             verificationId: verificationId, smsCode: smsCode);
 
         // Sign the user in (or link) with the credential
-        await auth.signInWithCredential(credential);
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
-        _showMessage("${auth.currentUser!.phoneNumber} kayit oldu ");
+        showMessageTelNo(
+            "${FirebaseAuth.instance.currentUser!.phoneNumber} kayit oldu ",
+            context);
 
-        firebaseUserConfig(auth);
+        firebaseUserConfig(FirebaseAuth.instance);
 
         Navigator.of(context).pushNamed("/anaSayfa");
       } catch (e) {
-        _showMessage(e.toString());
+        showMessageTelNo(e.toString(), context);
       }
     },
     codeAutoRetrievalTimeout: (String verificationId) async {},
   );
 }
-*/
+
+void showMessageTelNo(String mesaj, BuildContext context) {
+  String result = " $mesaj";
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(result, style: TextStyle(fontSize: 20)),
+    backgroundColor: Colors.black,
+  ));
+}
