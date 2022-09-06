@@ -39,6 +39,7 @@ sendMessage(String message, bool isImg, String imgUrl, String senderId,
       imgurl: imgUrl,
       isImg: isImg,
       messageId: messageId,
+      isReaded: false,
     );
 
     Map<String, dynamic> newMessage = <String, dynamic>{};
@@ -49,6 +50,7 @@ sendMessage(String message, bool isImg, String imgUrl, String senderId,
     newMessage["isImg"] = messageModel.isImg;
     newMessage["imgUrl"] = messageModel.imgurl;
     newMessage["messageId"] = messageModel.messageId;
+    newMessage["isReaded"] = messageModel.isReaded;
 
     //   await firestore.collection("chat").add(newMessage);
 
@@ -87,11 +89,20 @@ Future<String> getUserName(String userId) async {
   return name;
 }
 
-addUserToFriends(String addUserId) {
-  FirebaseFirestore.instance
+addUserToFriends(String addUserId) async {
+  // lets make both friends
+
+  await FirebaseFirestore.instance
       .collection("users")
       .doc("${FirebaseAuth.instance.currentUser!.uid}")
       .update({
     "friends": FieldValue.arrayUnion([addUserId])
+  });
+
+  await FirebaseFirestore.instance
+      .collection("users")
+      .doc("${addUserId}")
+      .update({
+    "friends": FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
   });
 }

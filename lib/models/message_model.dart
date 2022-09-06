@@ -9,8 +9,10 @@ class MessageModel {
   final bool isImg;
   final String imgurl;
   final String messageId;
+  final bool isReaded;
 
   MessageModel({
+    required this.isReaded,
     required this.messageId,
     required this.isImg,
     required this.imgurl,

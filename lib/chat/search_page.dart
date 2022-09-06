@@ -140,7 +140,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     size: 34,
                                                   )
                                                 : IconButton(
-                                                    onPressed: () {
+                                                    onPressed: () async {
                                                       addUserToFriends(userId);
                                                     },
                                                     icon: const Icon(
