@@ -123,6 +123,22 @@ class _FriendsState extends State<Friends> {
           }
         },
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton.extended(
+              onPressed: () {
+                // Add your onPressed code here!
+              },
+              label: const Text('Grup mesajı'),
+              icon: const Icon(Icons.group),
+              backgroundColor: Colors.pink,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

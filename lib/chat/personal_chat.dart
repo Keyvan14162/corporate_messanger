@@ -94,12 +94,6 @@ class _PersonalChatState extends State<PersonalChat> {
                               FirebaseAuth.instance.currentUser!.uid ==
                                   senderId;
 
-                          if (isSender) {
-                            // karsıdan gelen mesajlar isreaded olsun
-                            setMessagesReaded(
-                                widget.senderId, widget.reciverId);
-                          }
-
                           var isImg = (snapshot.data
                                   as QuerySnapshot<Map<String, dynamic>>)
                               .docs[index]
@@ -117,6 +111,12 @@ class _PersonalChatState extends State<PersonalChat> {
                               .docs[index]
                               .data()["imgUrl"]
                               .toString();
+
+                          if (!isSender) {
+                            // karsıdan gelen mesajlar isreaded olsun
+                            setMessagesReaded(
+                                widget.senderId, widget.reciverId, messageId);
+                          }
 
                           return messageWidget(isSender, senderId, isImg,
                               imgUrl, message, date, messageId, isReaded);
@@ -189,7 +189,7 @@ class _PersonalChatState extends State<PersonalChat> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () async {
-                      _kameraOnTap(ImageSource.camera);
+                      _sendImageOnTap(ImageSource.camera);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,7 +204,7 @@ class _PersonalChatState extends State<PersonalChat> {
                   ),
                   PopupMenuItem(
                     onTap: () async {
-                      _kameraOnTap(ImageSource.gallery);
+                      _sendImageOnTap(ImageSource.gallery);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -250,7 +250,11 @@ class _PersonalChatState extends State<PersonalChat> {
     return AppBar(
       // automaticallyImplyLeading: false,
       leadingWidth: 30,
-      leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+      leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back)),
       title: Row(
         children: [
           FutureBuilder(
@@ -393,13 +397,22 @@ class _PersonalChatState extends State<PersonalChat> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            child: Image.network(
-                              imgUrl,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed("/imgPage", arguments: imgUrl);
+                            },
+                            child: Hero(
+                              tag: imgUrl,
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child: Image.network(
+                                  imgUrl,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -542,7 +555,7 @@ class _PersonalChatState extends State<PersonalChat> {
     );
   }
 
-  _kameraOnTap(ImageSource source) async {
+  _sendImageOnTap(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     XFile? file = await picker.pickImage(source: source);
 
@@ -635,14 +648,28 @@ class _PersonalChatState extends State<PersonalChat> {
     }
   }
 
-  setMessagesReaded(String senderId, String reciverId) async {
-    var collection = FirebaseFirestore.instance
+  setMessagesReaded(String senderId, String reciverId, String messageId) async {
+    var messageDocRef = await FirebaseFirestore.instance
         .collection('personal_chat')
         .doc("${reciverId + "-" + senderId}")
-        .collection("messages");
-    var querySnapshots = await collection.get();
-    for (var doc in querySnapshots.docs) {
-      await doc.reference.update({
+        .collection("messages")
+        .doc(messageId);
+
+    var myMessageDocRef = await FirebaseFirestore.instance
+        .collection('personal_chat')
+        .doc("${senderId + "-" + reciverId}")
+        .collection("messages")
+        .doc(messageId)
+        .get();
+
+    // her seferinde 1 write yapacagına 1 read yapsın
+    // gerekliyse bide write yapsın
+    var messageIsReaded = await myMessageDocRef.data()!["isReaded"];
+    print("-----------------------------------------");
+    print(messageDocRef);
+
+    if (!messageIsReaded) {
+      await messageDocRef.update({
         'isReaded': true,
       });
     }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/chat/%C4%B1mg_page.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/kullanici_guncelle.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/mail_degistir.dart';
@@ -46,6 +47,13 @@ class RouteGenerator {
         return _generateRoute(
             MailDegistir(
               auth: settings.arguments as FirebaseAuth,
+            ),
+            settings);
+
+      case "/imgPage":
+        return _generateRoute(
+            ImgPage(
+              imgUrl: settings.arguments as String,
             ),
             settings);
 

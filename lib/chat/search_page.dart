@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
+import 'package:flutter_firebase_auth/widgets/friends.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({required this.friends, Key? key}) : super(key: key);
@@ -100,12 +101,16 @@ class _SearchPageState extends State<SearchPage> {
 
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushNamed("/personalChat",
-                        // tıklayan, tıklanan
-                        arguments: [
-                          FirebaseAuth.instance.currentUser!.uid,
-                          userId
-                        ]);
+                    if (widget.friends.contains(userId)) {
+                      Navigator.of(context).pushNamed("/personalChat",
+                          // tıklayan, tıklanan
+                          arguments: [
+                            FirebaseAuth.instance.currentUser!.uid,
+                            userId
+                          ]);
+                    } else {
+                      print("once arkadas ekle");
+                    }
                   },
                   child: FirebaseAuth.instance.currentUser!.uid != userId
                       ? name.contains(searchText)
