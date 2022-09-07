@@ -9,7 +9,6 @@ import 'package:flutter_firebase_auth/widgets/ayarlar/mail_degistir.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/sifre_degistir.dart';
 import 'package:flutter_firebase_auth/chat/chat_room.dart';
 import 'package:flutter_firebase_auth/widgets/giris/giris_ekrani.dart';
-import 'package:flutter_firebase_auth/main_page.dart';
 import 'package:flutter_firebase_auth/widgets/giris/giris_kontrol.dart';
 import 'package:flutter_firebase_auth/widgets/ana_sayfa.dart';
 import 'package:flutter_firebase_auth/chat/personal_chat.dart';
@@ -32,7 +31,7 @@ class RouteGenerator {
   static Route<dynamic>? routeGenrator(RouteSettings settings) {
     switch (settings.name) {
       case "/":
-        return _generateRoute(MainPage(), settings);
+        return _generateRoute(GirisKontrol(), settings);
 
       case "/girisEkrani":
         return _generateRoute(GirisEkrani(), settings);
