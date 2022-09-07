@@ -1,16 +1,16 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/chat/chat_room.dart';
 import 'package:flutter_firebase_auth/widgets/friends.dart';
-
 import 'ayarlar/ayarlar.dart';
 
 class AnaSayfa extends StatefulWidget {
   // User user; required this.user,
-  AnaSayfa({Key? key}) : super(key: key);
+  // const AnaSayfa({Key? key}) : super(key: key);
 
-  @override
   State<AnaSayfa> createState() => _AnaSayfaState();
 }
 
@@ -20,6 +20,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   late PageController _pageController;
   int _currentIndex = 0;
 
+  @override
   void initState() {
     super.initState();
     auth = FirebaseAuth.instance;
