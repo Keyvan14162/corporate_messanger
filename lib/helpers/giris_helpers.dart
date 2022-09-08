@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 void saveUserToFirestore(String name, int age, String userId) async {
   var user =
       // profile pic url
-      UserModel(name: name, age: age, friends: []);
+      UserModel(name: name, age: age, friends: [], groups: []);
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -111,7 +111,7 @@ void firebaseUserConfig(FirebaseAuth auth) async {
     // yani boyle bi user yoksa, ilk kaytsa firebasede defaukt bi user olustursun
     var user =
         // profile pic url
-        UserModel(name: "Name", age: 0, friends: []);
+        UserModel(name: "Name", age: 0, friends: [], groups: []);
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -120,6 +120,7 @@ void firebaseUserConfig(FirebaseAuth auth) async {
     eklenecekUser["age"] = user.age;
     eklenecekUser["createdAt"] = FieldValue.serverTimestamp();
     eklenecekUser["friends"] = user.friends;
+    eklenecekUser["groups"] = user.groups;
 
     // kullaniciyi guncelleme
     await FirebaseFirestore.instance.doc("users/${auth.currentUser!.uid}").set(

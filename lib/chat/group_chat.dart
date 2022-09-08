@@ -7,18 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PersonalChat extends StatefulWidget {
-  const PersonalChat(
-      {required this.senderId, required this.reciverId, Key? key})
-      : super(key: key);
-  final String senderId;
-  final String reciverId;
+class GroupChat extends StatefulWidget {
+  const GroupChat({required this.groupId, Key? key}) : super(key: key);
+
+  final String groupId;
 
   @override
-  State<PersonalChat> createState() => _PersonalChatState();
+  State<GroupChat> createState() => _GroupChatState();
 }
 
-class _PersonalChatState extends State<PersonalChat> {
+class _GroupChatState extends State<GroupChat> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   StreamSubscription? userSubscribe;
   late TextEditingController _textController;
@@ -43,7 +41,7 @@ class _PersonalChatState extends State<PersonalChat> {
           children: [
             Flexible(
               child: StreamBuilder(
-                stream: getAllMessages(),
+                stream: getAllGroupMessages(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
@@ -112,27 +110,12 @@ class _PersonalChatState extends State<PersonalChat> {
                               .data()["imgUrl"]
                               .toString();
 
-                          /*
-                          bool didISendLastMessage = false;
-                          try {
-                            var previusMessageSenderId = (snapshot.data
-                                    as QuerySnapshot<Map<String, dynamic>>)
-                                .docs[index - 1]
-                                .data()["senderId"]
-                                .toString();
-                            if (previusMessageSenderId == senderId) {
-                              didISendLastMessage = false;
-                            } else {
-                              didISendLastMessage = true;
-                            }
-                          } catch (e) {}
-                          print(didISendLastMessage);
-                          */
-
                           if (!isSender) {
                             // karsıdan gelen mesajlar isreaded olsun
+                            /*
                             setMessagesReaded(
                                 widget.senderId, widget.reciverId, messageId);
+                                */
                           }
 
                           return messageWidget(
@@ -171,6 +154,7 @@ class _PersonalChatState extends State<PersonalChat> {
           icon: const Icon(Icons.arrow_back)),
       title: Row(
         children: [
+          /*
           FutureBuilder(
               future: getUserField(widget.reciverId, "profileImg"),
               builder: (context, snapshot) {
@@ -195,6 +179,7 @@ class _PersonalChatState extends State<PersonalChat> {
               }
             },
           ),
+          */
         ],
       ),
       actions: [
@@ -293,9 +278,15 @@ class _PersonalChatState extends State<PersonalChat> {
                     onChanged: (value) {
                       _message = value.toString();
                     },
-                    onSubmitted: (value) {
-                      sendMessage(_message, false, "imgUrl", widget.senderId,
-                          widget.reciverId);
+                    onSubmitted: (value) async {
+                      await sendGroupMessage(
+                        _message,
+                        false,
+                        "imgUrl",
+                        FirebaseAuth.instance.currentUser!.uid,
+                        widget.groupId,
+                        widget.groupId,
+                      );
                       _textController.clear();
                     },
                   ),
@@ -319,7 +310,7 @@ class _PersonalChatState extends State<PersonalChat> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () async {
-                      _sendImageOnTap(ImageSource.camera);
+                      _sendGroupImageOnTap(ImageSource.camera);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -334,7 +325,7 @@ class _PersonalChatState extends State<PersonalChat> {
                   ),
                   PopupMenuItem(
                     onTap: () async {
-                      _sendImageOnTap(ImageSource.gallery);
+                      _sendGroupImageOnTap(ImageSource.gallery);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -356,8 +347,14 @@ class _PersonalChatState extends State<PersonalChat> {
               padding: const EdgeInsets.only(right: 10),
               child: FloatingActionButton(
                 onPressed: () {
-                  sendMessage(_message, false, "imgUrl", widget.senderId,
-                      widget.reciverId);
+                  sendGroupMessage(
+                    _message,
+                    false,
+                    "imgUrl",
+                    FirebaseAuth.instance.currentUser!.uid,
+                    widget.groupId,
+                    widget.groupId,
+                  );
                   _textController.clear();
                 },
                 backgroundColor: Colors.blue,
@@ -394,18 +391,6 @@ class _PersonalChatState extends State<PersonalChat> {
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            /*
-            FutureBuilder(
-                future: getUserField(senderId, "name"),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data.toString());
-                  } else {
-                    return const Text("No Name Found");
-                  }
-                }),
-                */
-            //Text("sender id - $senderId"),
             isImg == "true"
                 ? GestureDetector(
                     onLongPress: () {
@@ -466,7 +451,8 @@ class _PersonalChatState extends State<PersonalChat> {
                               })
                             : const SizedBox(),
                       ],
-                    ))
+                    ),
+                  )
                 : Column(
                     crossAxisAlignment: isSender
                         ? CrossAxisAlignment.end
@@ -587,19 +573,25 @@ class _PersonalChatState extends State<PersonalChat> {
     );
   }
 
-  _sendImageOnTap(ImageSource source) async {
+  _sendGroupImageOnTap(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     XFile? file = await picker.pickImage(source: source);
 
     var profileRef = FirebaseStorage.instance.ref(
-        "users/messagePics/${FirebaseAuth.instance.currentUser!.uid}/${firestore.collection("users").doc().id}");
+        "users/messagePics/${FirebaseAuth.instance.currentUser!.uid}/${firestore.collection("groups").doc().id}");
     var task = profileRef.putFile(File(file!.path));
+    print(task);
 
     task.whenComplete(() async {
       var url = await profileRef.getDownloadURL();
 
-      await sendMessage(
-          "message", true, url, widget.senderId, widget.reciverId);
+      await sendGroupMessage(
+          "message",
+          true,
+          url,
+          FirebaseAuth.instance.currentUser!.uid,
+          widget.groupId,
+          widget.groupId);
     });
   }
 
@@ -613,10 +605,10 @@ class _PersonalChatState extends State<PersonalChat> {
     return data[fieldName];
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllGroupMessages() {
     var messageStream = firestore
-        .collection("personal_chat")
-        .doc("${widget.senderId + "-" + widget.reciverId}")
+        .collection("groups")
+        .doc("${widget.groupId}")
         .collection("messages")
         .orderBy("date", descending: true)
         .snapshots();
@@ -651,14 +643,8 @@ class _PersonalChatState extends State<PersonalChat> {
                 // delete from firebase
                 selectedMessagesId.forEach((messageId) async {
                   await firestore
-                      .collection("personal_chat")
-                      .doc("${widget.senderId + "-" + widget.reciverId}")
-                      .collection("messages")
-                      .doc(messageId)
-                      .delete();
-                  await firestore
-                      .collection("personal_chat")
-                      .doc("${widget.reciverId + "-" + widget.senderId}")
+                      .collection("groups")
+                      .doc("${widget.groupId}")
                       .collection("messages")
                       .doc(messageId)
                       .delete();

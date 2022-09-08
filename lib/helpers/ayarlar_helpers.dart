@@ -91,7 +91,7 @@ Future<bool> deleteUser(BuildContext context) async {
 Future updateUser(String name, int age, String userId) async {
   var user =
       // profile pic url
-      UserModel(name: name, age: age, friends: []);
+      UserModel(name: name, age: age, friends: [], groups: []);
 
   Map<String, dynamic> eklenecekUser = <String, dynamic>{};
   eklenecekUser["name"] = user.name;

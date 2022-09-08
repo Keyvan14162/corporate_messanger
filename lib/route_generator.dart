@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/chat/%C4%B1mg_page.dart';
+import 'package:flutter_firebase_auth/chat/group_chat.dart';
+import 'package:flutter_firebase_auth/chat/group_create_page.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/kullanici_guncelle.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/mail_degistir.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/sifre_degistir.dart';
-import 'package:flutter_firebase_auth/chat/chat_room.dart';
+import 'package:flutter_firebase_auth/chat/groups.dart';
 import 'package:flutter_firebase_auth/widgets/giris/giris_ekrani.dart';
 import 'package:flutter_firebase_auth/widgets/giris/giris_kontrol.dart';
 import 'package:flutter_firebase_auth/widgets/ana_sayfa.dart';
@@ -59,6 +61,9 @@ class RouteGenerator {
       case "/girisKontrol":
         return _generateRoute(GirisKontrol(), settings);
 
+      case "/groupCreatePage":
+        return _generateRoute(GroupCreatePage(), settings);
+
       case "/ayarlar":
         return _generateRoute(Ayarlar(), settings);
 
@@ -86,8 +91,15 @@ class RouteGenerator {
       case "/telNoGiris":
         return _generateRoute(TelefonNumarasiGiris(), settings);
 
-      case "/chatRoom":
-        return _generateRoute(ChatRoom(), settings);
+      case "/groups":
+        return _generateRoute(Groups(), settings);
+
+      case "/groupChat":
+        return _generateRoute(
+            GroupChat(
+              groupId: (settings.arguments as String),
+            ),
+            settings);
 
       case "/telNoDogrulama":
         return _generateRoute(TelNoDogrulama(), settings);

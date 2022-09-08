@@ -129,9 +129,12 @@ class _FriendsState extends State<Friends> {
                                                   NetworkImage(profileImgUrl),
                                             ),
                                       title: Text(
-                                        name,
+                                        "$name $userId",
                                       ),
-                                      subtitle: Text(userId),
+                                      // BURDA STREAMBUİLDER ILE GETLASTMESSAGE DINLI
+                                      // O DA SON MESAJIN OLDUGU SNAPSHOTU DONSUN
+
+                                      subtitle: Text("sdadasdad"),
                                     ),
                                   ),
                                 ),
@@ -155,7 +158,7 @@ class _FriendsState extends State<Friends> {
           children: [
             FloatingActionButton.extended(
               onPressed: () {
-                // Add your onPressed code here!
+                Navigator.of(context).pushNamed("/groupCreatePage");
               },
               label: const Text('Grup mesajı'),
               icon: const Icon(Icons.group),
@@ -192,7 +195,6 @@ class _FriendsState extends State<Friends> {
               // delete from storage
               messages.docs.forEach((element) async {
                 var url = element.data()["imgUrl"];
-                print("img url : " + url);
 
                 if (url != "imgUrl") {
                   await FirebaseStorage.instance.refFromURL(url).delete();
@@ -202,7 +204,6 @@ class _FriendsState extends State<Friends> {
               // delete from firebase
               messages.docs.forEach((element) async {
                 var messageId = element.data()["messageId"];
-                print(messageId);
 
                 await firestore
                     .collection("personal_chat")
@@ -239,4 +240,17 @@ class _FriendsState extends State<Friends> {
       ),
     );
   }
+
+  /*
+  getMessages(String myId, String friendId) {
+    var messageSnapshots = firestore
+        .collection("personal_chat")
+        .doc("${myId + "-" + friendId}")
+        .collection("messages")
+        .orderBy("date", descending: true)
+        .snapshots();
+
+    print(messageSnapshots);
+  }
+  */
 }

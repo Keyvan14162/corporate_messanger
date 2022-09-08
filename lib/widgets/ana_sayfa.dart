@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/chat/chat_room.dart';
+import 'package:flutter_firebase_auth/chat/groups.dart';
 import 'package:flutter_firebase_auth/widgets/friends.dart';
 import 'ayarlar/ayarlar.dart';
 
@@ -46,7 +46,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             Container(
               color: Colors.red,
             ),
-            ChatRoom(),
+            Groups(),
             Friends(),
             Ayarlar(),
           ],
@@ -64,7 +64,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             icon: const Icon(Icons.chat_bubble),
           ),
           BottomNavyBarItem(
-            title: const Text('Chat Room'),
+            title: const Text('Groups'),
             icon: const Icon(Icons.chat),
           ),
           BottomNavyBarItem(
