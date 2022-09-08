@@ -142,10 +142,12 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
                   var groupModel = GroupModel(
                     userIds: selectedUsersId.toList(),
                     groupId: groupId,
+                    name: groupName.trim(),
                   );
                   Map<String, dynamic> newGroup = <String, dynamic>{};
                   newGroup["userIds"] = groupModel.userIds;
                   newGroup["groupId"] = groupModel.groupId;
+                  newGroup["name"] = groupModel.name;
 
                   await FirebaseFirestore.instance
                       .collection("groups")

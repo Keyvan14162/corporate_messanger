@@ -8,9 +8,16 @@ import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
 class GroupChat extends StatefulWidget {
-  const GroupChat({required this.groupId, Key? key}) : super(key: key);
+  const GroupChat(
+      {required this.groupUserIdList,
+      required this.groupName,
+      required this.groupId,
+      Key? key})
+      : super(key: key);
 
   final String groupId;
+  final String groupName;
+  final List<dynamic> groupUserIdList;
 
   @override
   State<GroupChat> createState() => _GroupChatState();
@@ -148,38 +155,37 @@ class _GroupChatState extends State<GroupChat> {
       // automaticallyImplyLeading: false,
       leadingWidth: 30,
       leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(Icons.arrow_back)),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
       title: Row(
         children: [
-          /*
-          FutureBuilder(
-              future: getUserField(widget.reciverId, "profileImg"),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(snapshot.data.toString()),
-                    ),
-                  );
-                } else {
-                  return const Icon(Icons.person);
-                }
-              }),
-          FutureBuilder(
-            future: getUserField(widget.reciverId, "name"),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.toString());
-              } else {
-                return Text("No name found");
-              }
-            },
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.groupName),
+              Row(
+                children: [
+                  for (int i = 0; i < widget.groupUserIdList.length; i++)
+                    FutureBuilder(
+                      future: getUserName(widget.groupUserIdList[i]),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data.toString(),
+                            style: const TextStyle(fontSize: 10),
+                          );
+                        } else {
+                          return SizedBox();
+                        }
+                      },
+                    )
+                ],
+              )
+            ],
           ),
-          */
         ],
       ),
       actions: [
@@ -391,6 +397,17 @@ class _GroupChatState extends State<GroupChat> {
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
+            isSender
+                ? const SizedBox()
+                : FutureBuilder(
+                    future: getUserName(senderId),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data.toString());
+                      } else {
+                        return const Text("No Name Found");
+                      }
+                    }),
             isImg == "true"
                 ? GestureDetector(
                     onLongPress: () {
@@ -416,7 +433,9 @@ class _GroupChatState extends State<GroupChat> {
                             child: Hero(
                               tag: imgUrl,
                               child: Container(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: isSender
+                                    ? const EdgeInsets.fromLTRB(48, 8, 8, 8)
+                                    : const EdgeInsets.fromLTRB(8, 8, 48, 8),
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                 ),
@@ -428,27 +447,30 @@ class _GroupChatState extends State<GroupChat> {
                           ),
                         ),
                         hoverd
-                            ? StatefulBuilder(builder: (context, setState) {
-                                return isSender
-                                    ? Checkbox(
-                                        value: checkboxValue,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            checkboxValue = val!;
-                                            if (checkboxValue) {
-                                              selectedMessagesId.add(messageId);
-                                              selectedMessagesImgUrl
-                                                  .add(imgUrl);
-                                            } else {
-                                              selectedMessagesId
-                                                  .remove(messageId);
-                                              selectedMessagesImgUrl
-                                                  .remove(imgUrl);
-                                            }
-                                          });
-                                        })
-                                    : const SizedBox();
-                              })
+                            ? StatefulBuilder(
+                                builder: (context, setState) {
+                                  return isSender
+                                      ? Checkbox(
+                                          value: checkboxValue,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              checkboxValue = val!;
+                                              if (checkboxValue) {
+                                                selectedMessagesId
+                                                    .add(messageId);
+                                                selectedMessagesImgUrl
+                                                    .add(imgUrl);
+                                              } else {
+                                                selectedMessagesId
+                                                    .remove(messageId);
+                                                selectedMessagesImgUrl
+                                                    .remove(imgUrl);
+                                              }
+                                            });
+                                          })
+                                      : const SizedBox();
+                                },
+                              )
                             : const SizedBox(),
                       ],
                     ),
@@ -597,7 +619,7 @@ class _GroupChatState extends State<GroupChat> {
 
   // HER SEFERINDE ISTEK YOLLAMASIN DYUZELT BUNU
   // SENDERNAME DİGER SINIFTAN YOLLASIN YADA BURDA 1 KERE TANIMLA
-  Future<String> getUserField(String userId, String fieldName) async {
+  Future<String> getGroupName(String userId, String fieldName) async {
     // one time read
     var data =
         (await FirebaseFirestore.instance.doc("users/$userId").get()).data()!;

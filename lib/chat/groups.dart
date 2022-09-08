@@ -75,6 +75,17 @@ class _GroupsState extends State<Groups> {
                               .id
                               .toString();
 
+                      var groupName =
+                          (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
+                              .docs[index]
+                              .data()["name"]
+                              .toString();
+
+                      List<dynamic> groupUserIdList =
+                          (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
+                              .docs[index]
+                              .data()["userIds"];
+
                       return GestureDetector(
                         onTap: () {
                           /*
@@ -87,9 +98,12 @@ class _GroupsState extends State<Groups> {
                         },
                         child: groups.contains(groupId)
                             ? GestureDetector(
-                                onTap: () => Navigator.of(context).pushNamed(
-                                    "/groupChat",
-                                    arguments: groupId),
+                                onTap: () => Navigator.of(context)
+                                    .pushNamed("/groupChat", arguments: [
+                                  groupId,
+                                  groupName,
+                                  groupUserIdList
+                                ]),
                                 child: Card(
                                   elevation: 4,
                                   child: Padding(

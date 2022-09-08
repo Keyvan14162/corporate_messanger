@@ -97,7 +97,10 @@ class RouteGenerator {
       case "/groupChat":
         return _generateRoute(
             GroupChat(
-              groupId: (settings.arguments as String),
+              groupId: (settings.arguments as List<dynamic>)[0] as String,
+              groupName: (settings.arguments as List<dynamic>)[1] as String,
+              groupUserIdList:
+                  (settings.arguments as List<dynamic>)[2] as List<dynamic>,
             ),
             settings);
 
