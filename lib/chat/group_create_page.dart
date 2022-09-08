@@ -142,42 +142,45 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
           children: [
             FloatingActionButton.extended(
               onPressed: () async {
-                if (groupName.trim().isNotEmpty && groupName.length < 30) {
-                  selectedUsersId.add(FirebaseAuth.instance.currentUser!.uid);
-                  // Tek basına iken de grup olsuturabilsin
-                  var groupId =
-                      FirebaseFirestore.instance.collection("groups").doc().id;
-                  var groupModel = GroupModel(
-                    userIds: selectedUsersId.toList(),
-                    groupId: groupId,
-                    name: groupName.trim(),
-                  );
-                  Map<String, dynamic> newGroup = <String, dynamic>{};
-                  newGroup["userIds"] = groupModel.userIds;
-                  newGroup["groupId"] = groupModel.groupId;
-                  newGroup["name"] = groupModel.name;
-
-                  await FirebaseFirestore.instance
-                      .collection("groups")
-                      .doc(groupId)
-                      .set(newGroup);
-                  selectedUsersId.forEach((element) async {
-                    await FirebaseFirestore.instance
-                        .collection("users")
-                        .doc("${element}")
-                        .update({
-                      "groups": FieldValue.arrayUnion([groupId])
-                    });
-                  });
-                }
+                createGroup();
               },
               label: const Text('Grup Oluştur'),
-              icon: const Icon(Icons.group),
+              icon: const Icon(Icons.add),
               backgroundColor: Colors.pink,
             ),
           ],
         ),
       ),
     );
+  }
+
+  createGroup() async {
+    if (groupName.trim().isNotEmpty && groupName.length < 30) {
+      selectedUsersId.add(FirebaseAuth.instance.currentUser!.uid);
+      // Tek basına iken de grup olsuturabilsin
+      var groupId = FirebaseFirestore.instance.collection("groups").doc().id;
+      var groupModel = GroupModel(
+        userIds: selectedUsersId.toList(),
+        groupId: groupId,
+        name: groupName.trim(),
+      );
+      Map<String, dynamic> newGroup = <String, dynamic>{};
+      newGroup["userIds"] = groupModel.userIds;
+      newGroup["groupId"] = groupModel.groupId;
+      newGroup["name"] = groupModel.name;
+
+      await FirebaseFirestore.instance
+          .collection("groups")
+          .doc(groupId)
+          .set(newGroup);
+      selectedUsersId.forEach((element) async {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc("${element}")
+            .update({
+          "groups": FieldValue.arrayUnion([groupId])
+        });
+      });
+    }
   }
 }

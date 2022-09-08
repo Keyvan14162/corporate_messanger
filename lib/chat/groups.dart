@@ -19,33 +19,10 @@ class _GroupsState extends State<Groups> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Grup Ara',
+          'Gruplar',
           style: TextStyle(color: ThemeData().primaryColor),
         ),
         backgroundColor: Colors.white,
-        actions: [
-          // Navigate to the Search Screen
-
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.person,
-              color: ThemeData().primaryColor,
-            ),
-          ),
-
-          IconButton(
-            /*
-            onPressed: () => Navigator.of(context)
-                .pushNamed("/searchPage", arguments: friends),
-                */
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-              color: ThemeData().primaryColor,
-            ),
-          )
-        ],
       ),
       body: StreamBuilder(
         stream: getGroups(),
