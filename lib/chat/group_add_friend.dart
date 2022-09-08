@@ -1,17 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/models/group_model.dart';
 
-class GroupCreatePage extends StatefulWidget {
-  const GroupCreatePage({Key? key}) : super(key: key);
+class GroupAddFriend extends StatefulWidget {
+  const GroupAddFriend(
+      {required this.groupUserIdList, required this.groupId, Key? key})
+      : super(key: key);
+  final String groupId;
+  final List<dynamic> groupUserIdList;
 
   @override
-  State<GroupCreatePage> createState() => _GroupCreatePageState();
+  State<GroupAddFriend> createState() => _GroupAddFriendState();
 }
 
-class _GroupCreatePageState extends State<GroupCreatePage> {
+class _GroupAddFriendState extends State<GroupAddFriend> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Set<String> selectedUsersId = {};
   String groupName = "";
@@ -29,14 +34,9 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
               Icons.arrow_back,
               color: ThemeData().primaryColor,
             )),
-        title: TextField(
-          maxLines: 1,
-          decoration: InputDecoration.collapsed(
-            hintText: "Grup ismi giriniz",
-          ),
-          onChanged: (value) {
-            groupName = value;
-          },
+        title: Text(
+          "Add Friends",
+          style: TextStyle(color: ThemeData().primaryColor),
         ),
         backgroundColor: Colors.white,
       ),
@@ -50,6 +50,7 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   friends = (snapshot.data as DocumentSnapshot)["friends"];
+
                   return StreamBuilder(
                     stream: getAllUsers(),
                     builder: (context, snapshot) {
@@ -83,7 +84,13 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
 
                             bool checkBoxValue = false;
 
-                            return friends.contains(userId)
+                            bool isMe =
+                                FirebaseAuth.instance.currentUser!.uid ==
+                                    userId;
+
+                            return friends.contains(userId) &&
+                                    !isMe &&
+                                    !widget.groupUserIdList.contains(userId)
                                 ? Card(
                                     elevation: 4,
                                     child: Padding(
@@ -114,6 +121,7 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
                                                       selectedUsersId
                                                           .remove(userId);
                                                     }
+                                                    print(selectedUsersId);
                                                   },
                                                 );
                                               },
@@ -142,36 +150,29 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
           children: [
             FloatingActionButton.extended(
               onPressed: () async {
-                if (groupName.trim().isNotEmpty && groupName.length < 30) {
-                  selectedUsersId.add(FirebaseAuth.instance.currentUser!.uid);
-                  // Tek basına iken de grup olsuturabilsin
-                  var groupId =
-                      FirebaseFirestore.instance.collection("groups").doc().id;
-                  var groupModel = GroupModel(
-                    userIds: selectedUsersId.toList(),
-                    groupId: groupId,
-                    name: groupName.trim(),
-                  );
-                  Map<String, dynamic> newGroup = <String, dynamic>{};
-                  newGroup["userIds"] = groupModel.userIds;
-                  newGroup["groupId"] = groupModel.groupId;
-                  newGroup["name"] = groupModel.name;
+                if (selectedUsersId.isNotEmpty) {
+                  selectedUsersId.forEach((element) async {
+                    await FirebaseFirestore.instance
+                        .collection("groups")
+                        .doc(widget.groupId)
+                        .update({
+                      "userIds": FieldValue.arrayUnion([element])
+                    });
+                  });
 
-                  await FirebaseFirestore.instance
-                      .collection("groups")
-                      .doc(groupId)
-                      .set(newGroup);
                   selectedUsersId.forEach((element) async {
                     await FirebaseFirestore.instance
                         .collection("users")
                         .doc("${element}")
                         .update({
-                      "groups": FieldValue.arrayUnion([groupId])
+                      "groups": FieldValue.arrayUnion([widget.groupId])
                     });
                   });
+
+                  Navigator.of(context).pop();
                 }
               },
-              label: const Text('Grup Oluştur'),
+              label: const Text('Gruba Ekle'),
               icon: const Icon(Icons.group),
               backgroundColor: Colors.pink,
             ),

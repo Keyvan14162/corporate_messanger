@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/chat/%C4%B1mg_page.dart';
+import 'package:flutter_firebase_auth/chat/group_add_friend.dart';
 import 'package:flutter_firebase_auth/chat/group_chat.dart';
 import 'package:flutter_firebase_auth/chat/group_create_page.dart';
 import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar.dart';
@@ -81,12 +82,13 @@ class RouteGenerator {
             ),
             settings);
       case "/personalChat":
-        return _generateRoute(
-            PersonalChat(
-              senderId: (settings.arguments as List<String>)[0],
-              reciverId: (settings.arguments as List<String>)[1],
-            ),
-            settings);
+        return CupertinoPageRoute(
+          builder: (context) => PersonalChat(
+            senderId: (settings.arguments as List<String>)[0],
+            reciverId: (settings.arguments as List<String>)[1],
+          ),
+          settings: settings,
+        );
 
       case "/telNoGiris":
         return _generateRoute(TelefonNumarasiGiris(), settings);
@@ -94,15 +96,25 @@ class RouteGenerator {
       case "/groups":
         return _generateRoute(Groups(), settings);
 
-      case "/groupChat":
+      case "/groupAddFriend":
         return _generateRoute(
-            GroupChat(
+            GroupAddFriend(
               groupId: (settings.arguments as List<dynamic>)[0] as String,
-              groupName: (settings.arguments as List<dynamic>)[1] as String,
               groupUserIdList:
-                  (settings.arguments as List<dynamic>)[2] as List<dynamic>,
+                  (settings.arguments as List<dynamic>)[1] as List<dynamic>,
             ),
             settings);
+
+      case "/groupChat":
+        return CupertinoPageRoute(
+          builder: (context) => GroupChat(
+            groupId: (settings.arguments as List<dynamic>)[0] as String,
+            groupName: (settings.arguments as List<dynamic>)[1] as String,
+            groupUserIdList:
+                (settings.arguments as List<dynamic>)[2] as List<dynamic>,
+          ),
+          settings: settings,
+        );
 
       case "/telNoDogrulama":
         return _generateRoute(TelNoDogrulama(), settings);

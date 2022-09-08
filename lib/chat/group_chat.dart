@@ -224,26 +224,41 @@ class _GroupChatState extends State<GroupChat> {
                   ),
                   itemBuilder: (context) => [
                     PopupMenuItem(
-                      onTap: () async {},
+                      key: UniqueKey(),
+                      onTap: () {
+                        leaveGroup(widget.groupId);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("AAAAAAAAAAA"),
+                          const Text("Leave Group"),
                           Icon(
-                            Icons.arrow_forward_ios,
+                            Icons.exit_to_app,
                             color: ThemeData().primaryColor,
                           ),
                         ],
                       ),
                     ),
                     PopupMenuItem(
-                      onTap: () async {},
+                      key: UniqueKey(),
+                      onTap: () {
+                        Navigator.of(context).pushNamed("/groupAddFriend",
+                            arguments: [
+                              widget.groupId,
+                              widget.groupUserIdList
+                            ]);
+                        Navigator.of(context).pushNamed("/groupAddFriend",
+                            arguments: [
+                              widget.groupId,
+                              widget.groupUserIdList
+                            ]);
+                      },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("BBBBBBBBB"),
+                          const Text("Add Friend"),
                           Icon(
-                            Icons.arrow_forward_ios,
+                            Icons.person_add_alt_1_outlined,
                             color: ThemeData().primaryColor,
                           ),
                         ],
@@ -716,5 +731,69 @@ class _GroupChatState extends State<GroupChat> {
         'isReaded': true,
       });
     }*/
+  }
+
+  leaveGroup(String groupId) async {
+    var messages = await firestore
+        .collection("groups")
+        .doc("${groupId}")
+        .collection("messages")
+        .orderBy("date", descending: true)
+        .get();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Uyarı"),
+        content: Text("Gruptan ayrılınsın mı ?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Hayır"),
+          ),
+          TextButton(
+            onPressed: () async {
+              // delete from storage
+              /*
+              messages.docs.forEach((element) async {
+                var url = element.data()["imgUrl"];
+
+                if (url != "imgUrl") {
+                  await FirebaseStorage.instance.refFromURL(url).delete();
+                }
+              });
+              */
+
+              // delete from firebase
+              /*
+              messages.docs.forEach((element) async {
+                var messageId = element.data()["messageId"];
+
+                await firestore
+                    .collection("groups")
+                    .doc("${groupId}")
+                    .collection("messages")
+                    .doc(messageId)
+                    .delete();
+              });
+              */
+
+              await FirebaseFirestore.instance
+                  .collection("users")
+                  .doc("${FirebaseAuth.instance.currentUser!.uid}")
+                  .update({
+                "groups": FieldValue.arrayRemove([groupId])
+              });
+
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text("Evet"),
+          ),
+        ],
+      ),
+    );
   }
 }
