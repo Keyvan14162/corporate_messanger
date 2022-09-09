@@ -36,6 +36,7 @@ class _ProfileImgState extends State<ProfileImg> {
     return Stack(
       clipBehavior: Clip.none,
       children: [
+        // cover img
         FutureBuilder<String>(
           future: getDownloadUrl(widget.userId, "coverImg"),
           builder: (context, snapshot) {
@@ -65,6 +66,7 @@ class _ProfileImgState extends State<ProfileImg> {
             }
           },
         ),
+        // profile img
         FutureBuilder<String>(
           future: getDownloadUrl(widget.userId, "profileImg"),
           builder: (context, snapshot) {
@@ -102,6 +104,7 @@ class _ProfileImgState extends State<ProfileImg> {
             }
           },
         ),
+        // name
         FutureBuilder(
           future: widget.userName,
           builder: (context, snapshot) {

@@ -29,6 +29,25 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
               arguments: auth.currentUser!.uid);
         }),
 
+        // Hesap Doğrulama
+        createButton("Hesap Dogrulama", Icons.account_box, () async {
+          setState(() {
+            hesapDogrula(context);
+          });
+        }),
+
+        // Mail Change
+        createButton("Mail Değiştir", Icons.mail, () async {
+          Navigator.of(context)
+              .pushNamed(Constants.MAIL_CHNAGE_PATH, arguments: auth);
+        }),
+
+        // Password Change 141622
+        createButton("Sifre degistir", Icons.password, () async {
+          Navigator.of(context)
+              .pushNamed(Constants.PASSWORD_CHANGE_PATH, arguments: auth);
+        }),
+
         // Sign out user
         createButton("Sign Out cıkıs yap", Icons.exit_to_app, () {
           showDialog(
@@ -85,25 +104,6 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
             ),
           );
         }),
-
-        // Hesap Doğrulama
-        createButton("Hesap Dogrulama", Icons.account_box, () async {
-          setState(() {
-            hesapDogrula(context);
-          });
-        }),
-
-        // Password Change 141622
-        createButton("Sifre degistir", Icons.password, () async {
-          Navigator.of(context)
-              .pushNamed(Constants.PASSWORD_CHANGE_PATH, arguments: auth);
-        }),
-
-        // Mail Change
-        createButton("Mail Değiştir", Icons.mail, () async {
-          Navigator.of(context)
-              .pushNamed(Constants.MAIL_CHNAGE_PATH, arguments: auth);
-        })
       ],
     );
   }
