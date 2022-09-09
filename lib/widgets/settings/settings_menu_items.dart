@@ -1,18 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class AyarlarMenuItems extends StatefulWidget {
-  const AyarlarMenuItems({Key? key}) : super(key: key);
+class SettingsMenuItems extends StatefulWidget {
+  const SettingsMenuItems({Key? key}) : super(key: key);
 
   @override
-  State<AyarlarMenuItems> createState() => _AyarlarMenuItemsState();
+  State<SettingsMenuItems> createState() => _SettingsMenuItemsState();
 }
 
-class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
+class _SettingsMenuItemsState extends State<SettingsMenuItems> {
   late FirebaseAuth auth;
 
   @override
@@ -27,7 +25,7 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
       children: [
         // Change user informations
         createButton("Change User Informations", Icons.edit, () {
-          Navigator.of(context).pushNamed("/kullaniciGuncelle",
+          Navigator.of(context).pushNamed(Constants.USER_UPDATE_PATH,
               arguments: auth.currentUser!.uid);
         }),
 
@@ -97,12 +95,14 @@ class _AyarlarMenuItemsState extends State<AyarlarMenuItems> {
 
         // Password Change 141622
         createButton("Sifre degistir", Icons.password, () async {
-          Navigator.of(context).pushNamed("/sifreDegistir", arguments: auth);
+          Navigator.of(context)
+              .pushNamed(Constants.PASSWORD_CHANGE_PATH, arguments: auth);
         }),
 
         // Mail Change
         createButton("Mail Değiştir", Icons.mail, () async {
-          Navigator.of(context).pushNamed("/mailDegistir", arguments: auth);
+          Navigator.of(context)
+              .pushNamed(Constants.MAIL_CHNAGE_PATH, arguments: auth);
         })
       ],
     );

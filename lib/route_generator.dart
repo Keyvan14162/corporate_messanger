@@ -2,86 +2,87 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/chat/%C4%B1mg_page.dart';
-import 'package:flutter_firebase_auth/chat/group_add_friend.dart';
-import 'package:flutter_firebase_auth/chat/group_chat.dart';
-import 'package:flutter_firebase_auth/chat/group_create_page.dart';
-import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar.dart';
-import 'package:flutter_firebase_auth/widgets/ayarlar/kullanici_guncelle.dart';
-import 'package:flutter_firebase_auth/widgets/ayarlar/mail_degistir.dart';
-import 'package:flutter_firebase_auth/widgets/ayarlar/sifre_degistir.dart';
-import 'package:flutter_firebase_auth/chat/groups.dart';
-import 'package:flutter_firebase_auth/widgets/giris/giris_ekrani.dart';
-import 'package:flutter_firebase_auth/widgets/giris/giris_kontrol.dart';
-import 'package:flutter_firebase_auth/widgets/ana_sayfa.dart';
-import 'package:flutter_firebase_auth/chat/personal_chat.dart';
-import 'package:flutter_firebase_auth/chat/search_page.dart';
-import 'package:flutter_firebase_auth/widgets/tel_no_dogrulama/tel_no_dogrulama.dart';
-import 'package:flutter_firebase_auth/widgets/tel_no_dogrulama/tel_no_giris.dart';
+import 'package:flutter_firebase_auth/widgets/%C4%B1mg_page.dart';
+import 'package:flutter_firebase_auth/widgets/groups/group_add_friend.dart';
+import 'package:flutter_firebase_auth/widgets/groups/group_chat.dart';
+import 'package:flutter_firebase_auth/widgets/groups/group_create_page.dart';
+import 'package:flutter_firebase_auth/widgets/home_page.dart';
+import 'package:flutter_firebase_auth/widgets/friends/personal_chat.dart';
+import 'package:flutter_firebase_auth/widgets/friends/search_page.dart';
+import 'package:flutter_firebase_auth/widgets/groups/groups.dart';
+import 'package:flutter_firebase_auth/widgets/login/login_control.dart';
+import 'package:flutter_firebase_auth/widgets/login/login_screen.dart';
+import 'package:flutter_firebase_auth/widgets/phone_no/phone_no_login.dart';
+import 'package:flutter_firebase_auth/widgets/phone_no/phone_no_verification.dart';
+import 'package:flutter_firebase_auth/widgets/settings/settings.dart';
+import 'package:flutter_firebase_auth/widgets/settings/user_update.dart';
+import 'package:flutter_firebase_auth/widgets/settings/mail_change.dart';
+import 'package:flutter_firebase_auth/widgets/settings/password_change.dart';
+import 'constants.dart' as Constants;
 
 class RouteGenerator {
   static Route<dynamic>? _generateRoute(
-      Widget gidilecekPage, RouteSettings settings) {
+      Widget togoPage, RouteSettings settings) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return MaterialPageRoute(
-          builder: (context) => gidilecekPage, settings: settings);
+          builder: (context) => togoPage, settings: settings);
     } else {
       return CupertinoPageRoute(
-          builder: (context) => gidilecekPage, settings: settings);
+          builder: (context) => togoPage, settings: settings);
     }
   }
 
   static Route<dynamic>? routeGenrator(RouteSettings settings) {
     switch (settings.name) {
       case "/":
-        return _generateRoute(GirisKontrol(), settings);
+        return _generateRoute(LoginControl(), settings);
 
-      case "/girisEkrani":
-        return _generateRoute(GirisEkrani(), settings);
+      case Constants.LOGIN_SCREEN_PATH:
+        return _generateRoute(LoginScreen(), settings);
 
-      case "/sifreDegistir":
+      case Constants.PASSWORD_CHANGE_PATH:
         return _generateRoute(
-            SifreDegistir(
+            PasswordChange(
               auth: settings.arguments as FirebaseAuth,
             ),
             settings);
-      case "/mailDegistir":
+      case Constants.MAIL_CHNAGE_PATH:
         return _generateRoute(
-            MailDegistir(
+            MailChange(
               auth: settings.arguments as FirebaseAuth,
             ),
             settings);
 
-      case "/imgPage":
+      case Constants.IMG_PAGE_PATH:
         return _generateRoute(
             ImgPage(
               imgUrl: settings.arguments as String,
             ),
             settings);
 
-      case "/girisKontrol":
-        return _generateRoute(GirisKontrol(), settings);
+      case Constants.LOGIN_CONTROL_PATH:
+        return _generateRoute(LoginControl(), settings);
 
-      case "/groupCreatePage":
+      case Constants.GROUP_CREATE_PAGE_PATH:
         return _generateRoute(GroupCreatePage(), settings);
 
-      case "/ayarlar":
-        return _generateRoute(Ayarlar(), settings);
+      case Constants.SETTINGS_PATH:
+        return _generateRoute(Settings(), settings);
 
-      case "/searchPage":
+      case Constants.SEARCH_PAGE_PATH:
         return CupertinoPageRoute(
           builder: (context) => SearchPage(
             friends: settings.arguments as List<dynamic>,
           ),
           settings: settings,
         );
-      case "/kullaniciGuncelle":
+      case Constants.USER_UPDATE_PATH:
         return _generateRoute(
-            KullaniciGuncelle(
+            UserUpdate(
               userId: settings.arguments as String,
             ),
             settings);
-      case "/personalChat":
+      case Constants.PERSONAL_CHAT_PATH:
         return CupertinoPageRoute(
           builder: (context) => PersonalChat(
             senderId: (settings.arguments as List<String>)[0],
@@ -90,13 +91,13 @@ class RouteGenerator {
           settings: settings,
         );
 
-      case "/telNoGiris":
-        return _generateRoute(TelefonNumarasiGiris(), settings);
+      case Constants.PHONE_NO_LOGIN_PATH:
+        return _generateRoute(PhoneNoLogin(), settings);
 
-      case "/groups":
+      case Constants.GROUPS_PATH:
         return _generateRoute(Groups(), settings);
 
-      case "/groupAddFriend":
+      case Constants.GROUP_ADD_FRIEND_PATH:
         return _generateRoute(
             GroupAddFriend(
               groupId: (settings.arguments as List<dynamic>)[0] as String,
@@ -105,7 +106,7 @@ class RouteGenerator {
             ),
             settings);
 
-      case "/groupChat":
+      case Constants.GROUP_CHAT_PATH:
         return CupertinoPageRoute(
           builder: (context) => GroupChat(
             groupId: (settings.arguments as List<dynamic>)[0] as String,
@@ -116,24 +117,18 @@ class RouteGenerator {
           settings: settings,
         );
 
-      case "/telNoDogrulama":
-        return _generateRoute(TelNoDogrulama(), settings);
+      case Constants.PHONE_NO_VERIFICATION_PATH:
+        return _generateRoute(PhoneNoVerification(), settings);
 
-      case "/anaSayfa":
-        return _generateRoute(
-            AnaSayfa(
-                // user: settings.arguments as User,
-                // bunun bir mantıgı yok, auth.currentuser ile giris yapan kullaniciya
-                // ersisebiliriz
-                ),
-            settings);
+      case Constants.HOME_PAGE_PATH:
+        return _generateRoute(HomePage(), settings);
 
       // unknown page
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
             appBar: AppBar(
-              title: Text("Unknown Route"),
+              title: const Text("Unknown Route"),
             ),
             body: const Center(
               child: Text("404"),

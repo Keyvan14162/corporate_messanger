@@ -1,16 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class SifreDegistir extends StatefulWidget {
-  SifreDegistir({Key? key, required this.auth}) : super(key: key);
+class PasswordChange extends StatefulWidget {
+  const PasswordChange({Key? key, required this.auth}) : super(key: key);
   final FirebaseAuth auth;
 
   @override
-  State<SifreDegistir> createState() => _SifreDegistirState();
+  State<PasswordChange> createState() => _PasswordChangeState();
 }
 
-class _SifreDegistirState extends State<SifreDegistir> {
+class _PasswordChangeState extends State<PasswordChange> {
   final formKey = GlobalKey<FormState>();
 
   String _yeniSifre = "";
@@ -94,7 +95,8 @@ class _SifreDegistirState extends State<SifreDegistir> {
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed("/ayarlar");
+                                    Navigator.of(context)
+                                        .pushNamed(Constants.SETTINGS_PATH);
                                   },
                                   child: const Text("Hayır")),
                               TextButton(
@@ -102,7 +104,8 @@ class _SifreDegistirState extends State<SifreDegistir> {
                                     changePassword(_yeniSifre);
                                     showMessageAyarlar(
                                         "yeni sifre : $_yeniSifre", context);
-                                    Navigator.of(context).pushNamed("/ayarlar");
+                                    Navigator.of(context)
+                                        .pushNamed(Constants.SETTINGS_PATH);
                                   },
                                   child: const Text("Evet")),
                             ],

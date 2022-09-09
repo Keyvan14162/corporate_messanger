@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
-import 'package:flutter_firebase_auth/models/group_model.dart';
 
 class GroupAddFriend extends StatefulWidget {
   const GroupAddFriend(
@@ -121,7 +119,6 @@ class _GroupAddFriendState extends State<GroupAddFriend> {
                                                       selectedUsersId
                                                           .remove(userId);
                                                     }
-                                                    print(selectedUsersId);
                                                   },
                                                 );
                                               },
@@ -163,7 +160,7 @@ class _GroupAddFriendState extends State<GroupAddFriend> {
                   selectedUsersId.forEach((element) async {
                     await FirebaseFirestore.instance
                         .collection("users")
-                        .doc("${element}")
+                        .doc(element)
                         .update({
                       "groups": FieldValue.arrayUnion([widget.groupId])
                     });

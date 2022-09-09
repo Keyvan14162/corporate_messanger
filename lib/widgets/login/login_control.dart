@@ -1,17 +1,16 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class GirisKontrol extends StatefulWidget {
-  const GirisKontrol({Key? key}) : super(key: key);
+class LoginControl extends StatefulWidget {
+  const LoginControl({Key? key}) : super(key: key);
 
   @override
-  State<GirisKontrol> createState() => _GirisKontrolState();
+  State<LoginControl> createState() => _LoginControlState();
 }
 
-class _GirisKontrolState extends State<GirisKontrol> {
+class _LoginControlState extends State<LoginControl> {
   // auth initialize
   late FirebaseAuth auth;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -27,11 +26,11 @@ class _GirisKontrolState extends State<GirisKontrol> {
     auth.authStateChanges().listen((User? user) async {
       if (user == null) {
         print("giris ekrani");
-        Navigator.of(context).pushNamed("/girisEkrani");
+        Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
       } else {
         // /anaSayfa
-        Navigator.of(context)
-            .pushNamed("/anaSayfa", arguments: auth.currentUser!.uid);
+        Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH,
+            arguments: auth.currentUser!.uid);
         // print("User signed in ${user.email} - ${user.emailVerified}");
       }
     });

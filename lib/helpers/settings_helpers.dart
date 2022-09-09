@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 void hesapDogrula(BuildContext context) async {
   // hesabı dogrulayınca anlamıyo tekra giriş yapınca oluyo****
@@ -72,7 +72,7 @@ Future<bool> deleteUser(BuildContext context) async {
           FirebaseStorage.instance.ref().child("users/profilePics/$uid");
       await profileImgRef.delete();
 
-      Navigator.of(context).pushNamed("/girisEkrani");
+      Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
 
       return true;
     } catch (e) {
@@ -114,7 +114,7 @@ void changeMail(
     await auth.currentUser!.updateEmail(yeniMail);
     await auth.signOut();
     showMessageAyarlar("İlk try Yeni mailinizle giris yapabilirsiniz", context);
-    Navigator.of(context).pushNamed("/girisKontrol");
+    Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
     // hassas islem, firebase bidaha oturum ac once diyo
     // hata fırlatıyo bunun icin
     // bende olmadı tabı
@@ -127,7 +127,7 @@ void changeMail(
       await auth.currentUser!.updateEmail(yeniMail);
       await auth.signOut();
       showMessageAyarlar("Yeni mailinizle giris yapabilirsiniz", context);
-      Navigator.of(context).pushNamed("/girisKontrol");
+      Navigator.of(context).pushNamed(Constants.LOGIN_CONTROL_PATH);
     }
   } catch (e) {
     print(e.toString());

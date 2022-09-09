@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class PersonalChat extends StatefulWidget {
   const PersonalChat(
@@ -26,6 +27,8 @@ class _PersonalChatState extends State<PersonalChat> {
   String _message = "";
   Set<String> selectedMessagesId = {};
   Set<String> selectedMessagesImgUrl = {};
+  var readCounter = 0;
+  var writeCounter = 0;
 
   @override
   void initState() {
@@ -111,29 +114,6 @@ class _PersonalChatState extends State<PersonalChat> {
                               .docs[index]
                               .data()["imgUrl"]
                               .toString();
-
-                          /*
-                          bool didISendLastMessage = false;
-                          try {
-                            var previusMessageSenderId = (snapshot.data
-                                    as QuerySnapshot<Map<String, dynamic>>)
-                                .docs[index - 1]
-                                .data()["senderId"]
-                                .toString();
-                            if (previusMessageSenderId == senderId) {
-                              didISendLastMessage = false;
-                            } else {
-                              didISendLastMessage = true;
-                            }
-                          } catch (e) {}
-                          print(didISendLastMessage);
-                          */
-
-                          if (!isSender) {
-                            // karsıdan gelen mesajlar isreaded olsun
-                            setMessagesReaded(
-                                widget.senderId, widget.reciverId, messageId);
-                          }
 
                           return messageWidget(
                             isSender,
@@ -293,6 +273,8 @@ class _PersonalChatState extends State<PersonalChat> {
                     onChanged: (value) {
                       _message = value.toString();
                     },
+                    // dont dismisss keyboard
+                    onEditingComplete: () {},
                     onSubmitted: (value) {
                       sendMessage(_message, false, "imgUrl", widget.senderId,
                           widget.reciverId);
@@ -394,18 +376,17 @@ class _PersonalChatState extends State<PersonalChat> {
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            /*
-            FutureBuilder(
-                future: getUserField(senderId, "name"),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data.toString());
-                  } else {
-                    return const Text("No Name Found");
-                  }
-                }),
-                */
-            //Text("sender id - $senderId"),
+            isSender
+                ? const SizedBox()
+                : FutureBuilder(
+                    future: getUserName(senderId),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data.toString());
+                      } else {
+                        return const Text("No Name Found");
+                      }
+                    }),
             isImg == "true"
                 ? GestureDetector(
                     onLongPress: () {
@@ -425,13 +406,16 @@ class _PersonalChatState extends State<PersonalChat> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed("/imgPage", arguments: imgUrl);
+                              Navigator.of(context).pushNamed(
+                                  Constants.IMG_PAGE_PATH,
+                                  arguments: imgUrl);
                             },
                             child: Hero(
                               tag: imgUrl,
                               child: Container(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: isSender
+                                    ? const EdgeInsets.fromLTRB(48, 8, 8, 8)
+                                    : const EdgeInsets.fromLTRB(8, 8, 48, 8),
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                 ),
@@ -678,35 +662,5 @@ class _PersonalChatState extends State<PersonalChat> {
         ),
       );
     }
-  }
-
-  // OKUNDU KISMI, COK FAZLA WRITE HARCADIGI ICIN YORUMA ALDIM
-  setMessagesReaded(String senderId, String reciverId, String messageId) async {
-/*
-    var messageDocRef = await FirebaseFirestore.instance
-        .collection('personal_chat')
-        .doc("${reciverId + "-" + senderId}")
-        .collection("messages")
-        .doc(messageId);
-
-    // karsının mesajalrı okudugu yerden mesajı alalım
-    var myMessageDocRef = await FirebaseFirestore.instance
-        .collection('personal_chat')
-        .doc("${senderId + "-" + reciverId}")
-        .collection("messages")
-        .doc(messageId)
-        .get();
-
-    // her seferinde 1 write yapacagına 1 read yapsın
-    // gerekliyse bide write yapsın
-    // karsının okudugu mesaj okunmus mu 
-    var messageIsReaded = await myMessageDocRef.data()!["isReaded"];
-
-    // okunmamıssa okunmus yap
-    if (!messageIsReaded) {
-      await messageDocRef.update({
-        'isReaded': true,
-      });
-    }*/
   }
 }

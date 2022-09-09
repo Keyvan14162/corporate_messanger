@@ -1,20 +1,19 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/chat/groups.dart';
-import 'package:flutter_firebase_auth/widgets/friends.dart';
-import 'ayarlar/ayarlar.dart';
+import 'package:flutter_firebase_auth/widgets/friends/friends.dart';
+import 'package:flutter_firebase_auth/widgets/groups/groups.dart';
+import 'package:flutter_firebase_auth/widgets/settings/settings.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class AnaSayfa extends StatefulWidget {
+class HomePage extends StatefulWidget {
   // User user; required this.user,
   // const AnaSayfa({Key? key}) : super(key: key);
 
-  State<AnaSayfa> createState() => _AnaSayfaState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _AnaSayfaState extends State<AnaSayfa> {
+class _HomePageState extends State<HomePage> {
   // auth initialize
   late FirebaseAuth auth;
   late PageController _pageController;
@@ -48,7 +47,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
             Groups(),
             Friends(),
-            Ayarlar(),
+            Settings(),
           ],
         ),
       ),

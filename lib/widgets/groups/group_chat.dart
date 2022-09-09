@@ -1,11 +1,11 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/group_helpers.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class GroupChat extends StatefulWidget {
   const GroupChat(
@@ -25,7 +25,6 @@ class GroupChat extends StatefulWidget {
 
 class _GroupChatState extends State<GroupChat> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  StreamSubscription? userSubscribe;
   late TextEditingController _textController;
   bool hoverd = false;
   String _message = "";
@@ -48,7 +47,7 @@ class _GroupChatState extends State<GroupChat> {
           children: [
             Flexible(
               child: StreamBuilder(
-                stream: getAllGroupMessages(),
+                stream: getAllGroupMessages(widget.groupId),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
@@ -178,7 +177,7 @@ class _GroupChatState extends State<GroupChat> {
                             style: const TextStyle(fontSize: 10),
                           );
                         } else {
-                          return SizedBox();
+                          return const SizedBox();
                         }
                       },
                     )
@@ -194,7 +193,7 @@ class _GroupChatState extends State<GroupChat> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      _deleteSelectedMessages();
+                      deleteSelectedMessages();
                     },
                     icon: const Icon(Icons.delete),
                   ),
@@ -226,7 +225,7 @@ class _GroupChatState extends State<GroupChat> {
                     PopupMenuItem(
                       key: UniqueKey(),
                       onTap: () {
-                        leaveGroup(widget.groupId);
+                        leaveGroup(widget.groupId, context);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,12 +241,14 @@ class _GroupChatState extends State<GroupChat> {
                     PopupMenuItem(
                       key: UniqueKey(),
                       onTap: () {
-                        Navigator.of(context).pushNamed("/groupAddFriend",
+                        Navigator.of(context).pushNamed(
+                            Constants.GROUP_ADD_FRIEND_PATH,
                             arguments: [
                               widget.groupId,
                               widget.groupUserIdList
                             ]);
-                        Navigator.of(context).pushNamed("/groupAddFriend",
+                        Navigator.of(context).pushNamed(
+                            Constants.GROUP_ADD_FRIEND_PATH,
                             arguments: [
                               widget.groupId,
                               widget.groupUserIdList
@@ -331,7 +332,7 @@ class _GroupChatState extends State<GroupChat> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () async {
-                      _sendGroupImageOnTap(ImageSource.camera);
+                      sendGroupImageOnTap(ImageSource.camera, widget.groupId);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -346,7 +347,7 @@ class _GroupChatState extends State<GroupChat> {
                   ),
                   PopupMenuItem(
                     onTap: () async {
-                      _sendGroupImageOnTap(ImageSource.gallery);
+                      sendGroupImageOnTap(ImageSource.gallery, widget.groupId);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -422,7 +423,8 @@ class _GroupChatState extends State<GroupChat> {
                       } else {
                         return const Text("No Name Found");
                       }
-                    }),
+                    },
+                  ),
             isImg == "true"
                 ? GestureDetector(
                     onLongPress: () {
@@ -442,8 +444,9 @@ class _GroupChatState extends State<GroupChat> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed("/imgPage", arguments: imgUrl);
+                              Navigator.of(context).pushNamed(
+                                  Constants.IMG_PAGE_PATH,
+                                  arguments: imgUrl);
                             },
                             child: Hero(
                               tag: imgUrl,
@@ -610,50 +613,7 @@ class _GroupChatState extends State<GroupChat> {
     );
   }
 
-  _sendGroupImageOnTap(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: source);
-
-    var profileRef = FirebaseStorage.instance.ref(
-        "users/messagePics/${FirebaseAuth.instance.currentUser!.uid}/${firestore.collection("groups").doc().id}");
-    var task = profileRef.putFile(File(file!.path));
-    print(task);
-
-    task.whenComplete(() async {
-      var url = await profileRef.getDownloadURL();
-
-      await sendGroupMessage(
-          "message",
-          true,
-          url,
-          FirebaseAuth.instance.currentUser!.uid,
-          widget.groupId,
-          widget.groupId);
-    });
-  }
-
-  // HER SEFERINDE ISTEK YOLLAMASIN DYUZELT BUNU
-  // SENDERNAME DİGER SINIFTAN YOLLASIN YADA BURDA 1 KERE TANIMLA
-  Future<String> getGroupName(String userId, String fieldName) async {
-    // one time read
-    var data =
-        (await FirebaseFirestore.instance.doc("users/$userId").get()).data()!;
-
-    return data[fieldName];
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllGroupMessages() {
-    var messageStream = firestore
-        .collection("groups")
-        .doc("${widget.groupId}")
-        .collection("messages")
-        .orderBy("date", descending: true)
-        .snapshots();
-
-    return messageStream;
-  }
-
-  _deleteSelectedMessages() async {
+  deleteSelectedMessages() async {
     if (selectedMessagesId.isNotEmpty) {
       showDialog(
         context: context,
@@ -681,7 +641,7 @@ class _GroupChatState extends State<GroupChat> {
                 selectedMessagesId.forEach((messageId) async {
                   await firestore
                       .collection("groups")
-                      .doc("${widget.groupId}")
+                      .doc(widget.groupId)
                       .collection("messages")
                       .doc(messageId)
                       .delete();
@@ -701,99 +661,5 @@ class _GroupChatState extends State<GroupChat> {
         ),
       );
     }
-  }
-
-  // OKUNDU KISMI, COK FAZLA WRITE HARCADIGI ICIN YORUMA ALDIM
-  setMessagesReaded(String senderId, String reciverId, String messageId) async {
-/*
-    var messageDocRef = await FirebaseFirestore.instance
-        .collection('personal_chat')
-        .doc("${reciverId + "-" + senderId}")
-        .collection("messages")
-        .doc(messageId);
-
-    // karsının mesajalrı okudugu yerden mesajı alalım
-    var myMessageDocRef = await FirebaseFirestore.instance
-        .collection('personal_chat')
-        .doc("${senderId + "-" + reciverId}")
-        .collection("messages")
-        .doc(messageId)
-        .get();
-
-    // her seferinde 1 write yapacagına 1 read yapsın
-    // gerekliyse bide write yapsın
-    // karsının okudugu mesaj okunmus mu 
-    var messageIsReaded = await myMessageDocRef.data()!["isReaded"];
-
-    // okunmamıssa okunmus yap
-    if (!messageIsReaded) {
-      await messageDocRef.update({
-        'isReaded': true,
-      });
-    }*/
-  }
-
-  leaveGroup(String groupId) async {
-    var messages = await firestore
-        .collection("groups")
-        .doc("${groupId}")
-        .collection("messages")
-        .orderBy("date", descending: true)
-        .get();
-
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Uyarı"),
-        content: Text("Gruptan ayrılınsın mı ?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Hayır"),
-          ),
-          TextButton(
-            onPressed: () async {
-              // delete from storage
-              /*
-              messages.docs.forEach((element) async {
-                var url = element.data()["imgUrl"];
-
-                if (url != "imgUrl") {
-                  await FirebaseStorage.instance.refFromURL(url).delete();
-                }
-              });
-              */
-
-              // delete from firebase
-              /*
-              messages.docs.forEach((element) async {
-                var messageId = element.data()["messageId"];
-
-                await firestore
-                    .collection("groups")
-                    .doc("${groupId}")
-                    .collection("messages")
-                    .doc(messageId)
-                    .delete();
-              });
-              */
-
-              await FirebaseFirestore.instance
-                  .collection("users")
-                  .doc("${FirebaseAuth.instance.currentUser!.uid}")
-                  .update({
-                "groups": FieldValue.arrayRemove([groupId])
-              });
-
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text("Evet"),
-          ),
-        ],
-      ),
-    );
   }
 }

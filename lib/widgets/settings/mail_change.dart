@@ -1,16 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class MailDegistir extends StatefulWidget {
-  const MailDegistir({Key? key, required this.auth}) : super(key: key);
+class MailChange extends StatefulWidget {
+  const MailChange({Key? key, required this.auth}) : super(key: key);
   final FirebaseAuth auth;
 
   @override
-  State<MailDegistir> createState() => _MailDegistirState();
+  State<MailChange> createState() => _MailChangeState();
 }
 
-class _MailDegistirState extends State<MailDegistir> {
+class _MailChangeState extends State<MailChange> {
   final formKey = GlobalKey<FormState>();
 
   String _yeniMail = "";
@@ -72,7 +73,8 @@ class _MailDegistirState extends State<MailDegistir> {
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed("/ayarlar");
+                                  Navigator.of(context)
+                                      .pushNamed(Constants.SETTINGS_PATH);
                                 },
                                 child: const Text("Hayır"),
                               ),
@@ -82,7 +84,8 @@ class _MailDegistirState extends State<MailDegistir> {
                                       "yeni mail : $_yeniMail", context);
 
                                   changeMail(_yeniMail, widget.auth, context);
-                                  Navigator.of(context).pushNamed("/ayarlar");
+                                  Navigator.of(context)
+                                      .pushNamed(Constants.SETTINGS_PATH);
                                 },
                                 child: const Text("Evet"),
                               ),

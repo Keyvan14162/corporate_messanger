@@ -3,17 +3,18 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
-import 'package:flutter_firebase_auth/helpers/tel_no_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/phone_no_helpers.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class TelefonNumarasiGiris extends StatefulWidget {
-  const TelefonNumarasiGiris({Key? key}) : super(key: key);
+class PhoneNoLogin extends StatefulWidget {
+  const PhoneNoLogin({Key? key}) : super(key: key);
 
   @override
-  State<TelefonNumarasiGiris> createState() => _TelefonNumarasiGirisState();
+  State<PhoneNoLogin> createState() => _PhoneNoLoginState();
 }
 
-class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
+class _PhoneNoLoginState extends State<PhoneNoLogin> {
   final formKey = GlobalKey<FormState>();
   String telNo = "";
 
@@ -129,7 +130,7 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
               "Lutfen numaranıza gönderilen kodu giriniz", context);
 
           await Navigator.of(context)
-              .pushNamed("/telNoDogrulama")
+              .pushNamed(Constants.PHONE_NO_VERIFICATION_PATH)
               .then((value) {
             smsCode = value as String;
           });
@@ -145,7 +146,7 @@ class _TelefonNumarasiGirisState extends State<TelefonNumarasiGiris> {
 
           firebaseUserConfig(auth);
 
-          Navigator.of(context).pushNamed("/anaSayfa");
+          Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
         } catch (e) {
           showMessageTelNo(e.toString(), context);
         }

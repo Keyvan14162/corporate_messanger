@@ -1,15 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class GirisEkrani extends StatefulWidget {
-  GirisEkrani({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<GirisEkrani> createState() => _GirisEkraniState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _GirisEkraniState extends State<GirisEkrani> {
+class _LoginScreenState extends State<LoginScreen> {
   // auth initialize
   late FirebaseAuth auth;
 
@@ -242,7 +243,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
                                         firebaseUserConfig(auth);
 
                                         Navigator.of(context).pushNamed(
-                                            "/anaSayfa",
+                                            Constants.HOME_PAGE_PATH,
                                             arguments: user);
                                       }
                                     }
@@ -336,7 +337,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
                                     // useri yollayabilin arguments ile eklersen
                                     firebaseUserConfig(auth);
                                     Navigator.of(context)
-                                        .pushNamed("/anaSayfa");
+                                        .pushNamed(Constants.HOME_PAGE_PATH);
                                   },
                                   child: Row(
                                     mainAxisAlignment:
@@ -383,8 +384,8 @@ class _GirisEkraniState extends State<GirisEkrani> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    Navigator.of(context)
-                                        .pushNamed("/telNoGiris");
+                                    Navigator.of(context).pushNamed(
+                                        Constants.PHONE_NO_LOGIN_PATH);
                                   },
                                   child: Row(
                                     mainAxisAlignment:

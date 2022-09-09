@@ -1,4 +1,3 @@
-// Bunu sadece db ye veri eklerken kullanacagız
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageModel {

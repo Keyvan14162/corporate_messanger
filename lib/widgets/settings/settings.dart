@@ -1,18 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
-import 'package:flutter_firebase_auth/widgets/ayarlar/ayarlar_menu_items.dart';
+import 'package:flutter_firebase_auth/widgets/settings/settings_menu_items.dart';
+import 'profile_img.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-import 'profileImg.dart';
-
-class Ayarlar extends StatefulWidget {
-  const Ayarlar({Key? key}) : super(key: key);
+class Settings extends StatefulWidget {
+  const Settings({Key? key}) : super(key: key);
 
   @override
-  State<Ayarlar> createState() => _AyarlarState();
+  State<Settings> createState() => _SettingsState();
 }
 
-class _AyarlarState extends State<Ayarlar> {
+class _SettingsState extends State<Settings> {
   late FirebaseAuth auth;
   final double coverImgHeight = 200;
   final double profileHeight = 144;
@@ -28,7 +28,7 @@ class _AyarlarState extends State<Ayarlar> {
     final double top = coverImgHeight - profileHeight / 2;
     return WillPopScope(
       onWillPop: () {
-        Navigator.of(context).pushNamed("/girisEkrani");
+        Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
         return Future.value(false);
       },
       child: Scaffold(
@@ -49,7 +49,7 @@ class _AyarlarState extends State<Ayarlar> {
                 Text("Email : ${auth.currentUser!.email}"),
                 Text("Mail verified : ${auth.currentUser!.emailVerified}"),
                 Text("Telefon : ${auth.currentUser!.phoneNumber}"),
-                const AyarlarMenuItems(),
+                const SettingsMenuItems(),
               ],
             ),
           ),

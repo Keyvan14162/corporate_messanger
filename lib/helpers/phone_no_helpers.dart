@@ -62,8 +62,10 @@ void telNoGiris(String telNo, BuildContext context) async {
 
 void showMessageTelNo(String mesaj, BuildContext context) {
   String result = " $mesaj";
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(result, style: TextStyle(fontSize: 20)),
-    backgroundColor: Colors.black,
-  ));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(result, style: const TextStyle(fontSize: 20)),
+      backgroundColor: Colors.black,
+    ),
+  );
 }

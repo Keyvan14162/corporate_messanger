@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:pinput/pinput.dart';
 
-class TelNoDogrulama extends StatefulWidget {
-  const TelNoDogrulama({Key? key}) : super(key: key);
+class PhoneNoVerification extends StatefulWidget {
+  const PhoneNoVerification({Key? key}) : super(key: key);
 
   @override
-  State<TelNoDogrulama> createState() => _TelNoDogrulamaState();
+  State<PhoneNoVerification> createState() => _PhoneNoVerificationState();
 }
 
-class _TelNoDogrulamaState extends State<TelNoDogrulama> {
+class _PhoneNoVerificationState extends State<PhoneNoVerification> {
   final formKey = GlobalKey<FormState>();
   String smsCode = "";
 

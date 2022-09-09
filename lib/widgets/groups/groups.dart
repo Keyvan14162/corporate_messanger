@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/group_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class Groups extends StatefulWidget {
   const Groups({Key? key}) : super(key: key);
@@ -31,7 +32,6 @@ class _GroupsState extends State<Groups> {
             return const Center(child: CircularProgressIndicator());
           } else {
             groups = (snapshot.data as DocumentSnapshot)["groups"];
-            print(groups);
             return StreamBuilder(
               stream: getAllGroups(),
               builder: (context, snapshot) {
@@ -63,48 +63,39 @@ class _GroupsState extends State<Groups> {
                               .docs[index]
                               .data()["userIds"];
 
-                      return GestureDetector(
-                        onTap: () {
-                          /*
-                          Navigator.of(context).pushNamed("/personalChat",
-                              arguments: [
-                                FirebaseAuth.instance.currentUser!.uid,
-                                userId
-                              ]);
-                              */
-                        },
-                        child: groups.contains(groupId)
-                            ? GestureDetector(
-                                onTap: () => Navigator.of(context)
-                                    .pushNamed("/groupChat", arguments: [
+                      return groups.contains(groupId)
+                          ? GestureDetector(
+                              onTap: () => Navigator.of(context).pushNamed(
+                                Constants.GROUP_CHAT_PATH,
+                                arguments: [
                                   groupId,
                                   groupName,
                                   groupUserIdList
-                                ]),
-                                child: Card(
-                                  elevation: 4,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4),
-                                    child: ListTile(
-                                      /*
-                                leading: profileImgUrl.contains("null")
-                                    ? const Icon(Icons.person)
-                                    : CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage(profileImgUrl),
-                                      ),
-                                      */
-                                      title: Text(
-                                        // "$name $userId",
-                                        "$groupId",
-                                      ),
-                                      subtitle: Text("sdadasdad"),
+                                ],
+                              ),
+                              child: Card(
+                                elevation: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: ListTile(
+                                    /*
+                              leading: profileImgUrl.contains("null")
+                                  ? const Icon(Icons.person)
+                                  : CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(profileImgUrl),
                                     ),
+                                    */
+                                    title: Text(
+                                      // "$name $userId",
+                                      groupId,
+                                    ),
+                                    subtitle: Text("sdadasdad"),
                                   ),
                                 ),
-                              )
-                            : const SizedBox(),
-                      );
+                              ),
+                            )
+                          : const SizedBox();
                     },
                   );
                 }
@@ -114,20 +105,5 @@ class _GroupsState extends State<Groups> {
         },
       ),
     );
-  }
-
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getGroups() {
-    var groups = FirebaseFirestore.instance
-        .doc("users/${FirebaseAuth.instance.currentUser!.uid}")
-        .snapshots();
-
-    return groups;
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllGroups() {
-    var groupStream =
-        FirebaseFirestore.instance.collection("groups").snapshots();
-
-    return groupStream;
   }
 }

@@ -1,20 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/ayarlar_helpers.dart';
-import 'package:flutter_firebase_auth/models/user_model.dart';
+import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
-class KullaniciGuncelle extends StatefulWidget {
+class UserUpdate extends StatefulWidget {
   final String userId;
-  const KullaniciGuncelle({required this.userId, Key? key}) : super(key: key);
+  const UserUpdate({required this.userId, Key? key}) : super(key: key);
 
   @override
-  State<KullaniciGuncelle> createState() => _KullaniciGuncelleState();
+  State<UserUpdate> createState() => _UserUpdateState();
 }
 
 String _name = "";
 int _age = 0;
 
-class _KullaniciGuncelleState extends State<KullaniciGuncelle> {
+class _UserUpdateState extends State<UserUpdate> {
   // formumuzun stateine erissin, bunu formu keyine verip
   // formu butona basilinca kullanabiliriz
   final formKey = GlobalKey<FormState>();
@@ -100,7 +99,8 @@ class _KullaniciGuncelleState extends State<KullaniciGuncelle> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed("/ayarlar");
+                                Navigator.of(context)
+                                    .pushNamed(Constants.SETTINGS_PATH);
                               },
                               child: const Text("Hayır"),
                             ),
@@ -113,7 +113,8 @@ class _KullaniciGuncelleState extends State<KullaniciGuncelle> {
                                 // savelendikten sonra reset, initial value verdiklerin
                                 // resetlenmez
                                 formKey.currentState!.reset();
-                                Navigator.of(context).pushNamed("/ayarlar");
+                                Navigator.of(context)
+                                    .pushNamed(Constants.SETTINGS_PATH);
                               },
                               child: const Text("Evet"),
                             ),

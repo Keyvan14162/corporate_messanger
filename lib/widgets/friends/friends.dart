@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _FriendsState extends State<Friends> {
 
           IconButton(
             onPressed: () => Navigator.of(context)
-                .pushNamed("/searchPage", arguments: friends),
+                .pushNamed(Constants.SEARCH_PAGE_PATH, arguments: friends),
             icon: Icon(
               Icons.search,
               color: ThemeData().primaryColor,
@@ -85,7 +86,8 @@ class _FriendsState extends State<Friends> {
 
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed("/personalChat",
+                          Navigator.of(context).pushNamed(
+                              Constants.PERSONAL_CHAT_PATH,
                               arguments: [
                                 FirebaseAuth.instance.currentUser!.uid,
                                 userId
@@ -158,7 +160,8 @@ class _FriendsState extends State<Friends> {
           children: [
             FloatingActionButton.extended(
               onPressed: () {
-                Navigator.of(context).pushNamed("/groupCreatePage");
+                Navigator.of(context)
+                    .pushNamed(Constants.GROUP_CREATE_PAGE_PATH);
               },
               label: const Text('Grup mesajı'),
               icon: const Icon(Icons.group),

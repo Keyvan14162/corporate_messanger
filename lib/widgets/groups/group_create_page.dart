@@ -12,6 +12,7 @@ class GroupCreatePage extends StatefulWidget {
 }
 
 class _GroupCreatePageState extends State<GroupCreatePage> {
+  final formKey = GlobalKey<FormState>();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Set<String> selectedUsersId = {};
   String groupName = "";
@@ -22,26 +23,44 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: ThemeData().primaryColor,
-            )),
-        title: TextField(
-          maxLines: 1,
-          decoration: InputDecoration.collapsed(
-            hintText: "Grup ismi giriniz",
-          ),
-          onChanged: (value) {
-            groupName = value;
+          onPressed: () {
+            Navigator.of(context).pop();
           },
+          icon: Icon(
+            Icons.arrow_back,
+            color: ThemeData().primaryColor,
+          ),
+        ),
+        title: Form(
+          key: formKey,
+          child: TextFormField(
+            autofocus: true,
+            decoration: const InputDecoration.collapsed(
+              hintText: "Grup ismi giriniz",
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
+            onChanged: (value) {
+              groupName = value;
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Lütfen Grup İsmini Belirtiniz";
+              } else if (value.length > 40) {
+                return "En fazla 40 karakter girebilirsiniz";
+              } else {
+                return null;
+              }
+            },
+          ),
         ),
         backgroundColor: Colors.white,
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("Grup Kişilerini Ekleyiniz"),
+          ),
           Flexible(
             child: StreamBuilder(
               stream: getFriends(),
@@ -84,41 +103,44 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
                             bool checkBoxValue = false;
 
                             return friends.contains(userId)
-                                ? Card(
-                                    elevation: 4,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4),
-                                      child: ListTile(
-                                        leading: profileImgUrl.contains("null")
-                                            ? const Icon(Icons.person)
-                                            : CircleAvatar(
-                                                backgroundImage:
-                                                    NetworkImage(profileImgUrl),
-                                              ),
-                                        title: Text(
-                                          "$name $userId",
-                                        ),
-                                        trailing: StatefulBuilder(
-                                          builder: (context, setState) {
-                                            return Checkbox(
-                                              value: checkBoxValue,
-                                              onChanged: (val) {
-                                                setState(
-                                                  () {
-                                                    checkBoxValue = val!;
+                                ? GestureDetector(
+                                    child: Card(
+                                      elevation: 4,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: ListTile(
+                                          leading: profileImgUrl
+                                                  .contains("null")
+                                              ? const Icon(Icons.person)
+                                              : CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      profileImgUrl),
+                                                ),
+                                          title: Text(
+                                            "$name $userId",
+                                          ),
+                                          trailing: StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return Checkbox(
+                                                value: checkBoxValue,
+                                                onChanged: (val) {
+                                                  setState(
+                                                    () {
+                                                      checkBoxValue = val!;
 
-                                                    if (checkBoxValue) {
-                                                      selectedUsersId
-                                                          .add(userId);
-                                                    } else {
-                                                      selectedUsersId
-                                                          .remove(userId);
-                                                    }
-                                                  },
-                                                );
-                                              },
-                                            );
-                                          },
+                                                      if (checkBoxValue) {
+                                                        selectedUsersId
+                                                            .add(userId);
+                                                      } else {
+                                                        selectedUsersId
+                                                            .remove(userId);
+                                                      }
+                                                    },
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -155,7 +177,10 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
   }
 
   createGroup() async {
-    if (groupName.trim().isNotEmpty && groupName.length < 30) {
+    bool validate = formKey.currentState!.validate();
+
+    if (validate) {
+      formKey.currentState!.save();
       selectedUsersId.add(FirebaseAuth.instance.currentUser!.uid);
       // Tek basına iken de grup olsuturabilsin
       var groupId = FirebaseFirestore.instance.collection("groups").doc().id;
@@ -176,11 +201,29 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
       selectedUsersId.forEach((element) async {
         await FirebaseFirestore.instance
             .collection("users")
-            .doc("${element}")
+            .doc(element)
             .update({
           "groups": FieldValue.arrayUnion([groupId])
         });
       });
+      final snackBar = SnackBar(
+        backgroundColor: Colors.white,
+        content: const Text(
+          'Yay! A SnackBar!',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            // Some code to undo the change.
+          },
+        ),
+      );
+      formKey.currentState!.reset();
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.of(context).pop();
     }
   }
 }
