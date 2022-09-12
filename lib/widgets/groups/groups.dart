@@ -88,7 +88,7 @@ class _GroupsState extends State<Groups> {
                                     */
                                     title: Text(
                                       // "$name $userId",
-                                      groupId,
+                                      groupName,
                                     ),
                                     subtitle: Text("sdadasdad"),
                                   ),

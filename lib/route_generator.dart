@@ -12,6 +12,7 @@ import 'package:flutter_firebase_auth/widgets/friends/search_page.dart';
 import 'package:flutter_firebase_auth/widgets/groups/groups.dart';
 import 'package:flutter_firebase_auth/widgets/login/login_control.dart';
 import 'package:flutter_firebase_auth/widgets/login/login_screen.dart';
+import 'package:flutter_firebase_auth/widgets/login/login_user_config.dart';
 import 'package:flutter_firebase_auth/widgets/phone_no/phone_no_login.dart';
 import 'package:flutter_firebase_auth/widgets/phone_no/phone_no_verification.dart';
 import 'package:flutter_firebase_auth/widgets/settings/settings.dart';
@@ -35,7 +36,10 @@ class RouteGenerator {
   static Route<dynamic>? routeGenrator(RouteSettings settings) {
     switch (settings.name) {
       case "/":
-        return _generateRoute(LoginControl(), settings);
+        // return _generateRoute(LoginControl(), settings);
+        // burdan sonra logn controlden ilk defa giris yapıyosa login user
+        // confge atsın, ordan da home page'e atsın
+        return _generateRoute(LoginUserConfig(), settings);
 
       case Constants.LOGIN_SCREEN_PATH:
         return _generateRoute(LoginScreen(), settings);

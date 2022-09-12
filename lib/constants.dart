@@ -15,3 +15,4 @@ const String GROUP_CHAT_PATH = "/groupChat"; // groupChat
 const String PHONE_NO_VERIFICATION_PATH =
     "/phoneNoVerification"; // telNoDogrulama
 const String HOME_PAGE_PATH = "/homePage"; // anaSayfa
+const String LOGIN_USER_CONFIG_PATH = "/loginUserConfig"; // kullanıcı bilgileri 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/models/user_model.dart';
 import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 void saveUserToFirestore(String name, int age, String userId) async {
   var user =
@@ -146,15 +149,23 @@ void firebaseUserConfig(FirebaseAuth auth) async {
     });
   }
 }
-/*
-void _showMessage(
-    String durum, String email, String pass, BuildContext context) {
-  String result = "email: $email \n password: $pass\n  $durum";
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(result, style: const TextStyle(fontSize: 20)),
-      backgroundColor: Colors.black,
-    ),
-  );
+
+chooseProfileImg(String userId) async {
+  // firestore'a id ile isimlendirip resmi atsın
+  // firebase de userin profileImg download urlsini degistrisin
+  final ImagePicker picker = ImagePicker();
+  XFile? file = await picker.pickImage(source: ImageSource.camera);
+
+  var profileRef = FirebaseStorage.instance.ref("users/profilePics/${userId}");
+
+  var task = profileRef.putFile(File(file!.path));
+
+  task.whenComplete(() async {
+    var url = await profileRef.getDownloadURL();
+    // dbye url yi yazdircaz
+
+    FirebaseFirestore.instance
+        .doc("users/${userId}")
+        .update({"profileImg": url.toString()});
+  });
 }
-*/

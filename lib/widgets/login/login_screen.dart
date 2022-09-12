@@ -243,8 +243,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         firebaseUserConfig(auth);
 
                                         Navigator.of(context).pushNamed(
-                                            Constants.HOME_PAGE_PATH,
-                                            arguments: user);
+                                          Constants.HOME_PAGE_PATH,
+                                        );
                                       }
                                     }
                                   },
