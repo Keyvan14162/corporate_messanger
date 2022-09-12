@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/models/message_model.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 
 //
@@ -157,6 +158,8 @@ leaveGroup(String groupId, BuildContext context) async {
 
             Navigator.of(context).pop();
             Navigator.of(context).pop();
+            ScaffoldMessenger.of(context)
+                .showSnackBar(MySnackbar.getSnackbar("Gruptan ayrıldın."));
           },
           child: const Text("Evet"),
         ),

@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/login_helpers.dart';
 import 'package:flutter_firebase_auth/helpers/phone_no_helpers.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
@@ -109,14 +110,14 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
 
         firebaseUserConfig(auth);
 
-        showMessageTelNo(
-            "verificationCompleted tetiklendi ${credential.toString()}",
-            context);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(MySnackbar.getSnackbar("Doğrulama tamamlandı."));
       },
       // hata
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          showMessageTelNo("The provided phone number is not valid.", context);
+          ScaffoldMessenger.of(context).showSnackBar(
+              MySnackbar.getSnackbar("Girilen numara uygun değil."));
         }
       },
       // kullaniciya 6 karakterli numara yollaniyo, burda o kodu iste
@@ -126,8 +127,8 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
           // ui ile kulanicidan girilen kodu al, bu kullanicin girdigi kod
           String smsCode = "";
 
-          showMessageTelNo(
-              "Lutfen numaranıza gönderilen kodu giriniz", context);
+          ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+              "Lütfen numaranıza gönderilen kodu giriniz."));
 
           await Navigator.of(context)
               .pushNamed(Constants.PHONE_NO_VERIFICATION_PATH)
@@ -141,14 +142,15 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
           // Sign the user in (or link) with the credential
           await auth.signInWithCredential(credential);
 
-          showMessageTelNo(
-              "${auth.currentUser!.phoneNumber} kayit oldu ", context);
+          ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+              "${auth.currentUser!.phoneNumber} kayıt oldu."));
 
           firebaseUserConfig(auth);
 
           Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
         } catch (e) {
-          showMessageTelNo(e.toString(), context);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(MySnackbar.getSnackbar(e.toString()));
         }
       },
       codeAutoRetrievalTimeout: (String verificationId) async {},

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class MailChange extends StatefulWidget {
   const MailChange({Key? key, required this.auth}) : super(key: key);
@@ -80,8 +81,9 @@ class _MailChangeState extends State<MailChange> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  showMessageAyarlar(
-                                      "yeni mail : $_yeniMail", context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      MySnackbar.getSnackbar(
+                                          "Yeni mail : $_yeniMail"));
 
                                   changeMail(_yeniMail, widget.auth, context);
                                   Navigator.of(context)

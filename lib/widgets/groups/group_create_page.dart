@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/models/group_model.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class GroupCreatePage extends StatefulWidget {
   const GroupCreatePage({Key? key}) : super(key: key);
@@ -206,24 +207,16 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
           "groups": FieldValue.arrayUnion([groupId])
         });
       });
-      final snackBar = SnackBar(
-        backgroundColor: Colors.white,
-        content: const Text(
-          'Yay! A SnackBar!',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        action: SnackBarAction(
-          label: 'Undo',
-          onPressed: () {
-            // Some code to undo the change.
-          },
-        ),
-      );
+
       formKey.currentState!.reset();
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(
+        MySnackbar.getSnackbar("$groupName grubu oluşturuldu."),
+      );
       Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        MySnackbar.getSnackbar("Grup Oluşturulamadı"),
+      );
     }
   }
 }

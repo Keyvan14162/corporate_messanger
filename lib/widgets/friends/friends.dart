@@ -243,17 +243,4 @@ class _FriendsState extends State<Friends> {
       ),
     );
   }
-
-  /*
-  getMessages(String myId, String friendId) {
-    var messageSnapshots = firestore
-        .collection("personal_chat")
-        .doc("${myId + "-" + friendId}")
-        .collection("messages")
-        .orderBy("date", descending: true)
-        .snapshots();
-
-    print(messageSnapshots);
-  }
-  */
 }

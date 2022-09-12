@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class PasswordChange extends StatefulWidget {
   const PasswordChange({Key? key, required this.auth}) : super(key: key);
@@ -102,8 +103,10 @@ class _PasswordChangeState extends State<PasswordChange> {
                               TextButton(
                                   onPressed: () {
                                     changePassword(_yeniSifre);
-                                    showMessageAyarlar(
-                                        "yeni sifre : $_yeniSifre", context);
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        MySnackbar.getSnackbar(
+                                            "Yeni şifre : $_yeniSifre"));
                                     Navigator.of(context)
                                         .pushNamed(Constants.SETTINGS_PATH);
                                   },

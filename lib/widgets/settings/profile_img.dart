@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class ProfileImg extends StatefulWidget {
   const ProfileImg({
@@ -44,6 +45,7 @@ class _ProfileImgState extends State<ProfileImg> {
               return GestureDetector(
                 onTap: () {
                   changeCoverImg(widget.userId);
+                  Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
                 },
                 child: Container(
                   color: Colors.grey,
@@ -74,7 +76,6 @@ class _ProfileImgState extends State<ProfileImg> {
               return Positioned(
                 top: widget.top,
                 left: 0,
-                // neden 3 bilmiyom
                 right: MediaQuery.of(context).size.width / 2,
                 child: GestureDetector(
                   onTap: () {

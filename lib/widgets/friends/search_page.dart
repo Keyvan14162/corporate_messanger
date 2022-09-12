@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({required this.friends, Key? key}) : super(key: key);
@@ -110,7 +111,9 @@ class _SearchPageState extends State<SearchPage> {
                             userId
                           ]);
                     } else {
-                      print("once arkadas ekle");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        MySnackbar.getSnackbar("Önce arkadaş eklemelisiniz"),
+                      );
                     }
                   },
                   child: FirebaseAuth.instance.currentUser!.uid != userId
@@ -148,6 +151,11 @@ class _SearchPageState extends State<SearchPage> {
                                                 : IconButton(
                                                     onPressed: () async {
                                                       addUserToFriends(userId);
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(MySnackbar
+                                                              .getSnackbar(
+                                                                  "$name arkadaş olarak eklendi"));
                                                     },
                                                     icon: const Icon(
                                                       Icons.person_add_alt,

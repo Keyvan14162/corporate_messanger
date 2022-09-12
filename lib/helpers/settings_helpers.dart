@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/models/user_model.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
@@ -12,18 +13,17 @@ void hesapDogrula(BuildContext context) async {
   // hesabı dogrulayınca anlamıyo tekra giriş yapınca oluyo****
   if (FirebaseAuth.instance.currentUser != null) {
     if (FirebaseAuth.instance.currentUser!.emailVerified) {
-      showMessageAyarlar(
-          "${FirebaseAuth.instance.currentUser!.email} hesabı dogrulanmıstır  ",
-          context);
+      ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+          "${FirebaseAuth.instance.currentUser!.email} hesabı doğrulanmıştır."));
     } else {
       try {
         await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
-        showMessageAyarlar(
-            "Mailinize gonderilen linke tıklayarak hesabınızı dogrulaynız. Hesabın dogrulandıgını gormke icin uygulamaya tekrar giris yapınız",
-            context);
+        ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+            "Mailinize gonderilen linke tıklayarak hesabınızı dogrulaynız. Hesabın dogrulandıgını gormke icin uygulamaya tekrar giris yapınız"));
       } catch (e) {
-        showMessageAyarlar(e.toString(), context);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(MySnackbar.getSnackbar(e.toString()));
         await FirebaseAuth.instance.signOut();
 
         Navigator.of(context).pop();
@@ -77,12 +77,13 @@ Future<bool> deleteUser(BuildContext context) async {
       return true;
     } catch (e) {
       // requires login again
-      showMessageAyarlar(
-          "Bu kritik bir işlemdir, silmek icin hesabınıza tekrar giris yapınız.",
-          context);
+
+      ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+          "Bu kritik bir işlemdir, silmek icin hesabınıza tekrar giris yapınız."));
     }
   } else if (FirebaseAuth.instance.currentUser == null) {
-    print("Once oturum ac");
+    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+        "Oturum açmamış durumdasınız, uygulamayı kapatıp tekrar deneyiniz"));
     return false;
   }
   return false;
@@ -113,7 +114,9 @@ void changeMail(
   try {
     await auth.currentUser!.updateEmail(yeniMail);
     await auth.signOut();
-    showMessageAyarlar("İlk try Yeni mailinizle giris yapabilirsiniz", context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      MySnackbar.getSnackbar("İlk try Yeni mailinizle giris yapabilirsiniz"),
+    );
     Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
     // hassas islem, firebase bidaha oturum ac once diyo
     // hata fırlatıyo bunun icin
@@ -126,7 +129,9 @@ void changeMail(
       await auth.currentUser!.reauthenticateWithCredential(credietial);
       await auth.currentUser!.updateEmail(yeniMail);
       await auth.signOut();
-      showMessageAyarlar("Yeni mailinizle giris yapabilirsiniz", context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        MySnackbar.getSnackbar("Yeni mailinizle giris yapabilirsiniz"),
+      );
       Navigator.of(context).pushNamed(Constants.LOGIN_CONTROL_PATH);
     }
   } catch (e) {
@@ -162,6 +167,7 @@ changeProfileImg(BuildContext context, String userId) async {
                     .doc("users/${userId}")
                     .update({"profileImg": url.toString()});
               });
+              Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
             },
             child: const Text("Evet"),
           ),
@@ -204,11 +210,4 @@ Future<String> getDownloadUrl(String userId, String img) async {
       .data()![img];
 
   return url;
-}
-
-void showMessageAyarlar(String message, BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(message, style: const TextStyle(fontSize: 20)),
-    backgroundColor: Colors.black,
-  ));
 }

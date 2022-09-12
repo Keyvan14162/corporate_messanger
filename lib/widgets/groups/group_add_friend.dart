@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class GroupAddFriend extends StatefulWidget {
   const GroupAddFriend(
@@ -167,6 +168,9 @@ class _GroupAddFriendState extends State<GroupAddFriend> {
                   });
 
                   Navigator.of(context).pop();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      MySnackbar.getSnackbar("Kişiler gruba eklendi."));
                 }
               },
               label: const Text('Gruba Ekle'),

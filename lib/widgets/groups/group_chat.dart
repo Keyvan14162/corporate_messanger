@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/helpers/group_helpers.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
@@ -116,14 +117,6 @@ class _GroupChatState extends State<GroupChat> {
                               .data()["imgUrl"]
                               .toString();
 
-                          if (!isSender) {
-                            // karsıdan gelen mesajlar isreaded olsun
-                            /*
-                            setMessagesReaded(
-                                widget.senderId, widget.reciverId, messageId);
-                                */
-                          }
-
                           return messageWidget(
                             isSender,
                             senderId,
@@ -199,11 +192,13 @@ class _GroupChatState extends State<GroupChat> {
                   ),
                   TextButton(
                     onPressed: () {
-                      setState(() {
-                        hoverd = !hoverd;
-                        selectedMessagesId = {};
-                        selectedMessagesImgUrl = {};
-                      });
+                      setState(
+                        () {
+                          hoverd = !hoverd;
+                          selectedMessagesId = {};
+                          selectedMessagesImgUrl = {};
+                        },
+                      );
                     },
                     child: const Text(
                       "İptal",
@@ -224,8 +219,8 @@ class _GroupChatState extends State<GroupChat> {
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       key: UniqueKey(),
-                      onTap: () {
-                        leaveGroup(widget.groupId, context);
+                      onTap: () async {
+                        await leaveGroup(widget.groupId, context);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

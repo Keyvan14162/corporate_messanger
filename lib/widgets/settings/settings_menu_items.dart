@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class SettingsMenuItems extends StatefulWidget {
   const SettingsMenuItems({Key? key}) : super(key: key);
@@ -66,8 +67,10 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
                   onPressed: () {
                     signOutUser();
                     Navigator.of(context).pop();
-                    showMessageAyarlar(
-                        "${auth.currentUser!.email} çıkış yaptı", context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      MySnackbar.getSnackbar(
+                          "${auth.currentUser!.email} çıkış yaptı."),
+                    );
                   },
                   child: const Text("Evet"),
                 ),
@@ -95,7 +98,10 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
                     var sonuc = await deleteUser(context);
                     if (sonuc) {
                       Navigator.of(context).pop();
-                      showMessageAyarlar("silindi", context);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        MySnackbar.getSnackbar("Silindi."),
+                      );
                     }
                   },
                   child: const Text("Evet"),

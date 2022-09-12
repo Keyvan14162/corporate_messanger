@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/models/user_model.dart';
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 void saveUserToFirestore(String name, int age, String userId) async {
@@ -49,11 +50,13 @@ Future createEmailAndPass(
 
     // HESAP DOGRULAMA MAİN_PAGE'DE
 
-    _showMessage("Kayıt Olundu", email, pass, context);
+    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+        "Email: $email \n Şifre: $pass\n  Kayıt olundu."));
   } catch (e) {
     // create.. ozelliklerine bak, invalid email vs. firlatabilir
     // print(e.toString());
-    _showMessage(e.toString(), email, pass, context);
+    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+        "Email: $email \n Şifre: $pass\n  ${e.toString()}."));
   }
 }
 
@@ -71,7 +74,8 @@ Future<User?> loginEmailAndPass(
     return user;
   } catch (e) {
     // print(e.toString());
-    _showMessage(e.toString(), email, pass, context);
+    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
+        "Email: $email \n Şifre: $pass\n  ${e.toString()}."));
   }
   return null;
 }
@@ -142,7 +146,7 @@ void firebaseUserConfig(FirebaseAuth auth) async {
     });
   }
 }
-
+/*
 void _showMessage(
     String durum, String email, String pass, BuildContext context) {
   String result = "email: $email \n password: $pass\n  $durum";
@@ -153,3 +157,4 @@ void _showMessage(
     ),
   );
 }
+*/

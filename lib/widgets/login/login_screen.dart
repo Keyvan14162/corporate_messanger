@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/giris_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/login_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class LoginScreen extends StatefulWidget {
