@@ -1,3 +1,4 @@
+import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_firebase_auth/helpers/login_helpers.dart';
 import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_firebase_auth/widgets/login/custom_gender_select.dart';
+import 'package:flutter_firebase_auth/widgets/login/gender.dart';
 
 class LoginUserConfig extends StatefulWidget {
   const LoginUserConfig({Key? key}) : super(key: key);
@@ -15,141 +18,152 @@ class LoginUserConfig extends StatefulWidget {
 }
 
 class _LoginUserConfigState extends State<LoginUserConfig> {
+  final formKey = GlobalKey<FormState>();
+  String _name = "";
+  DateTime _birthdate = DateTime(2000);
+  TextEditingController _textEditingController = TextEditingController();
+  String dropdownValue = 'One';
+  List<Gender> genders = <Gender>[];
+  String _gender = "Male";
+  int _age = 0;
+
   @override
   void initState() {
     super.initState();
     print("-------------" + FirebaseAuth.instance.currentUser!.uid);
+    genders.add(Gender("Male", Icons.male, true));
+    genders.add(Gender("Female", Icons.female, false));
+    genders.add(Gender("Other", Icons.ac_unit, false));
   }
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    String _name = "";
-    DateTime _birthdate = DateTime(2000);
-
+    print("--------------BUILD----------------");
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Fill the fields"),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          "Fill the fieldhhs",
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
       ),
-      body: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // profile img
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: StreamBuilder(
-                    stream: getUserStream(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return GestureDetector(
-                          onTap: () {
-                            chooseProfileImg(
-                                FirebaseAuth.instance.currentUser!.uid);
-                          },
-                          child: CircleAvatar(
-                            //  foregroundImage: ImageProvider(),
-                            maxRadius: 80,
-                            child: CircleAvatar(
-                              radius: 144 / 2 + 10,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 144 / 2,
-                                // backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(
-                                  (snapshot.data
-                                      as DocumentSnapshot)["profileImg"],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return const CircleAvatar(
+      body: Container(
+        color: Colors.white,
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
+                child: StreamBuilder(
+                  stream: getUserStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return GestureDetector(
+                        onTap: () {
+                          chooseProfileImg(
+                              FirebaseAuth.instance.currentUser!.uid);
+                        },
+                        child: CircleAvatar(
+                          //  foregroundImage: ImageProvider(),
                           maxRadius: 80,
                           child: CircleAvatar(
                             radius: 144 / 2 + 10,
-                            backgroundColor: Colors.white,
+                            backgroundColor: Theme.of(context).primaryColor,
                             child: CircleAvatar(
                               radius: 144 / 2,
+                              // backgroundColor: Colors.white,
+                              backgroundImage: NetworkImage(
+                                (snapshot.data
+                                    as DocumentSnapshot)["profileImg"],
+                              ),
                             ),
                           ),
-                        );
-                      }
-                    },
-                  ),
+                        ),
+                      );
+                    } else {
+                      return const CircleAvatar(
+                        maxRadius: 80,
+                        child: CircleAvatar(
+                          radius: 144 / 2 + 10,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 144 / 2,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
-                // name
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Name",
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                      onSaved: (deger) {
-                        _name = deger!;
-                      },
-                      validator: (deger) {
-                        if (deger!.trim().isEmpty) {
-                          return "Name can't be empty";
-                        } else if (deger.length > 25) {
-                          return "Name can't be longer than 25 chracters";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                  ),
-                  /*
-                  TextFormField(
-                initialValue: "Name",
-                decoration: const InputDecoration(
-                  labelText: "Name",
-                  hintText: "Name",
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (deger) {
-                  _name = deger!;
-                },
-                validator: (deger) {
-                  if (deger!.isEmpty) {
-                    return "Cannot be null";
-                  } else if (deger.length < 3) {
-                    return "Username cannot be small than 3 chracters";
-                  } else {
-                    // hata uretme
-                    return null;
-                  }
-                },
               ),
-              */
+              const Padding(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: Text(
+                  "Click profile image to change it.",
+                  style: TextStyle(color: Colors.grey),
                 ),
-              ],
-            ),
-            // birth date
-            Expanded(
-              child: Padding(
+              ),
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  keyboardType: TextInputType.none,
-                  decoration: const InputDecoration(
-                    labelText: "Birthdate dd/mm/yyyy",
-                    hintText: "",
-                    prefixIcon: Icon(Icons.date_range),
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                    prefixIcon: const Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  onTap: () {
-                    showDatePicker(
+                  onSaved: (deger) {
+                    _name = deger!;
+                  },
+                  onChanged: (value) {
+                    formKey.currentState!.validate();
+                  },
+                  validator: (deger) {
+                    if (deger!.trim().isEmpty) {
+                      return "Name can't be empty";
+                    } else if (deger.length > 25) {
+                      return "Name can't be longer than 25 chracters";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+              ),
+
+              // birth date
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _textEditingController,
+                  keyboardType: TextInputType.none,
+                  decoration: InputDecoration(
+                    labelText: "Birthdate yyyy/mm/dd",
+                    suffix: Text("Age : $_age"),
+                    prefixIcon: const Icon(Icons.date_range),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      //borderSide: BorderSide.none,
+                    ),
+                  ),
+                  onTap: () async {
+                    await showDatePicker(
                       context: context,
                       initialDate: DateTime(2000, 8),
                       firstDate: DateTime(1900, 8),
-                      lastDate: DateTime(2019, 8),
-                    );
+                      lastDate: DateTime.now(),
+                    ).then((value) {
+                      _birthdate = value!;
+                      _textEditingController.text =
+                          _birthdate.toString().substring(0, 10);
+                      formKey.currentState!.validate();
+                      _age = AgeCalculator.age(_birthdate).years;
+                      setState(() {});
+                    });
+                  },
+                  onChanged: (value) {
+                    formKey.currentState!.validate();
                   },
                   onSaved: (deger) {
                     _birthdate = DateTime.parse(deger!);
@@ -166,8 +180,26 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
                   },
                 ),
               ),
-            ),
-          ],
+              // gender
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < genders.length; i++)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          genders
+                              .forEach((gender) => gender.isSelected = false);
+                          genders[i].isSelected = true;
+                          _gender = genders[i].name;
+                        });
+                      },
+                      child: CustomGenderSelect(genders[i]),
+                    ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: Padding(
@@ -177,7 +209,7 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
           children: [
             FloatingActionButton.extended(
               onPressed: () {
-                // Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
+                Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
 
                 bool validate = formKey.currentState!.validate();
                 if (validate) {

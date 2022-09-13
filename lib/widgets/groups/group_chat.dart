@@ -144,6 +144,7 @@ class _GroupChatState extends State<GroupChat> {
   AppBar appbar() {
     return AppBar(
       // automaticallyImplyLeading: false,
+      backgroundColor: Theme.of(context).primaryColor,
       leadingWidth: 30,
       leading: IconButton(
         onPressed: () {
@@ -227,7 +228,7 @@ class _GroupChatState extends State<GroupChat> {
                           const Text("Leave Group"),
                           Icon(
                             Icons.exit_to_app,
-                            color: ThemeData().primaryColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ],
                       ),
@@ -254,7 +255,7 @@ class _GroupChatState extends State<GroupChat> {
                           const Text("Add Friend"),
                           Icon(
                             Icons.person_add_alt_1_outlined,
-                            color: ThemeData().primaryColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ],
                       ),
@@ -280,7 +281,7 @@ class _GroupChatState extends State<GroupChat> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Colors.blue.shade100,
+                  color: Theme.of(context).primaryColor.withAlpha(100),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
@@ -333,7 +334,7 @@ class _GroupChatState extends State<GroupChat> {
                       children: [
                         Icon(
                           Icons.photo_camera,
-                          color: ThemeData().primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         const Text("Kamera"),
                       ],
@@ -348,7 +349,7 @@ class _GroupChatState extends State<GroupChat> {
                       children: [
                         Icon(
                           Icons.image,
-                          color: ThemeData().primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         const Text("Galeri"),
                       ],
@@ -373,7 +374,7 @@ class _GroupChatState extends State<GroupChat> {
                   );
                   _textController.clear();
                 },
-                backgroundColor: Colors.blue,
+                backgroundColor: Theme.of(context).primaryColor,
                 elevation: 0,
                 child: const Icon(
                   Icons.send,
@@ -524,7 +525,9 @@ class _GroupChatState extends State<GroupChat> {
                                     bottomRight: const Radius.circular(8),
                                   ),
                                   color: (isSender
-                                      ? Colors.blue.shade300
+                                      ? Theme.of(context)
+                                          .primaryColor
+                                          .withAlpha(100)
                                       : Colors.grey.shade300),
                                 ),
                                 child: Container(

@@ -143,6 +143,7 @@ class _PersonalChatState extends State<PersonalChat> {
   AppBar appbar() {
     return AppBar(
       // automaticallyImplyLeading: false,
+      backgroundColor: Theme.of(context).primaryColor,
       leadingWidth: 30,
       leading: IconButton(
           onPressed: () {
@@ -220,7 +221,7 @@ class _PersonalChatState extends State<PersonalChat> {
                           const Text("AAAAAAAAAAA"),
                           Icon(
                             Icons.arrow_forward_ios,
-                            color: ThemeData().primaryColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ],
                       ),
@@ -233,7 +234,7 @@ class _PersonalChatState extends State<PersonalChat> {
                           const Text("BBBBBBBBB"),
                           Icon(
                             Icons.arrow_forward_ios,
-                            color: ThemeData().primaryColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ],
                       ),
@@ -259,7 +260,7 @@ class _PersonalChatState extends State<PersonalChat> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Colors.blue.shade100,
+                  color: Theme.of(context).primaryColor.withAlpha(100),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
@@ -308,7 +309,7 @@ class _PersonalChatState extends State<PersonalChat> {
                       children: [
                         Icon(
                           Icons.photo_camera,
-                          color: ThemeData().primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         const Text("Kamera"),
                       ],
@@ -323,7 +324,7 @@ class _PersonalChatState extends State<PersonalChat> {
                       children: [
                         Icon(
                           Icons.image,
-                          color: ThemeData().primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                         const Text("Galeri"),
                       ],
@@ -342,7 +343,7 @@ class _PersonalChatState extends State<PersonalChat> {
                       widget.reciverId);
                   _textController.clear();
                 },
-                backgroundColor: Colors.blue,
+                backgroundColor: Theme.of(context).primaryColor,
                 elevation: 0,
                 child: const Icon(
                   Icons.send,
@@ -450,7 +451,8 @@ class _PersonalChatState extends State<PersonalChat> {
                               })
                             : const SizedBox(),
                       ],
-                    ))
+                    ),
+                  )
                 : Column(
                     crossAxisAlignment: isSender
                         ? CrossAxisAlignment.end
@@ -488,7 +490,9 @@ class _PersonalChatState extends State<PersonalChat> {
                                     bottomRight: const Radius.circular(8),
                                   ),
                                   color: (isSender
-                                      ? Colors.blue.shade300
+                                      ? Theme.of(context)
+                                          .primaryColor
+                                          .withAlpha(100)
                                       : Colors.grey.shade300),
                                 ),
                                 child: Container(

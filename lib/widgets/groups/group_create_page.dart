@@ -29,7 +29,7 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: ThemeData().primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
         ),
         title: Form(

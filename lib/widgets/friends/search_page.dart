@@ -30,14 +30,14 @@ class _SearchPageState extends State<SearchPage> {
         // The search area here
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
-          color: ThemeData().primaryColor, //change your color here
+          color: Theme.of(context).primaryColor,
         ),
 
         title: Container(
           width: double.infinity,
           height: 40,
           decoration: BoxDecoration(
-            color: ThemeData().primaryColor.withOpacity(0.3),
+            color: Theme.of(context).primaryColor.withAlpha(80),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(

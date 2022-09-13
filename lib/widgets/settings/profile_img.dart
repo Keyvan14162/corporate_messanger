@@ -44,7 +44,7 @@ class _ProfileImgState extends State<ProfileImg> {
             if (snapshot.hasData) {
               return GestureDetector(
                 onTap: () {
-                  changeCoverImg(widget.userId);
+                  changeCoverImgGallery(widget.userId);
                   Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
                 },
                 child: Container(
@@ -79,7 +79,7 @@ class _ProfileImgState extends State<ProfileImg> {
                 right: MediaQuery.of(context).size.width / 2,
                 child: GestureDetector(
                   onTap: () {
-                    changeProfileImg(context, widget.userId);
+                    changeProfileImgGallery(context, widget.userId);
                   },
                   child: CircleAvatar(
                     radius: widget.profileHeight / 2 + 10,

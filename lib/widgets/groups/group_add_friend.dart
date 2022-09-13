@@ -31,11 +31,11 @@ class _GroupAddFriendState extends State<GroupAddFriend> {
             },
             icon: Icon(
               Icons.arrow_back,
-              color: ThemeData().primaryColor,
+              color: Theme.of(context).primaryColor,
             )),
         title: Text(
           "Add Friends",
-          style: TextStyle(color: ThemeData().primaryColor),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         backgroundColor: Colors.white,
       ),

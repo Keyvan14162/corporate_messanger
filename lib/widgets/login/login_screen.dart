@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         MaterialStateProperty.all<double>(10),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Colors.blue),
+                                            Theme.of(context).primaryColor),
                                   ),
                                   onPressed: () async {
                                     bool validate =
@@ -254,13 +254,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     children: [
                                       Icon(
                                         Icons.login,
-                                        color: ThemeData().primaryColor,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                       Text(
                                         "Giriş Yap",
                                         maxLines: 1,
                                         style: TextStyle(
-                                            color: ThemeData().primaryColor),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
                                       // text ortalansin diye
                                       const SizedBox(width: 10),
@@ -379,7 +380,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             .contains(MaterialState.pressed)) {
                                           return Colors.grey;
                                         }
-                                        return Colors.blue;
+                                        return Theme.of(context).primaryColor;
                                       },
                                     ),
                                   ),

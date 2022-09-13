@@ -78,8 +78,8 @@ class _PasswordChangeState extends State<PasswordChange> {
                   ElevatedButton(
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all<double>(10),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).primaryColor),
                     ),
                     onPressed: () async {
                       bool validate = formKey.currentState!.validate();

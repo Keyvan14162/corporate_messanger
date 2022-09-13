@@ -24,7 +24,7 @@ class _FriendsState extends State<Friends> {
         automaticallyImplyLeading: false,
         title: Text(
           'Kullanıcı Ara',
-          style: TextStyle(color: ThemeData().primaryColor),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         backgroundColor: Colors.white,
         actions: [
@@ -34,7 +34,7 @@ class _FriendsState extends State<Friends> {
             onPressed: () {},
             icon: Icon(
               Icons.person,
-              color: ThemeData().primaryColor,
+              color: Theme.of(context).primaryColor,
             ),
           ),
 
@@ -43,7 +43,7 @@ class _FriendsState extends State<Friends> {
                 .pushNamed(Constants.SEARCH_PAGE_PATH, arguments: friends),
             icon: Icon(
               Icons.search,
-              color: ThemeData().primaryColor,
+              color: Theme.of(context).primaryColor,
             ),
           )
         ],

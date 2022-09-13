@@ -139,7 +139,7 @@ void changeMail(
   }
 }
 
-changeProfileImg(BuildContext context, String userId) async {
+changeProfileImgGallery(BuildContext context, String userId) async {
   // firestore'a id ile isimlendirip resmi atsın
   // firebase de userin profileImg download urlsini degistrisin
   showDialog(
@@ -152,7 +152,7 @@ changeProfileImg(BuildContext context, String userId) async {
           TextButton(
             onPressed: () async {
               final ImagePicker picker = ImagePicker();
-              XFile? file = await picker.pickImage(source: ImageSource.camera);
+              XFile? file = await picker.pickImage(source: ImageSource.gallery);
 
               var profileRef =
                   FirebaseStorage.instance.ref("users/profilePics/${userId}");
@@ -183,11 +183,11 @@ changeProfileImg(BuildContext context, String userId) async {
   );
 }
 
-changeCoverImg(String userId) async {
+changeCoverImgGallery(String userId) async {
   // firestore'a id ile isimlendirip resmi atsın
   // firebase de userin profileImg download urlsini degistrisin
   final ImagePicker picker = ImagePicker();
-  XFile? file = await picker.pickImage(source: ImageSource.camera);
+  XFile? file = await picker.pickImage(source: ImageSource.gallery);
 
   var profileRef = FirebaseStorage.instance.ref("users/coverPics/${userId}");
 

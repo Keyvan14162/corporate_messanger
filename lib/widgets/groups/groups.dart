@@ -21,7 +21,7 @@ class _GroupsState extends State<Groups> {
         automaticallyImplyLeading: false,
         title: Text(
           'Gruplar',
-          style: TextStyle(color: ThemeData().primaryColor),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         backgroundColor: Colors.white,
       ),

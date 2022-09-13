@@ -130,7 +130,8 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(iconData, color: Colors.blue.shade500),
+                Icon(iconData,
+                    color: Theme.of(context).primaryColor.withAlpha(500)),
                 const SizedBox(
                   width: 30,
                   height: 0,

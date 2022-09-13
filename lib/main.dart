@@ -27,7 +27,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.routeGenrator,
       title: "sirket-ici-mesajlasma",
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        primaryColor: const Color(0xFF3B4257),
+        // primaryColor: Colors.blue,
+        //secondaryHeaderColor: Colors.green,
+      ),
     );
   }
 }

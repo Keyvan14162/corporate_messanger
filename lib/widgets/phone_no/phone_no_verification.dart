@@ -77,8 +77,8 @@ class _PhoneNoVerificationState extends State<PhoneNoVerification> {
                     ElevatedButton(
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(10),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.cyan),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor),
                       ),
                       onPressed: () {
                         if (smsCode.toString().length == 6) {
@@ -104,8 +104,8 @@ class _PhoneNoVerificationState extends State<PhoneNoVerification> {
                     ElevatedButton(
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(10),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.cyan),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor),
                       ),
                       onPressed: () {
                         if (smsCode.toString().length == 6) {

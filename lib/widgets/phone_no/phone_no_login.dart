@@ -67,8 +67,8 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
                 ElevatedButton(
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(10),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.cyan),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).primaryColor),
                   ),
                   onPressed: () {
                     if (telNo.toString().length == 13) {
