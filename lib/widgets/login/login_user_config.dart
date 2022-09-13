@@ -41,202 +41,207 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
   Widget build(BuildContext context) {
     print("--------------BUILD----------------");
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          "Fill the fields",
-          style: TextStyle(color: Theme.of(context).primaryColor),
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            "Fill the fields",
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
-                  child: StreamBuilder(
-                    stream: getUserStream(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return GestureDetector(
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              MySnackbar.getGalleryCameraSnackbar(
-                                  Theme.of(context).primaryColor),
-                            );
-                          },
-                          child: CircleAvatar(
-                            //  foregroundImage: ImageProvider(),
-                            maxRadius: 80,
+        body: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 2),
+                    child: StreamBuilder(
+                      stream: getUserStream(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GestureDetector(
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                MySnackbar.getGalleryCameraSnackbar(
+                                    Theme.of(context).primaryColor, context),
+                              );
+                            },
                             child: CircleAvatar(
-                              radius: 144 / 2 + 10,
-                              backgroundColor: Theme.of(context).primaryColor,
+                              //  foregroundImage: ImageProvider(),
+                              maxRadius: 80,
                               child: CircleAvatar(
-                                radius: 144 / 2,
-                                // backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(
-                                  (snapshot.data
-                                      as DocumentSnapshot)["profileImg"],
+                                radius: 144 / 2 + 10,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                child: CircleAvatar(
+                                  radius: 144 / 2,
+                                  // backgroundColor: Colors.white,
+                                  backgroundImage: NetworkImage(
+                                    (snapshot.data
+                                        as DocumentSnapshot)["profileImg"],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return const CircleAvatar(
-                          maxRadius: 80,
-                          child: CircleAvatar(
-                            radius: 144 / 2 + 10,
-                            backgroundColor: Colors.white,
+                          );
+                        } else {
+                          return const CircleAvatar(
+                            maxRadius: 80,
                             child: CircleAvatar(
-                              radius: 144 / 2,
+                              radius: 144 / 2 + 10,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 144 / 2,
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
-                  child: Text(
-                    "Click profile image to change it",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Name",
-                      prefixIcon: Icon(
-                        Icons.person,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                          );
+                        }
+                      },
                     ),
-                    onSaved: (deger) {
-                      _name = deger!;
-                    },
-                    onChanged: (value) {
-                      formKey.currentState!.validate();
-                    },
-                    validator: (deger) {
-                      if (deger!.trim().isEmpty) {
-                        return "Name can't be empty";
-                      } else if (deger.length > 25) {
-                        return "Name can't be longer than 25 chracters";
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
-                ),
-
-                // birth date
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _textEditingController,
-                    keyboardType: TextInputType.none,
-                    decoration: InputDecoration(
-                      labelText: "Birthdate yyyy/mm/dd",
-                      suffix: Text("Age : $_age"),
-                      prefixIcon: Icon(
-                        Icons.date_range,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        //borderSide: BorderSide.none,
-                      ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                    child: Text(
+                      "Click profile image to change it",
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    onTap: () async {
-                      await showDatePicker(
-                        context: context,
-                        initialDate: DateTime(2000, 8),
-                        firstDate: DateTime(1900, 8),
-                        lastDate: DateTime.now(),
-                      ).then((value) {
-                        _birthdate = value!;
-                        _textEditingController.text =
-                            _birthdate.toString().substring(0, 10);
-                        formKey.currentState!.validate();
-                        _age = AgeCalculator.age(_birthdate).years;
-                        setState(() {});
-                      });
-                    },
-                    onChanged: (value) {
-                      formKey.currentState!.validate();
-                    },
-                    onSaved: (deger) {
-                      _birthdate = DateTime.parse(deger!);
-                      print(_birthdate);
-                    },
-                    validator: (deger) {
-                      if (deger!.trim().isEmpty) {
-                        return "Birthdate can't be empty";
-                      } else if (DateTime.tryParse(deger) == null) {
-                        return "Please select a valid date";
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
-                ),
-                // gender
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 0; i < genders.length; i++)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            genders
-                                .forEach((gender) => gender.isSelected = false);
-                            genders[i].isSelected = true;
-                            _gender = genders[i].name;
-                          });
-                        },
-                        child: CustomGenderSelect(
-                          genders[i],
-                          cardColor: Theme.of(context).primaryColor,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Name",
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                  ],
-                )
-              ],
+                      onSaved: (deger) {
+                        _name = deger!;
+                      },
+                      onChanged: (value) {
+                        formKey.currentState!.validate();
+                      },
+                      validator: (deger) {
+                        if (deger!.trim().isEmpty) {
+                          return "Name can't be empty";
+                        } else if (deger.length > 25) {
+                          return "Name can't be longer than 25 chracters";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+
+                  // birth date
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _textEditingController,
+                      keyboardType: TextInputType.none,
+                      decoration: InputDecoration(
+                        labelText: "Birthdate yyyy/mm/dd",
+                        suffix: Text("Age : $_age"),
+                        prefixIcon: Icon(
+                          Icons.date_range,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          //borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onTap: () async {
+                        await showDatePicker(
+                          context: context,
+                          initialDate: DateTime(2000, 8),
+                          firstDate: DateTime(1900, 8),
+                          lastDate: DateTime.now(),
+                        ).then((value) {
+                          _birthdate = value!;
+                          _textEditingController.text =
+                              _birthdate.toString().substring(0, 10);
+                          formKey.currentState!.validate();
+                          _age = AgeCalculator.age(_birthdate).years;
+                          setState(() {});
+                        });
+                      },
+                      onChanged: (value) {
+                        formKey.currentState!.validate();
+                      },
+                      onSaved: (deger) {
+                        _birthdate = DateTime.parse(deger!);
+                        print(_birthdate);
+                      },
+                      validator: (deger) {
+                        if (deger!.trim().isEmpty) {
+                          return "Birthdate can't be empty";
+                        } else if (DateTime.tryParse(deger) == null) {
+                          return "Please select a valid date";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  // gender
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < genders.length; i++)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              genders.forEach(
+                                  (gender) => gender.isSelected = false);
+                              genders[i].isSelected = true;
+                              _gender = genders[i].name;
+                            });
+                          },
+                          child: CustomGenderSelect(
+                            genders[i],
+                            cardColor: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton.extended(
-              onPressed: () {
-                // Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton.extended(
+                onPressed: () {
+                  // Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
 
-                bool validate = formKey.currentState!.validate();
-                if (validate) {
-                  formKey.currentState!.save();
-                }
-              },
-              icon: const Icon(Icons.arrow_forward),
-              label: const Text('Save'),
-              backgroundColor: Colors.pink,
-            ),
-          ],
+                  bool validate = formKey.currentState!.validate();
+                  if (validate) {
+                    formKey.currentState!.save();
+                  }
+                },
+                icon: const Icon(Icons.arrow_forward),
+                label: const Text('Save'),
+                backgroundColor: Colors.pink,
+              ),
+            ],
+          ),
         ),
       ),
     );
