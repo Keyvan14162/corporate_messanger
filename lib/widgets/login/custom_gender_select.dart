@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/widgets/login/gender.dart';
 
 class CustomGenderSelect extends StatelessWidget {
+  const CustomGenderSelect(this._gender, {required this.cardColor, Key? key})
+      : super(key: key);
   final Gender _gender;
-
-  const CustomGenderSelect(this._gender, {Key? key}) : super(key: key);
+  final Color cardColor;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: _gender.isSelected ? const Color(0xFF3B4257) : Colors.white,
+      color: _gender.isSelected ? cardColor : Colors.white,
       child: Container(
-        height: 80,
-        width: 80,
+        height: 90,
+        width: 90,
         alignment: Alignment.center,
         margin: const EdgeInsets.all(5.0),
         child: Column(
@@ -28,6 +29,7 @@ class CustomGenderSelect extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               _gender.name,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: _gender.isSelected ? Colors.white : Colors.grey,
               ),

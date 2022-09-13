@@ -82,8 +82,9 @@ class _MailChangeState extends State<MailChange> {
                               TextButton(
                                 onPressed: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                      MySnackbar.getSnackbar(
-                                          "Yeni mail : $_yeniMail"));
+                                    MySnackbar.getSnackbar(
+                                        "Yeni mail : $_yeniMail"),
+                                  );
 
                                   changeMail(_yeniMail, widget.auth, context);
                                   Navigator.of(context)

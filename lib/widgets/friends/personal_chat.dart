@@ -302,7 +302,7 @@ class _PersonalChatState extends State<PersonalChat> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () async {
-                      _sendImageOnTap(ImageSource.camera);
+                      await _sendImageOnTap(ImageSource.camera);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -317,7 +317,7 @@ class _PersonalChatState extends State<PersonalChat> {
                   ),
                   PopupMenuItem(
                     onTap: () async {
-                      _sendImageOnTap(ImageSource.gallery);
+                      await _sendImageOnTap(ImageSource.gallery);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
