@@ -15,7 +15,8 @@ void telNoGiris(String telNo, BuildContext context) async {
       // firebase'e giris
       await FirebaseAuth.instance.signInWithCredential(credential);
 
-      firebaseUserConfig(FirebaseAuth.instance);
+      // .currentuser.auth?
+      firebaseUserConfig(FirebaseAuth.instance, context);
 
       ScaffoldMessenger.of(context)
           .showSnackBar(MySnackbar.getSnackbar("Doğrulama tamamlandı."));
@@ -50,7 +51,7 @@ void telNoGiris(String telNo, BuildContext context) async {
         ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
             "${FirebaseAuth.instance.currentUser!.phoneNumber} kayıt oldu."));
 
-        firebaseUserConfig(FirebaseAuth.instance);
+        firebaseUserConfig(FirebaseAuth.instance, context);
 
         Navigator.of(context).pushNamed("/anaSayfa");
       } catch (e) {

@@ -70,9 +70,9 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
                     backgroundColor: MaterialStateProperty.all<Color>(
                         Theme.of(context).primaryColor),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (telNo.toString().length == 13) {
-                      telNoGiris(telNo);
+                      await telNoGiris(telNo);
                     }
                   },
                   child: Row(
@@ -97,7 +97,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
     );
   }
 
-  void telNoGiris(String telNo) async {
+  Future telNoGiris(String telNo) async {
     await auth.verifyPhoneNumber(
       phoneNumber: telNo,
       // default 30 sn bekle, cihaz kod gelsin de isleyim diye bekliyo
@@ -108,10 +108,13 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
         // firebase'e giris
         await auth.signInWithCredential(credential);
 
-        firebaseUserConfig(auth);
+        await firebaseUserConfig(auth, context);
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(MySnackbar.getSnackbar("Doğrulama tamamlandı."));
+        ScaffoldMessenger.of(context).showSnackBar(
+          MySnackbar.getSnackbar("Doğrulama tamamlandı."),
+        );
+
+        Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
       },
       // hata
       verificationFailed: (FirebaseAuthException e) {
@@ -145,9 +148,9 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
           ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
               "${auth.currentUser!.phoneNumber} kayıt oldu."));
 
-          firebaseUserConfig(auth);
+          firebaseUserConfig(auth, context);
 
-          Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
+          Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
         } catch (e) {
           ScaffoldMessenger.of(context)
               .showSnackBar(MySnackbar.getSnackbar(e.toString()));

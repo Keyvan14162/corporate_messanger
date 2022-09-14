@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_firebase_auth/helpers/login_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
@@ -24,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     auth = FirebaseAuth.instance;
-    // auth.
 
     // kullanicinin auth statesini dinle, mesela oturumu kapatmışsa vs.
     // bu surekli calisir dinler
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         initialValue:
                             "ismailkyvsn2000@gmail.com", // starting value
                         keyboardType: TextInputType.emailAddress,
-                        autofocus: true,
+                        autofocus: false,
                         decoration: const InputDecoration(
                           labelText: "Email",
                           hintText: "Email",
@@ -179,9 +179,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       // FIREBASE CREATE USER WITH EMAIL AND PASSWORD
                                       await createEmailAndPass(
-                                          auth, _email, _pass, context);
+                                          auth, _email, _pass);
 
-                                      firebaseUserConfig(auth);
+                                      await firebaseUserConfig(auth, context);
+
+                                      Navigator.of(context).pushNamed(
+                                          Constants.LOGIN_USER_CONFIG_PATH);
                                     }
                                   },
                                   child: Row(
@@ -240,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       // sadece email verified ise bir user doner
                                       if (user != null) {
-                                        firebaseUserConfig(auth);
+                                        firebaseUserConfig(auth, context);
 
                                         Navigator.of(context).pushNamed(
                                           Constants.HOME_PAGE_PATH,
@@ -272,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
 
-                          // YADA
+                          // OR
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -286,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     )),
                               ),
                               const Text(
-                                "YADA",
+                                "OR",
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Expanded(
@@ -336,9 +339,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onPressed: () async {
                                     var userCredential = await googleileGiris();
                                     // useri yollayabilin arguments ile eklersen
-                                    firebaseUserConfig(auth);
-                                    Navigator.of(context)
-                                        .pushNamed(Constants.HOME_PAGE_PATH);
+                                    await firebaseUserConfig(auth, context);
+                                    Navigator.of(context).pushNamed(
+                                        Constants.LOGIN_USER_CONFIG_PATH);
                                   },
                                   child: Row(
                                     mainAxisAlignment:

@@ -36,10 +36,10 @@ class RouteGenerator {
   static Route<dynamic>? routeGenrator(RouteSettings settings) {
     switch (settings.name) {
       case "/":
-        // return _generateRoute(LoginControl(), settings);
-        // burdan sonra logn controlden ilk defa giris yapıyosa login user
-        // confge atsın, ordan da home page'e atsın
-        return _generateRoute(LoginUserConfig(), settings);
+        return _generateRoute(LoginControl(), settings);
+      // burdan sonra logn controlden ilk defa giris yapıyosa login user
+      // confge atsın, ordan da home page'e atsın
+      // return _generateRoute(LoginUserConfig(), settings);
 
       case Constants.LOGIN_SCREEN_PATH:
         return _generateRoute(LoginScreen(), settings);
@@ -66,6 +66,9 @@ class RouteGenerator {
 
       case Constants.LOGIN_CONTROL_PATH:
         return _generateRoute(LoginControl(), settings);
+
+      case Constants.LOGIN_USER_CONFIG_PATH:
+        return _generateRoute(LoginUserConfig(), settings);
 
       case Constants.GROUP_CREATE_PAGE_PATH:
         return _generateRoute(GroupCreatePage(), settings);

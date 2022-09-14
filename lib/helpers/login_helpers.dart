@@ -8,11 +8,12 @@ import 'package:flutter_firebase_auth/models/user_model.dart';
 import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 void saveUserToFirestore(String name, int age, String userId) async {
   var user =
       // profile pic url
-      UserModel(name: name, age: age, friends: [], groups: []);
+      UserModel(name: name, age: age, friends: [], groups: [], birthdate: "");
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -39,8 +40,7 @@ void saveUserToFirestore(String name, int age, String userId) async {
   });
 }
 
-Future createEmailAndPass(
-    FirebaseAuth auth, String email, String pass, BuildContext context) async {
+Future createEmailAndPass(FirebaseAuth auth, String email, String pass) async {
   // tryi ustte butona basilinca da yapabilin
   try {
     // user lan bu
@@ -52,14 +52,20 @@ Future createEmailAndPass(
     var user = userCrediantal.user;
 
     // HESAP DOGRULAMA MAİN_PAGE'DE
-
-    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-        "Email: $email \n Şifre: $pass\n  Kayıt olundu."));
+    /*
+    ScaffoldMessenger.of(context).showSnackBar(
+      MySnackbar.getSnackbar("Email: $email \n Şifre: $pass\n  Kayıt olundu."),
+    );
+    */
   } catch (e) {
     // create.. ozelliklerine bak, invalid email vs. firlatabilir
     // print(e.toString());
-    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-        "Email: $email \n Şifre: $pass\n  ${e.toString()}."));
+    /*
+    ScaffoldMessenger.of(context).showSnackBar(
+      MySnackbar.getSnackbar(
+          "Email: $email \n Şifre: $pass\n  ${e.toString()}."),
+    );
+    */
   }
 }
 
@@ -105,7 +111,7 @@ Future<UserCredential> googleileGiris() async {
 
 // authu glabal tutmalıyız
 // provider kullanılabilir
-void firebaseUserConfig(FirebaseAuth auth) async {
+Future firebaseUserConfig(FirebaseAuth auth, BuildContext context) async {
   try {
     // burasi 2. defa girdiginde fln
     // name cekerse onceden girmis demek, girmisse bisi yapma
@@ -115,10 +121,10 @@ void firebaseUserConfig(FirebaseAuth auth) async {
             .get())
         .data()!["name"];
   } catch (e) {
-    // yani boyle bi user yoksa, ilk kaytsa firebasede defaukt bi user olustursun
+    // yani boyle bi user yoksa, ilk kaytsa firebasede default bi user olustursun
+
     var user =
-        // profile pic url
-        UserModel(name: "Name", age: 0, friends: [], groups: []);
+        UserModel(name: "Name", age: 0, friends: [], groups: [], birthdate: "");
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -128,6 +134,7 @@ void firebaseUserConfig(FirebaseAuth auth) async {
     eklenecekUser["createdAt"] = FieldValue.serverTimestamp();
     eklenecekUser["friends"] = user.friends;
     eklenecekUser["groups"] = user.groups;
+    eklenecekUser["birthdate"] = user.birthdate;
 
     // kullaniciyi guncelleme
     await FirebaseFirestore.instance.doc("users/${auth.currentUser!.uid}").set(
@@ -147,6 +154,9 @@ void firebaseUserConfig(FirebaseAuth auth) async {
       "profileImg": await profileImgRef.getDownloadURL(),
       "coverImg": await coverImgRef.getDownloadURL()
     });
+
+    // Kullanicilardan bilgiler istensin
+    // Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
   }
 }
 
