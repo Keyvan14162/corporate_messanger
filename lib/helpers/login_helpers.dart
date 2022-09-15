@@ -13,7 +13,14 @@ import 'package:flutter_firebase_auth/constants.dart' as Constants;
 void saveUserToFirestore(String name, int age, String userId) async {
   var user =
       // profile pic url
-      UserModel(name: name, age: age, friends: [], groups: [], birthdate: "");
+      UserModel(
+    name: name,
+    age: age,
+    friends: [],
+    groups: [],
+    birthdate: "",
+    gender: "",
+  );
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -123,8 +130,14 @@ Future firebaseUserConfig(FirebaseAuth auth, BuildContext context) async {
   } catch (e) {
     // yani boyle bi user yoksa, ilk kaytsa firebasede default bi user olustursun
 
-    var user =
-        UserModel(name: "Name", age: 0, friends: [], groups: [], birthdate: "");
+    var user = UserModel(
+      name: "Name",
+      age: 0,
+      friends: [],
+      groups: [],
+      birthdate: "",
+      gender: "",
+    );
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -135,6 +148,7 @@ Future firebaseUserConfig(FirebaseAuth auth, BuildContext context) async {
     eklenecekUser["friends"] = user.friends;
     eklenecekUser["groups"] = user.groups;
     eklenecekUser["birthdate"] = user.birthdate;
+    eklenecekUser["gender"] = user.gender;
 
     // kullaniciyi guncelleme
     await FirebaseFirestore.instance.doc("users/${auth.currentUser!.uid}").set(

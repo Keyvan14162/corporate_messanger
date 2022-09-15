@@ -84,11 +84,7 @@ class RouteGenerator {
           settings: settings,
         );
       case Constants.USER_UPDATE_PATH:
-        return _generateRoute(
-            UserUpdate(
-              userId: settings.arguments as String,
-            ),
-            settings);
+        return _generateRoute(UserUpdate(), settings);
       case Constants.PERSONAL_CHAT_PATH:
         return CupertinoPageRoute(
           builder: (context) => PersonalChat(

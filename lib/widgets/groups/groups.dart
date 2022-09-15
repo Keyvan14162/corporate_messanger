@@ -16,93 +16,99 @@ class _GroupsState extends State<Groups> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Gruplar',
-          style: TextStyle(color: Theme.of(context).primaryColor),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed("/");
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Gruplar',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Colors.white,
         ),
-        backgroundColor: Colors.white,
-      ),
-      body: StreamBuilder(
-        stream: getGroups(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            groups = (snapshot.data as DocumentSnapshot)["groups"];
-            return StreamBuilder(
-              stream: getAllGroups(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return ListView.builder(
-                    key: const PageStorageKey<String>("page"),
-                    padding: const EdgeInsets.all(10.0),
-                    itemCount:
-                        (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                            .docs
-                            .length,
-                    itemBuilder: (context, index) {
-                      var groupId =
+        body: StreamBuilder(
+          stream: getGroups(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              groups = (snapshot.data as DocumentSnapshot)["groups"];
+              return StreamBuilder(
+                stream: getAllGroups(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return ListView.builder(
+                      key: const PageStorageKey<String>("page"),
+                      padding: const EdgeInsets.all(10.0),
+                      itemCount:
                           (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .id
-                              .toString();
+                              .docs
+                              .length,
+                      itemBuilder: (context, index) {
+                        var groupId = (snapshot.data
+                                as QuerySnapshot<Map<String, dynamic>>)
+                            .docs[index]
+                            .id
+                            .toString();
 
-                      var groupName =
-                          (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["name"]
-                              .toString();
+                        var groupName = (snapshot.data
+                                as QuerySnapshot<Map<String, dynamic>>)
+                            .docs[index]
+                            .data()["name"]
+                            .toString();
 
-                      List<dynamic> groupUserIdList =
-                          (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["userIds"];
+                        List<dynamic> groupUserIdList = (snapshot.data
+                                as QuerySnapshot<Map<String, dynamic>>)
+                            .docs[index]
+                            .data()["userIds"];
 
-                      return groups.contains(groupId)
-                          ? GestureDetector(
-                              onTap: () => Navigator.of(context).pushNamed(
-                                Constants.GROUP_CHAT_PATH,
-                                arguments: [
-                                  groupId,
-                                  groupName,
-                                  groupUserIdList
-                                ],
-                              ),
-                              child: Card(
-                                elevation: 4,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: ListTile(
-                                    /*
-                              leading: profileImgUrl.contains("null")
-                                  ? const Icon(Icons.person)
-                                  : CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(profileImgUrl),
+                        return groups.contains(groupId)
+                            ? GestureDetector(
+                                onTap: () => Navigator.of(context).pushNamed(
+                                  Constants.GROUP_CHAT_PATH,
+                                  arguments: [
+                                    groupId,
+                                    groupName,
+                                    groupUserIdList
+                                  ],
+                                ),
+                                child: Card(
+                                  elevation: 4,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4),
+                                    child: ListTile(
+                                      /*
+                                leading: profileImgUrl.contains("null")
+                                    ? const Icon(Icons.person)
+                                    : CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage(profileImgUrl),
+                                      ),
+                                      */
+                                      title: Text(
+                                        // "$name $userId",
+                                        groupName,
+                                      ),
+                                      subtitle: Text("sdadasdad"),
                                     ),
-                                    */
-                                    title: Text(
-                                      // "$name $userId",
-                                      groupName,
-                                    ),
-                                    subtitle: Text("sdadasdad"),
                                   ),
                                 ),
-                              ),
-                            )
-                          : const SizedBox();
-                    },
-                  );
-                }
-              },
-            );
-          }
-        },
+                              )
+                            : const SizedBox();
+                      },
+                    );
+                  }
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }

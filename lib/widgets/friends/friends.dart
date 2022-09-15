@@ -19,155 +19,161 @@ class _FriendsState extends State<Friends> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Kullanıcı Ara',
-          style: TextStyle(color: Theme.of(context).primaryColor),
-        ),
-        backgroundColor: Colors.white,
-        actions: [
-          // Navigate to the Search Screen
-
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(context).primaryColor,
-            ),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pushNamed("/");
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Kullanıcı Ara',
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
+          backgroundColor: Colors.white,
+          actions: [
+            // Navigate to the Search Screen
 
-          IconButton(
-            onPressed: () => Navigator.of(context)
-                .pushNamed(Constants.SEARCH_PAGE_PATH, arguments: friends),
-            icon: Icon(
-              Icons.search,
-              color: Theme.of(context).primaryColor,
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.person,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
-          )
-        ],
-      ),
-      body: StreamBuilder(
-        stream: getFriends(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            friends = (snapshot.data as DocumentSnapshot)["friends"];
-            return StreamBuilder(
-              stream: getAllUsers(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return ListView.builder(
-                    key: const PageStorageKey<String>("page"),
-                    padding: const EdgeInsets.all(10.0),
-                    itemCount:
-                        (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                            .docs
-                            .length,
-                    itemBuilder: (context, index) {
-                      var name =
-                          (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["name"]
-                              .toString();
-                      var userId =
-                          (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .id
-                              .toString();
 
-                      var profileImgUrl =
+            IconButton(
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(Constants.SEARCH_PAGE_PATH, arguments: friends),
+              icon: Icon(
+                Icons.search,
+                color: Theme.of(context).primaryColor,
+              ),
+            )
+          ],
+        ),
+        body: StreamBuilder(
+          stream: getFriends(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              friends = (snapshot.data as DocumentSnapshot)["friends"];
+              return StreamBuilder(
+                stream: getAllUsers(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return ListView.builder(
+                      key: const PageStorageKey<String>("page"),
+                      padding: const EdgeInsets.all(10.0),
+                      itemCount:
                           (snapshot.data as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["profileImg"]
-                              .toString();
+                              .docs
+                              .length,
+                      itemBuilder: (context, index) {
+                        var name = (snapshot.data
+                                as QuerySnapshot<Map<String, dynamic>>)
+                            .docs[index]
+                            .data()["name"]
+                            .toString();
+                        var userId = (snapshot.data
+                                as QuerySnapshot<Map<String, dynamic>>)
+                            .docs[index]
+                            .id
+                            .toString();
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                              Constants.PERSONAL_CHAT_PATH,
-                              arguments: [
-                                FirebaseAuth.instance.currentUser!.uid,
-                                userId
-                              ]);
-                        },
-                        child: FirebaseAuth.instance.currentUser!.uid !=
-                                    userId &&
-                                friends.contains(userId)
-                            ? Dismissible(
-                                key: UniqueKey(),
-                                background: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                      size: 34,
-                                    ),
-                                    Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                      size: 34,
-                                    ),
-                                  ],
-                                ),
-                                onDismissed: (direction) {
-                                  removeFriend(
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                      userId);
-                                },
-                                child: Card(
-                                  elevation: 4,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4),
-                                    child: ListTile(
-                                      leading: profileImgUrl.contains("null")
-                                          ? const Icon(Icons.person)
-                                          : CircleAvatar(
-                                              backgroundImage:
-                                                  NetworkImage(profileImgUrl),
-                                            ),
-                                      title: Text(
-                                        "$name $userId",
+                        var profileImgUrl = (snapshot.data
+                                as QuerySnapshot<Map<String, dynamic>>)
+                            .docs[index]
+                            .data()["profileImg"]
+                            .toString();
+
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                Constants.PERSONAL_CHAT_PATH,
+                                arguments: [
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  userId
+                                ]);
+                          },
+                          child: FirebaseAuth.instance.currentUser!.uid !=
+                                      userId &&
+                                  friends.contains(userId)
+                              ? Dismissible(
+                                  key: UniqueKey(),
+                                  background: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: const [
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 34,
                                       ),
-                                      // BURDA STREAMBUİLDER ILE GETLASTMESSAGE DINLI
-                                      // O DA SON MESAJIN OLDUGU SNAPSHOTU DONSUN
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 34,
+                                      ),
+                                    ],
+                                  ),
+                                  onDismissed: (direction) {
+                                    removeFriend(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                        userId);
+                                  },
+                                  child: Card(
+                                    elevation: 4,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4),
+                                      child: ListTile(
+                                        leading: profileImgUrl.contains("null")
+                                            ? const Icon(Icons.person)
+                                            : CircleAvatar(
+                                                backgroundImage:
+                                                    NetworkImage(profileImgUrl),
+                                              ),
+                                        title: Text(
+                                          "$name $userId",
+                                        ),
+                                        // BURDA STREAMBUİLDER ILE GETLASTMESSAGE DINLI
+                                        // O DA SON MESAJIN OLDUGU SNAPSHOTU DONSUN
 
-                                      subtitle: Text("sdadasdad"),
+                                        subtitle: Text("sdadasdad"),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : const SizedBox(),
-                      );
-                    },
-                  );
-                }
-              },
-            );
-          } else {
-            return const Text("nope");
-          }
-        },
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(Constants.GROUP_CREATE_PAGE_PATH);
-              },
-              label: const Text('Grup mesajı'),
-              icon: const Icon(Icons.group),
-              backgroundColor: Colors.pink,
-            ),
-          ],
+                                )
+                              : const SizedBox(),
+                        );
+                      },
+                    );
+                  }
+                },
+              );
+            } else {
+              return const Text("nope");
+            }
+          },
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(Constants.GROUP_CREATE_PAGE_PATH);
+                },
+                label: const Text('Grup mesajı'),
+                icon: const Icon(Icons.group),
+                backgroundColor: Colors.pink,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -26,8 +26,7 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
       children: [
         // Change user informations
         createButton("Change User Informations", Icons.edit, () {
-          Navigator.of(context).pushNamed(Constants.USER_UPDATE_PATH,
-              arguments: auth.currentUser!.uid);
+          Navigator.of(context).pushNamed(Constants.USER_UPDATE_PATH);
         }),
 
         // Hesap Doğrulama

@@ -30,7 +30,7 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
   void initState() {
     super.initState();
     print("-------------" + FirebaseAuth.instance.currentUser!.uid);
-    genders.add(Gender("Male", Icons.male, true));
+    genders.add(Gender("Male", Icons.male, false));
     genders.add(Gender("Female", Icons.female, false));
     genders.add(Gender("Don't wanna specify", Icons.ac_unit, false));
   }
@@ -246,6 +246,7 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
                         _name,
                         _age,
                         _birthdate.toString().substring(0, 10),
+                        _gender,
                       );
                       Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
                     }
@@ -262,9 +263,16 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
     );
   }
 
-  saveConfiguredUserToFirestore(String name, int age, String birthdate) async {
+  saveConfiguredUserToFirestore(
+      String name, int age, String birthdate, String gender) async {
     var user = UserModel(
-        name: name, age: age, friends: [], groups: [], birthdate: birthdate);
+      name: name,
+      age: age,
+      friends: [],
+      groups: [],
+      birthdate: birthdate,
+      gender: gender,
+    );
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -275,6 +283,7 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
     eklenecekUser["friends"] = user.friends;
     eklenecekUser["groups"] = user.groups;
     eklenecekUser["birthdate"] = user.birthdate;
+    eklenecekUser["gender"] = user.gender;
 
     // kullaniciyi guncelleme
     await FirebaseFirestore.instance
