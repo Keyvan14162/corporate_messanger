@@ -2,7 +2,7 @@
     package="com.ismailkeyvan.flutter_firebase_auth">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
-        android:label="flutter_firebase_auth"
+        android:label="Corporate Messaging"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

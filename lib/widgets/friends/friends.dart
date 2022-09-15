@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -16,11 +17,15 @@ class _FriendsState extends State<Friends> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String dropdownValue = 'One';
   var friends = [];
+  final isDialOpen = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
+        if (isDialOpen.value) {
+          isDialOpen.value = false;
+        }
         Navigator.of(context).pushNamed("/");
         return Future.value(false);
       },
@@ -34,15 +39,6 @@ class _FriendsState extends State<Friends> {
           backgroundColor: Colors.white,
           actions: [
             // Navigate to the Search Screen
-
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.person,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-
             IconButton(
               onPressed: () => Navigator.of(context)
                   .pushNamed(Constants.SEARCH_PAGE_PATH, arguments: friends),
@@ -158,22 +154,27 @@ class _FriendsState extends State<Friends> {
             }
           },
         ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(Constants.GROUP_CREATE_PAGE_PATH);
-                },
-                label: const Text('Grup mesajı'),
-                icon: const Icon(Icons.group),
-                backgroundColor: Colors.pink,
-              ),
-            ],
-          ),
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_arrow,
+          openCloseDial: isDialOpen,
+          children: [
+            SpeedDialChild(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(Constants.SEARCH_PAGE_PATH, arguments: friends);
+              },
+              child: const Icon(Icons.person),
+              label: "Add Friend",
+            ),
+            SpeedDialChild(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(Constants.GROUP_CREATE_PAGE_PATH);
+              },
+              child: const Icon(Icons.group),
+              label: "Group Message",
+            ),
+          ],
         ),
       ),
     );

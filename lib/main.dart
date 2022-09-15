@@ -12,7 +12,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // hide android bottom buttons
+  // hide android bottom buttons, immersive sticky
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   runApp(const MyApp());
@@ -26,12 +26,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.routeGenrator,
-      title: "sirket-ici-mesajlasma",
+      title: "corporate-messaging",
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: const Color(0xFF3B4257),
         // primaryColor: Colors.blue,
-        //secondaryHeaderColor: Colors.green,
+        // secondaryHeaderColor: Colors.green,
       ),
     );
   }
