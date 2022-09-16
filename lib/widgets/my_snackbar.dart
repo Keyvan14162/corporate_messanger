@@ -70,6 +70,9 @@ class MySnackbar {
                               ImageSource.camera,
                             );
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              getSnackbar("Image Succesfully Changed."),
+                            );
                           },
                           icon: const Icon(
                             Icons.camera_alt,
@@ -107,6 +110,9 @@ class MySnackbar {
                               ImageSource.gallery,
                             );
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              getSnackbar("Image Succesfully Changed."),
+                            );
                           },
                           icon: const Icon(
                             Icons.browse_gallery,

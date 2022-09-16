@@ -81,12 +81,11 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
                                 );
                               },
                               child: CircleAvatar(
-                                //  foregroundImage: ImageProvider(),
                                 maxRadius: 80,
                                 child: CircleAvatar(
                                   radius: 144 / 2 + 10,
                                   backgroundColor:
-                                      Theme.of(context).primaryColor,
+                                      Theme.of(context).secondaryHeaderColor,
                                   child: CircleAvatar(
                                     radius: 144 / 2,
                                     // backgroundColor: Colors.white,
@@ -252,7 +251,7 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
                   },
                   icon: const Icon(Icons.arrow_forward),
                   label: const Text('Save'),
-                  backgroundColor: Colors.pink,
+                  backgroundColor: Theme.of(context).secondaryHeaderColor,
                 ),
               ],
             ),

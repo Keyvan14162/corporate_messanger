@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
+import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
 class ProfileImg extends StatefulWidget {
   const ProfileImg({
@@ -29,7 +30,6 @@ class _ProfileImgState extends State<ProfileImg> {
   @override
   void initState() {
     super.initState();
-    setState(() {});
   }
 
   @override
@@ -38,6 +38,7 @@ class _ProfileImgState extends State<ProfileImg> {
       clipBehavior: Clip.none,
       children: [
         // cover img
+
         FutureBuilder<String>(
           future: getDownloadUrl(widget.userId, "coverImg"),
           builder: (context, snapshot) {
@@ -46,6 +47,9 @@ class _ProfileImgState extends State<ProfileImg> {
                 onTap: () {
                   changeCoverImgGallery(widget.userId);
                   Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    MySnackbar.getSnackbar("Cover Image Succesfully Changed."),
+                  );
                 },
                 child: Container(
                   color: Colors.grey,
@@ -68,6 +72,7 @@ class _ProfileImgState extends State<ProfileImg> {
             }
           },
         ),
+
         // profile img
         FutureBuilder<String>(
           future: getDownloadUrl(widget.userId, "profileImg"),
@@ -80,6 +85,10 @@ class _ProfileImgState extends State<ProfileImg> {
                 child: GestureDetector(
                   onTap: () {
                     changeProfileImgGallery(context, widget.userId);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      MySnackbar.getSnackbar(
+                          "Profile Image Succesfully Changed."),
+                    );
                   },
                   child: CircleAvatar(
                     radius: widget.profileHeight / 2 + 10,

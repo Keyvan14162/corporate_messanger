@@ -36,7 +36,10 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text("Phone Number Login "),
+        foregroundColor: Colors.white,
+        title: const Text(
+          "Phone Number Login ",
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

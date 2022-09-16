@@ -79,23 +79,21 @@ class _GroupsState extends State<Groups> {
                                   ],
                                 ),
                                 child: Card(
+                                  color: Theme.of(context).primaryColor,
                                   elevation: 4,
                                   child: Padding(
                                     padding: const EdgeInsets.all(4),
                                     child: ListTile(
-                                      /*
-                                leading: profileImgUrl.contains("null")
-                                    ? const Icon(Icons.person)
-                                    : CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage(profileImgUrl),
-                                      ),
-                                      */
                                       title: Text(
-                                        // "$name $userId",
                                         groupName,
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
-                                      subtitle: Text("sdadasdad"),
+                                      subtitle: Text(
+                                        "sdadasdad",
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
                                     ),
                                   ),
                                 ),

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/helpers/group_helpers.dart';
+import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
@@ -41,102 +42,222 @@ class _GroupChatState extends State<GroupChat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbar(),
-      body: Container(
-        // color: Colors.green.shade100,
-        child: Column(
-          children: [
-            Flexible(
-              child: StreamBuilder(
-                stream: getAllGroupMessages(widget.groupId),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return Scrollbar(
-                      thumbVisibility: true,
-                      interactive: true,
-                      thickness: 5,
-                      radius: const Radius.circular(10),
-                      child: ListView.builder(
-                        // to preserve scroll position
-                        key: const PageStorageKey<String>("page"),
-                        reverse: true,
-
-                        padding: const EdgeInsets.all(10.0),
-                        itemCount: (snapshot.data
-                                as QuerySnapshot<Map<String, dynamic>>)
-                            .docs
-                            .length,
-                        itemBuilder: (context, index) {
-                          var message = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["message"]
-                              .toString();
-
-                          Timestamp timestamp = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["date"] as Timestamp;
-
-                          var date =
-                              "${timestamp.toDate().year.toString()}-${timestamp.toDate().month.toString().padLeft(2, '0')}-${timestamp.toDate().day.toString().padLeft(2, '0')} ${timestamp.toDate().hour.toString().padLeft(2, '0')}-${timestamp.toDate().minute.toString().padLeft(2, '0')}";
-
-                          var senderId = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["senderId"]
-                              .toString();
-
-                          var messageId = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["messageId"]
-                              .toString();
-
-                          var isSender =
-                              FirebaseAuth.instance.currentUser!.uid ==
-                                  senderId;
-
-                          var isImg = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["isImg"]
-                              .toString();
-
-                          var isReaded = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["isReaded"]
-                              .toString();
-
-                          String imgUrl = (snapshot.data
-                                  as QuerySnapshot<Map<String, dynamic>>)
-                              .docs[index]
-                              .data()["imgUrl"]
-                              .toString();
-
-                          return messageWidget(
-                            isSender,
-                            senderId,
-                            isImg,
-                            imgUrl,
-                            message,
-                            date,
-                            messageId,
-                            isReaded,
-                          );
-                        },
-                      ),
-                    );
-                  }
-                },
+      body: FutureBuilder(
+        future:
+            getDownloadUrl(FirebaseAuth.instance.currentUser!.uid, "coverImg"),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                    snapshot.data.toString(),
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            // Text field
-            textFieldMessage(),
-          ],
-        ),
+              child: Column(
+                children: [
+                  Flexible(
+                    child: StreamBuilder(
+                      stream: getAllGroupMessages(widget.groupId),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else {
+                          return Scrollbar(
+                            thumbVisibility: true,
+                            interactive: true,
+                            thickness: 5,
+                            radius: const Radius.circular(10),
+                            child: ListView.builder(
+                              // to preserve scroll position
+                              key: const PageStorageKey<String>("page"),
+                              reverse: true,
+
+                              padding: const EdgeInsets.all(10.0),
+                              itemCount: (snapshot.data
+                                      as QuerySnapshot<Map<String, dynamic>>)
+                                  .docs
+                                  .length,
+                              itemBuilder: (context, index) {
+                                var message = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["message"]
+                                    .toString();
+
+                                Timestamp timestamp = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["date"] as Timestamp;
+
+                                var date =
+                                    "${timestamp.toDate().year.toString()}-${timestamp.toDate().month.toString().padLeft(2, '0')}-${timestamp.toDate().day.toString().padLeft(2, '0')} ${timestamp.toDate().hour.toString().padLeft(2, '0')}-${timestamp.toDate().minute.toString().padLeft(2, '0')}";
+
+                                var senderId = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["senderId"]
+                                    .toString();
+
+                                var messageId = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["messageId"]
+                                    .toString();
+
+                                var isSender =
+                                    FirebaseAuth.instance.currentUser!.uid ==
+                                        senderId;
+
+                                var isImg = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["isImg"]
+                                    .toString();
+
+                                var isReaded = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["isReaded"]
+                                    .toString();
+
+                                String imgUrl = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["imgUrl"]
+                                    .toString();
+
+                                return messageWidget(
+                                  isSender,
+                                  senderId,
+                                  isImg,
+                                  imgUrl,
+                                  message,
+                                  date,
+                                  messageId,
+                                  isReaded,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  // Text field
+                  textFieldMessage(),
+                ],
+              ),
+            );
+          } else {
+            return Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/cover.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Flexible(
+                    child: StreamBuilder(
+                      stream: getAllGroupMessages(widget.groupId),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else {
+                          return Scrollbar(
+                            thumbVisibility: true,
+                            interactive: true,
+                            thickness: 5,
+                            radius: const Radius.circular(10),
+                            child: ListView.builder(
+                              // to preserve scroll position
+                              key: const PageStorageKey<String>("page"),
+                              reverse: true,
+
+                              padding: const EdgeInsets.all(10.0),
+                              itemCount: (snapshot.data
+                                      as QuerySnapshot<Map<String, dynamic>>)
+                                  .docs
+                                  .length,
+                              itemBuilder: (context, index) {
+                                var message = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["message"]
+                                    .toString();
+
+                                Timestamp timestamp = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["date"] as Timestamp;
+
+                                var date =
+                                    "${timestamp.toDate().year.toString()}-${timestamp.toDate().month.toString().padLeft(2, '0')}-${timestamp.toDate().day.toString().padLeft(2, '0')} ${timestamp.toDate().hour.toString().padLeft(2, '0')}-${timestamp.toDate().minute.toString().padLeft(2, '0')}";
+
+                                var senderId = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["senderId"]
+                                    .toString();
+
+                                var messageId = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["messageId"]
+                                    .toString();
+
+                                var isSender =
+                                    FirebaseAuth.instance.currentUser!.uid ==
+                                        senderId;
+
+                                var isImg = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["isImg"]
+                                    .toString();
+
+                                var isReaded = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["isReaded"]
+                                    .toString();
+
+                                String imgUrl = (snapshot.data
+                                        as QuerySnapshot<Map<String, dynamic>>)
+                                    .docs[index]
+                                    .data()["imgUrl"]
+                                    .toString();
+
+                                return messageWidget(
+                                  isSender,
+                                  senderId,
+                                  isImg,
+                                  imgUrl,
+                                  message,
+                                  date,
+                                  messageId,
+                                  isReaded,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  // Text field
+                  textFieldMessage(),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -150,14 +271,22 @@ class _GroupChatState extends State<GroupChat> {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        icon: const Icon(Icons.arrow_back),
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
       ),
       title: Row(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.groupName),
+              Text(
+                widget.groupName,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               Row(
                 children: [
                   for (int i = 0; i < widget.groupUserIdList.length; i++)
@@ -167,7 +296,10 @@ class _GroupChatState extends State<GroupChat> {
                         if (snapshot.hasData) {
                           return Text(
                             "${snapshot.data}, ",
-                            style: const TextStyle(fontSize: 10),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
                           );
                         } else {
                           return const SizedBox();
@@ -188,7 +320,10 @@ class _GroupChatState extends State<GroupChat> {
                     onPressed: () {
                       deleteSelectedMessages();
                     },
-                    icon: const Icon(Icons.delete),
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -201,7 +336,7 @@ class _GroupChatState extends State<GroupChat> {
                       );
                     },
                     child: const Text(
-                      "İptal",
+                      "Cancel",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -210,7 +345,10 @@ class _GroupChatState extends State<GroupChat> {
             : Container(
                 padding: const EdgeInsets.only(right: 10),
                 child: PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
@@ -269,28 +407,78 @@ class _GroupChatState extends State<GroupChat> {
 
   Container textFieldMessage() {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.red.withOpacity(0),
-      ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 4),
+        padding: const EdgeInsets.only(left: 4, bottom: 4),
         child: Row(
           children: [
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Theme.of(context).primaryColor.withAlpha(100),
+                  color: Theme.of(context).primaryColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: TextField(
+                    style: const TextStyle(color: Colors.white),
                     controller: _textController,
-                    decoration: const InputDecoration(
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
                       hintText: "Write message...",
-                      hintStyle: TextStyle(color: Colors.black54),
+                      hintStyle: const TextStyle(color: Colors.white),
                       border: InputBorder.none,
+                      suffixIcon: Container(
+                        height: 55,
+                        width: 55,
+                        padding: const EdgeInsets.only(right: 10),
+                        child: PopupMenuButton(
+                          icon: const Icon(
+                            Icons.camera,
+                            color: Colors.white,
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              onTap: () async {
+                                sendGroupImageOnTap(
+                                    ImageSource.camera, widget.groupId);
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    Icons.photo_camera,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  const Text("Kamera"),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem(
+                              onTap: () async {
+                                sendGroupImageOnTap(
+                                    ImageSource.gallery, widget.groupId);
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Icon(
+                                    Icons.image,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  const Text("Galeri"),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                     onChanged: (value) {
                       _message = value.toString();
@@ -305,6 +493,7 @@ class _GroupChatState extends State<GroupChat> {
                         widget.groupId,
                       );
                       _textController.clear();
+                      _message = "";
                     },
                   ),
                 ),
@@ -313,54 +502,10 @@ class _GroupChatState extends State<GroupChat> {
             const SizedBox(
               width: 15,
             ),
+            // send button
             Container(
-              height: 55,
-              width: 55,
-              padding: const EdgeInsets.only(right: 10),
-              child: PopupMenuButton(
-                icon: const Icon(Icons.camera),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    onTap: () async {
-                      sendGroupImageOnTap(ImageSource.camera, widget.groupId);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.photo_camera,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        const Text("Kamera"),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    onTap: () async {
-                      sendGroupImageOnTap(ImageSource.gallery, widget.groupId);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          Icons.image,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        const Text("Galeri"),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 55,
-              width: 55,
+              height: 65,
+              width: 65,
               padding: const EdgeInsets.only(right: 10),
               child: FloatingActionButton(
                 onPressed: () {
@@ -373,13 +518,13 @@ class _GroupChatState extends State<GroupChat> {
                     widget.groupId,
                   );
                   _textController.clear();
+                  _message = "";
                 },
-                backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor: Theme.of(context).secondaryHeaderColor,
                 elevation: 0,
                 child: const Icon(
                   Icons.send,
                   color: Colors.white,
-                  size: 18,
                 ),
               ),
             ),
@@ -447,10 +592,10 @@ class _GroupChatState extends State<GroupChat> {
                               tag: imgUrl,
                               child: Container(
                                 padding: isSender
-                                    ? const EdgeInsets.fromLTRB(48, 8, 8, 8)
-                                    : const EdgeInsets.fromLTRB(8, 8, 48, 8),
+                                    ? const EdgeInsets.fromLTRB(48, 8, 0, 8)
+                                    : const EdgeInsets.fromLTRB(0, 8, 48, 8),
                                 decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                  color: Colors.transparent,
                                 ),
                                 child: Image.network(
                                   imgUrl,
@@ -525,10 +670,8 @@ class _GroupChatState extends State<GroupChat> {
                                     bottomRight: const Radius.circular(8),
                                   ),
                                   color: (isSender
-                                      ? Theme.of(context)
-                                          .primaryColor
-                                          .withAlpha(100)
-                                      : Colors.grey.shade300),
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.blueGrey.shade600),
                                 ),
                                 child: Container(
                                   margin: const EdgeInsets.only(
@@ -544,6 +687,7 @@ class _GroupChatState extends State<GroupChat> {
                                         message,
                                         style: const TextStyle(
                                           fontSize: 15,
+                                          color: Colors.white,
                                         ),
                                       ),
                                       Row(
@@ -555,7 +699,7 @@ class _GroupChatState extends State<GroupChat> {
                                             date.toString(),
                                             style: const TextStyle(
                                               fontSize: 8,
-                                              //color: Colors.grey,
+                                              color: Colors.white,
                                             ),
                                           ),
                                           isSender

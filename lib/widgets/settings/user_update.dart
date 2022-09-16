@@ -84,7 +84,8 @@ class _UserUpdateState extends State<UserUpdate> {
                               maxRadius: 80,
                               child: CircleAvatar(
                                 radius: 144 / 2 + 10,
-                                backgroundColor: Theme.of(context).primaryColor,
+                                backgroundColor:
+                                    Theme.of(context).secondaryHeaderColor,
                                 child: CircleAvatar(
                                   radius: 144 / 2,
                                   // backgroundColor: Colors.white,
@@ -390,7 +391,7 @@ class _UserUpdateState extends State<UserUpdate> {
                 },
                 icon: const Icon(Icons.arrow_forward),
                 label: const Text('Save'),
-                backgroundColor: Colors.pink,
+                backgroundColor: Theme.of(context).secondaryHeaderColor,
               ),
             ],
           ),

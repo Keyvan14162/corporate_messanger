@@ -60,36 +60,26 @@ class PersonDialogBox extends StatelessWidget {
               SizedBox(
                 height: padding,
               ),
-              const Text(
-                "remove friend",
-                textAlign: TextAlign.center,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: TextButton(
-                      onPressed: () {
-                        removeFriend(FirebaseAuth.instance.currentUser!.uid,
-                            reciverId, context, true);
-                      },
-                      child: const Text(
-                        "Remove Friend",
-                        style: TextStyle(
-                          color: Colors.red,
-                        ),
+                  TextButton(
+                    onPressed: () {
+                      removeFriend(FirebaseAuth.instance.currentUser!.uid,
+                          reciverId, context, true);
+                    },
+                    child: const Text(
+                      "Remove Friend",
+                      style: TextStyle(
+                        color: Colors.red,
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("Close"),
-                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Close"),
                   ),
                 ],
               ),
@@ -100,18 +90,24 @@ class PersonDialogBox extends StatelessWidget {
           left: padding,
           right: padding,
           top: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              maxRadius: 70,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(Constants.IMG_PAGE_PATH, arguments: profileImgUrl);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                radius: 70,
-                backgroundColor: Theme.of(context).primaryColor,
+                maxRadius: 70,
                 child: CircleAvatar(
-                  radius: 60,
-                  // backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage(
-                    profileImgUrl,
+                  radius: 70,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: CircleAvatar(
+                    radius: 60,
+                    // backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(
+                      profileImgUrl,
+                    ),
                   ),
                 ),
               ),

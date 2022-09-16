@@ -143,9 +143,10 @@ class _SearchPageState extends State<SearchPage> {
                                                             as DocumentSnapshot)[
                                                         "friends"]
                                                     .contains(userId)
-                                                ? const Icon(
+                                                ? Icon(
                                                     Icons.check,
-                                                    color: Colors.green,
+                                                    color: Theme.of(context)
+                                                        .secondaryHeaderColor,
                                                     size: 34,
                                                   )
                                                 : IconButton(

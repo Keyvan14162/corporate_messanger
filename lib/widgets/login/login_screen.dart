@@ -72,17 +72,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   autovalidateMode: AutovalidateMode.always,
                   child: Column(
                     children: [
+                      // icon
+
                       const Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Icon(
-                          Icons.car_crash,
+                          Icons.message,
                           size: 100,
                         ),
                       ),
+                      // title
                       const Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
                         child: Text(
-                          "title title title ",
+                          "Corporate Messenger ",
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 50),
                         ),
                       ),

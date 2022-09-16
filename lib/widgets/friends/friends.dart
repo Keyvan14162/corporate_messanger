@@ -33,7 +33,7 @@ class _FriendsState extends State<Friends> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
-            'Kullanıcı Ara',
+            'User Search',
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           backgroundColor: Colors.white,
@@ -124,22 +124,31 @@ class _FriendsState extends State<Friends> {
                                   },
                                   child: Card(
                                     elevation: 4,
+                                    color: Theme.of(context).primaryColor,
                                     child: Padding(
                                       padding: const EdgeInsets.all(4),
                                       child: ListTile(
                                         leading: profileImgUrl.contains("null")
                                             ? const Icon(Icons.person)
                                             : CircleAvatar(
-                                                backgroundImage:
-                                                    NetworkImage(profileImgUrl),
+                                                radius: 22,
+                                                backgroundColor: Colors.white,
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      profileImgUrl),
+                                                ),
                                               ),
                                         title: Text(
                                           "$name $userId",
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                         // BURDA STREAMBUİLDER ILE GETLASTMESSAGE DINLI
                                         // O DA SON MESAJIN OLDUGU SNAPSHOTU DONSUN
 
-                                        subtitle: Text("sdadasdad"),
+                                        subtitle: Text(
+                                          "sdadasdad",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -157,7 +166,11 @@ class _FriendsState extends State<Friends> {
           },
         ),
         floatingActionButton: SpeedDial(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
           animatedIcon: AnimatedIcons.menu_arrow,
+          animatedIconTheme: IconThemeData(
+            color: Theme.of(context).primaryColor,
+          ),
           openCloseDial: isDialOpen,
           children: [
             SpeedDialChild(

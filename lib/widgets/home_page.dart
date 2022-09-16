@@ -7,13 +7,15 @@ import 'package:flutter_firebase_auth/widgets/settings/settings.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   // User user; required this.user,
   // const AnaSayfa({Key? key}) : super(key: key);
 
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // auth initialize
   late FirebaseAuth auth;
   late PageController _pageController;
@@ -42,9 +44,11 @@ class _HomePageState extends State<HomePage> {
             setState(() => _currentIndex = index);
           },
           children: <Widget>[
+            /*
             Container(
               color: Colors.red,
             ),
+            */
             Groups(),
             Friends(),
             Settings(),
@@ -52,27 +56,46 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavyBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
+        itemCornerRadius: 50,
+        curve: Curves.decelerate,
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
           _pageController.jumpToPage(index);
         },
         items: <BottomNavyBarItem>[
+          /*
           BottomNavyBarItem(
             title: const Text('Personal chat'),
             icon: const Icon(Icons.chat_bubble),
           ),
+          */
           BottomNavyBarItem(
-            title: const Text('Groups'),
+            activeColor: Theme.of(context).primaryColor,
+            inactiveColor: Theme.of(context).primaryColor,
+            title: const Text(
+              'Groups',
+              style: TextStyle(color: Colors.black),
+            ),
             icon: const Icon(Icons.chat),
           ),
           BottomNavyBarItem(
-            title: const Text('Friends'),
+            activeColor: Theme.of(context).primaryColor,
+            inactiveColor: Theme.of(context).primaryColor,
+            title: const Text(
+              'Friends',
+              style: TextStyle(color: Colors.black),
+            ),
             icon: const Icon(Icons.person),
           ),
           BottomNavyBarItem(
-            title: const Text('Settings'),
+            activeColor: Theme.of(context).primaryColor,
+            inactiveColor: Theme.of(context).primaryColor,
+            title: const Text(
+              'Settings',
+              style: TextStyle(color: Colors.black),
+            ),
             icon: const Icon(Icons.settings),
           ),
         ],

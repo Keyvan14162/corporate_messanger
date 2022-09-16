@@ -45,12 +45,18 @@ class _SettingsState extends State<Settings> {
                   userId: auth.currentUser!.uid,
                   userName: getUserName(auth.currentUser!.uid),
                 ),
-                const SizedBox(height: 100),
+                SizedBox(height: profileHeight / 2 + 10),
                 Text("Name : ${auth.currentUser!.uid}"),
                 Text("Email : ${auth.currentUser!.email}"),
                 Text("Mail verified : ${auth.currentUser!.emailVerified}"),
                 Text("Telefon : ${auth.currentUser!.phoneNumber}"),
                 const SettingsMenuItems(),
+                /*
+                Text(
+                  "Click images to change it.",
+                  style: TextStyle(color: Colors.grey),
+                ),
+                */
               ],
             ),
           ),

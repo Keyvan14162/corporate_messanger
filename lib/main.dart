@@ -28,8 +28,10 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: RouteGenerator.routeGenrator,
       title: "corporate-messaging",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
         primaryColor: const Color(0xFF3B4257),
+        secondaryHeaderColor: Colors.tealAccent.shade400,
+
         // primaryColor: Colors.blue,
         // secondaryHeaderColor: Colors.green,
       ),
