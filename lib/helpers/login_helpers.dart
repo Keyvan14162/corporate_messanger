@@ -151,7 +151,9 @@ Future firebaseUserConfig(FirebaseAuth auth, BuildContext context) async {
     eklenecekUser["gender"] = user.gender;
 
     // kullaniciyi guncelleme
-    await FirebaseFirestore.instance.doc("users/${auth.currentUser!.uid}").set(
+    await FirebaseFirestore.instance
+        .doc("users/${FirebaseAuth.instance.currentUser!.uid}")
+        .set(
           eklenecekUser,
           SetOptions(merge: true),
         );
@@ -170,7 +172,7 @@ Future firebaseUserConfig(FirebaseAuth auth, BuildContext context) async {
     });
 
     // Kullanicilardan bilgiler istensin
-    // Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
+    Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
   }
 }
 

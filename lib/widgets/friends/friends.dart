@@ -118,7 +118,9 @@ class _FriendsState extends State<Friends> {
                                   onDismissed: (direction) {
                                     removeFriend(
                                         FirebaseAuth.instance.currentUser!.uid,
-                                        userId);
+                                        userId,
+                                        context,
+                                        false);
                                   },
                                   child: Card(
                                     elevation: 4,
@@ -176,77 +178,6 @@ class _FriendsState extends State<Friends> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  removeFriend(String senderId, String reciverId) async {
-    var messages = await firestore
-        .collection("personal_chat")
-        .doc("${senderId + "-" + reciverId}")
-        .collection("messages")
-        .orderBy("date", descending: true)
-        .get();
-
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Uyarı"),
-        content: Text("Seçilen Mesajlar silinsin mi ?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Hayır"),
-          ),
-          TextButton(
-            onPressed: () async {
-              // delete from storage
-              messages.docs.forEach((element) async {
-                var url = element.data()["imgUrl"];
-
-                if (url != "imgUrl") {
-                  await FirebaseStorage.instance.refFromURL(url).delete();
-                }
-              });
-
-              // delete from firebase
-              messages.docs.forEach((element) async {
-                var messageId = element.data()["messageId"];
-
-                await firestore
-                    .collection("personal_chat")
-                    .doc("${senderId + "-" + reciverId}")
-                    .collection("messages")
-                    .doc(messageId)
-                    .delete();
-                await firestore
-                    .collection("personal_chat")
-                    .doc("${reciverId + "-" + senderId}")
-                    .collection("messages")
-                    .doc(messageId)
-                    .delete();
-              });
-
-              await FirebaseFirestore.instance
-                  .collection("users")
-                  .doc("${senderId}")
-                  .update({
-                "friends": FieldValue.arrayRemove([reciverId])
-              });
-              await FirebaseFirestore.instance
-                  .collection("users")
-                  .doc("${reciverId}")
-                  .update({
-                "friends": FieldValue.arrayRemove([senderId])
-              });
-
-              Navigator.of(context).pop();
-            },
-            child: const Text("Evet"),
-          ),
-        ],
       ),
     );
   }

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
@@ -11,6 +14,7 @@ class PhoneNoVerification extends StatefulWidget {
 class _PhoneNoVerificationState extends State<PhoneNoVerification> {
   final formKey = GlobalKey<FormState>();
   String smsCode = "";
+  bool isSendCodeBackActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,8 @@ class _PhoneNoVerificationState extends State<PhoneNoVerification> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Doğrulama Kodunu Giriniz"),
+          backgroundColor: Theme.of(context).primaryColor,
+          title: const Text("Enter Verification Code "),
         ),
         body: Center(
           child: Padding(
@@ -48,26 +53,6 @@ class _PhoneNoVerificationState extends State<PhoneNoVerification> {
                         return null;
                       },
                     ),
-                    /*
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: "Verification Code ",
-                        hintText: "_ _ _ _ _ _",
-                        border: OutlineInputBorder(),
-                      ),
-                      maxLength: 6,
-                      onChanged: (number) {
-                        smsCode = number;
-                        formKey.currentState!.validate();
-                      },
-                      validator: (number) {
-                        if (number!.length < 6) {
-                          return "Must be 6 chracters";
-                        }
-                        return null;
-                      },
-                    ),*/
 
                     const SizedBox(
                       height: 30,
@@ -78,7 +63,8 @@ class _PhoneNoVerificationState extends State<PhoneNoVerification> {
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(10),
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Theme.of(context).primaryColor),
+                          Theme.of(context).primaryColor,
+                        ),
                       ),
                       onPressed: () {
                         if (smsCode.toString().length == 6) {
@@ -90,39 +76,11 @@ class _PhoneNoVerificationState extends State<PhoneNoVerification> {
                         children: const [
                           Icon(Icons.login, color: Colors.white),
                           Text(
-                            "Kodu onayla",
-                            maxLines: 1,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          // text ortalansin diye
-                          SizedBox(width: 10),
-                        ],
-                      ),
-                    ),
-
-                    // Kodu tekrar gonder
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all<double>(10),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Theme.of(context).primaryColor),
-                      ),
-                      onPressed: () {
-                        if (smsCode.toString().length == 6) {
-                          Navigator.of(context).pop(smsCode);
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Icon(Icons.login, color: Colors.white),
-                          Text(
-                            "Kodu Tekrar Gönder ",
+                            "Verify Code",
                             maxLines: 1,
                             style: TextStyle(color: Colors.white),
                           ),
                           SizedBox(width: 10),
-                          Text("12"),
                         ],
                       ),
                     ),

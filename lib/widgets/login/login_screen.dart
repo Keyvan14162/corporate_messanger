@@ -339,8 +339,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     var userCredential = await googleileGiris();
                                     // useri yollayabilin arguments ile eklersen
                                     await firebaseUserConfig(auth, context);
-                                    Navigator.of(context).pushNamed(
-                                        Constants.LOGIN_USER_CONFIG_PATH);
                                   },
                                   child: Row(
                                     mainAxisAlignment:

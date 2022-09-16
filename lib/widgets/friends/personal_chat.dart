@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
+import 'package:flutter_firebase_auth/widgets/friends/person_dialog_box.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
@@ -25,6 +26,8 @@ class _PersonalChatState extends State<PersonalChat> {
   late TextEditingController _textController;
   bool hoverd = false;
   String _message = "";
+  String _name = "";
+  String _profileUrl = "";
   Set<String> selectedMessagesId = {};
   Set<String> selectedMessagesImgUrl = {};
   var readCounter = 0;
@@ -146,37 +149,53 @@ class _PersonalChatState extends State<PersonalChat> {
       backgroundColor: Theme.of(context).primaryColor,
       leadingWidth: 30,
       leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(Icons.arrow_back)),
-      title: Row(
-        children: [
-          FutureBuilder(
-              future: getUserField(widget.reciverId, "profileImg"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+      title: GestureDetector(
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return PersonDialogBox(
+                  name: _name,
+                  profileImgUrl: _profileUrl,
+                  reciverId: widget.reciverId,
+                );
+              });
+        },
+        child: Row(
+          children: [
+            FutureBuilder(
+                future: getUserField(widget.reciverId, "profileImg"),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _profileUrl = snapshot.data.toString();
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(snapshot.data.toString()),
+                      ),
+                    );
+                  } else {
+                    return const Icon(Icons.person);
+                  }
+                }),
+            FutureBuilder(
+              future: getUserField(widget.reciverId, "name"),
               builder: (context, snapshot) {
+                _name = snapshot.data.toString();
                 if (snapshot.hasData) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(snapshot.data.toString()),
-                    ),
-                  );
+                  return Text(snapshot.data.toString());
                 } else {
-                  return const Icon(Icons.person);
+                  return Text("No name found");
                 }
-              }),
-          FutureBuilder(
-            future: getUserField(widget.reciverId, "name"),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.toString());
-              } else {
-                return Text("No name found");
-              }
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
       actions: [
         hoverd

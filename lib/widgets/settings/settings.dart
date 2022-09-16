@@ -26,6 +26,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final double top = coverImgHeight - profileHeight / 2;
+
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);

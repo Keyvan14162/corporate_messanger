@@ -1,7 +1,6 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 import 'package:flutter_firebase_auth/models/user_model.dart';
@@ -30,7 +29,7 @@ class _LoginUserConfigState extends State<LoginUserConfig> {
   void initState() {
     super.initState();
     print("-------------" + FirebaseAuth.instance.currentUser!.uid);
-    genders.add(Gender("Male", Icons.male, false));
+    genders.add(Gender("Male", Icons.male, true));
     genders.add(Gender("Female", Icons.female, false));
     genders.add(Gender("Don't wanna specify", Icons.ac_unit, false));
   }

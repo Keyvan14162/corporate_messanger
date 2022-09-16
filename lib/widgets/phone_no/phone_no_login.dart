@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/login_helpers.dart';
-import 'package:flutter_firebase_auth/helpers/phone_no_helpers.dart';
 import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
@@ -18,9 +16,6 @@ class PhoneNoLogin extends StatefulWidget {
 class _PhoneNoLoginState extends State<PhoneNoLogin> {
   final formKey = GlobalKey<FormState>();
   String telNo = "";
-
-  late Timer _timer;
-  int _start = 60;
 
   // ikisi de ayni deger icin, ama usttekinde kontrol ediyoz
   // 6 karakterse ve butona basılmıssa alttakine atiyoz
@@ -40,7 +35,8 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Telefon Numarasi ile Giriş"),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text("Phone Number Login "),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,7 +97,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
     await auth.verifyPhoneNumber(
       phoneNumber: telNo,
       // default 30 sn bekle, cihaz kod gelsin de isleyim diye bekliyo
-      timeout: const Duration(seconds: 60),
+      timeout: const Duration(seconds: 120),
       // forceResendingToken: , kod gelmediyse bida yolla
       // islem tamam
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -114,7 +110,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
           MySnackbar.getSnackbar("Doğrulama tamamlandı."),
         );
 
-        Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
+        // Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
       },
       // hata
       verificationFailed: (FirebaseAuthException e) {
@@ -150,7 +146,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
 
           firebaseUserConfig(auth, context);
 
-          Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
+          // Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
         } catch (e) {
           ScaffoldMessenger.of(context)
               .showSnackBar(MySnackbar.getSnackbar(e.toString()));

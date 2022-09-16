@@ -166,7 +166,7 @@ class _GroupChatState extends State<GroupChat> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Text(
-                            snapshot.data.toString(),
+                            "${snapshot.data}, ",
                             style: const TextStyle(fontSize: 10),
                           );
                         } else {

@@ -39,8 +39,12 @@ class RouteGenerator {
         return _generateRoute(LoginControl(), settings);
       // burdan sonra logn controlden ilk defa giris yapıyosa login user
       // confge atsın, ordan da home page'e atsın
-      // return _generateRoute(LoginUserConfig(), settings);
-
+      /* return _generateRoute(
+            PhoneNoVerification(
+              phoneNo: settings.arguments as String,
+            ),
+            settings);
+          */
       case Constants.LOGIN_SCREEN_PATH:
         return _generateRoute(LoginScreen(), settings);
 

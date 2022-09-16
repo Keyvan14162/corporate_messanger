@@ -13,10 +13,16 @@ class SettingsMenuItems extends StatefulWidget {
 
 class _SettingsMenuItemsState extends State<SettingsMenuItems> {
   late FirebaseAuth auth;
+  final String providerId =
+      FirebaseAuth.instance.currentUser!.providerData[0].providerId;
+  // password
+  // google.com
+  // phone
 
   @override
   void initState() {
     auth = FirebaseAuth.instance;
+
     super.initState();
   }
 
@@ -30,23 +36,29 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
         }),
 
         // Hesap Doğrulama
-        createButton("Hesap Dogrulama", Icons.account_box, () async {
-          setState(() {
-            hesapDogrula(context);
-          });
-        }),
+        (providerId != "phone")
+            ? createButton("Hesap Dogrulama", Icons.account_box, () async {
+                setState(() {
+                  hesapDogrula(context);
+                });
+              })
+            : const SizedBox(),
 
         // Mail Change
-        createButton("Mail Değiştir", Icons.mail, () async {
-          Navigator.of(context)
-              .pushNamed(Constants.MAIL_CHNAGE_PATH, arguments: auth);
-        }),
+        (providerId == "password")
+            ? createButton("Mail Değiştir", Icons.mail, () async {
+                Navigator.of(context)
+                    .pushNamed(Constants.MAIL_CHNAGE_PATH, arguments: auth);
+              })
+            : const SizedBox(),
 
         // Password Change 141622
-        createButton("Sifre degistir", Icons.password, () async {
-          Navigator.of(context)
-              .pushNamed(Constants.PASSWORD_CHANGE_PATH, arguments: auth);
-        }),
+        (providerId == "password")
+            ? createButton("Sifre degistir", Icons.password, () async {
+                Navigator.of(context)
+                    .pushNamed(Constants.PASSWORD_CHANGE_PATH, arguments: auth);
+              })
+            : const SizedBox(),
 
         // Sign out user
         createButton("Sign Out cıkıs yap", Icons.exit_to_app, () {
