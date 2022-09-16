@@ -1,4 +1,4 @@
-# message
+# Corporate Messanger
 
 A message app for companies. App will save logs and more...
 Just started.
