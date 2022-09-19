@@ -26,7 +26,7 @@ class _GroupsState extends State<Groups> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
-            'Gruplar',
+            'Grups',
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           backgroundColor: Colors.white,
