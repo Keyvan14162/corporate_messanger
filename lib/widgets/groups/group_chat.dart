@@ -546,6 +546,7 @@ class _GroupChatState extends State<GroupChat> {
     String isReaded,
   ) {
     bool checkboxValue = false;
+
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(

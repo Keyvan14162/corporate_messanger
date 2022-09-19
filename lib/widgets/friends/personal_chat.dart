@@ -305,7 +305,10 @@ class _PersonalChatState extends State<PersonalChat> {
                       ),
                     );
                   } else {
-                    return const Icon(Icons.person);
+                    return const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    );
                   }
                 }),
             FutureBuilder(
@@ -315,10 +318,15 @@ class _PersonalChatState extends State<PersonalChat> {
                 if (snapshot.hasData) {
                   return Text(
                     snapshot.data.toString(),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   );
                 } else {
-                  return Text("No name found");
+                  return const Text(
+                    "No name found",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  );
                 }
               },
             ),
@@ -543,20 +551,6 @@ class _PersonalChatState extends State<PersonalChat> {
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             // SENDER NAME
-            /*
-            isSender
-                ? const SizedBox()
-                : FutureBuilder(
-                    future: getUserName(senderId),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data.toString());
-                      } else {
-                        return const Text("No Name Found");
-                      }
-                    },
-                  ),
-            */
             isImg == "true"
                 ? Column(
                     crossAxisAlignment: isSender
