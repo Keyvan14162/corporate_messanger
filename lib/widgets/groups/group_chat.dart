@@ -308,7 +308,7 @@ class _GroupChatState extends State<GroupChat> {
                       },
                     )
                 ],
-              )
+              ),
             ],
           ),
         ],

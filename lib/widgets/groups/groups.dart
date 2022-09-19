@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/helpers/group_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
@@ -84,18 +85,42 @@ class _GroupsState extends State<Groups> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(4),
                                     child: ListTile(
-                                      title: Text(
-                                        groupName,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                      subtitle: Text(
-                                        "Grup uyeleri isimleri gelsin ",
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        title: Text(
+                                          groupName,
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
-                                      ),
-                                    ),
+                                        subtitle: Row(
+                                          children: [
+                                            const Text(
+                                              "Grup members :  ",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            for (int i = 0;
+                                                i < groupUserIdList.length;
+                                                i++)
+                                              FutureBuilder(
+                                                future: getUserName(
+                                                    groupUserIdList[i]),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                      "${snapshot.data}, ",
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors.white,
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    return const SizedBox();
+                                                  }
+                                                },
+                                              )
+                                          ],
+                                        )),
                                   ),
                                 ),
                               )
