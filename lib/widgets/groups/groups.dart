@@ -88,7 +88,8 @@ class _GroupsState extends State<Groups> {
                                         title: Text(
                                           groupName,
                                           style: const TextStyle(
-                                              color: Colors.white),
+                                            color: Colors.white,
+                                          ),
                                         ),
                                         subtitle: Row(
                                           children: [
