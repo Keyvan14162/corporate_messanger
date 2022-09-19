@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
@@ -139,14 +138,15 @@ class _FriendsState extends State<Friends> {
                                                 ),
                                               ),
                                         title: Text(
-                                          "$name $userId",
+                                          // "$name $userId",
+                                          name,
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         // BURDA STREAMBUİLDER ILE GETLASTMESSAGE DINLI
                                         // O DA SON MESAJIN OLDUGU SNAPSHOTU DONSUN
 
                                         subtitle: Text(
-                                          "sdadasdad",
+                                          "Son gonderilen mesaj gelsin",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),

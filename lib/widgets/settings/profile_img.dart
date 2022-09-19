@@ -38,7 +38,6 @@ class _ProfileImgState extends State<ProfileImg> {
       clipBehavior: Clip.none,
       children: [
         // cover img
-
         FutureBuilder<String>(
           future: getDownloadUrl(widget.userId, "coverImg"),
           builder: (context, snapshot) {

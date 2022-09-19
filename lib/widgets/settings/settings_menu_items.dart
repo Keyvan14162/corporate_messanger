@@ -37,7 +37,7 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
 
         // Hesap Doğrulama
         (providerId != "phone")
-            ? createButton("Hesap Dogrulama", Icons.account_box, () async {
+            ? createButton("Account Verification", Icons.account_box, () async {
                 setState(() {
                   hesapDogrula(context);
                 });
@@ -46,7 +46,7 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
 
         // Mail Change
         (providerId == "password")
-            ? createButton("Mail Değiştir", Icons.mail, () async {
+            ? createButton("Change Mail", Icons.mail, () async {
                 Navigator.of(context)
                     .pushNamed(Constants.MAIL_CHNAGE_PATH, arguments: auth);
               })
@@ -54,25 +54,25 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
 
         // Password Change 141622
         (providerId == "password")
-            ? createButton("Sifre degistir", Icons.password, () async {
+            ? createButton("Change Password", Icons.password, () async {
                 Navigator.of(context)
                     .pushNamed(Constants.PASSWORD_CHANGE_PATH, arguments: auth);
               })
             : const SizedBox(),
 
         // Sign out user
-        createButton("Sign Out cıkıs yap", Icons.exit_to_app, () {
+        createButton("Sign Out", Icons.exit_to_app, () {
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              title: Text("Uyarı"),
-              content: Text("Çıkış yapmak istediğinize emin misiniz ?"),
+              title: Text("Warning"),
+              content: Text("Are you sure you want to log out?"),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text("Hayır"),
+                  child: const Text("No"),
                 ),
                 TextButton(
                   onPressed: () {
@@ -80,10 +80,10 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       MySnackbar.getSnackbar(
-                          "${auth.currentUser!.email} çıkış yaptı."),
+                          "${auth.currentUser!.email} signed out."),
                     );
                   },
-                  child: const Text("Evet"),
+                  child: const Text("Yes"),
                 ),
               ],
             ),
@@ -95,14 +95,14 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              title: Text("Uyarı"),
-              content: Text("Hesabınızı silmek istediğinize emin misiniz ?"),
+              title: Text("Warning"),
+              content: Text("Are you sure you want to delete your account ?"),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text("Hayır"),
+                  child: const Text("No"),
                 ),
                 TextButton(
                   onPressed: () async {
@@ -111,11 +111,11 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
                       Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        MySnackbar.getSnackbar("Silindi."),
+                        MySnackbar.getSnackbar("Deleted."),
                       );
                     }
                   },
-                  child: const Text("Evet"),
+                  child: const Text("Yes"),
                 ),
               ],
             ),
@@ -141,8 +141,10 @@ class _SettingsMenuItemsState extends State<SettingsMenuItems> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(iconData,
-                    color: Theme.of(context).primaryColor.withAlpha(500)),
+                Icon(
+                  iconData,
+                  color: Theme.of(context).primaryColor.withAlpha(500),
+                ),
                 const SizedBox(
                   width: 30,
                   height: 0,

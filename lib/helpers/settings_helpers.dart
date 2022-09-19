@@ -13,14 +13,18 @@ void hesapDogrula(BuildContext context) async {
   // hesabı dogrulayınca anlamıyo tekra giriş yapınca oluyo****
   if (FirebaseAuth.instance.currentUser != null) {
     if (FirebaseAuth.instance.currentUser!.emailVerified) {
-      ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-          "${FirebaseAuth.instance.currentUser!.email} hesabı doğrulanmıştır."));
+      ScaffoldMessenger.of(context).showSnackBar(
+        MySnackbar.getSnackbar(
+            "${FirebaseAuth.instance.currentUser!.email} account verified."),
+      );
     } else {
       try {
         await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
-        ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-            "Mailinize gonderilen linke tıklayarak hesabınızı dogrulaynız. Hesabın dogrulandıgını gormke icin uygulamaya tekrar giris yapınız"));
+        ScaffoldMessenger.of(context).showSnackBar(
+          MySnackbar.getSnackbar(
+              "Verify your account by clicking the link sent to your e-mail. Login to the application again to see that the account has been verified."),
+        );
       } catch (e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(MySnackbar.getSnackbar(e.toString()));
@@ -78,12 +82,17 @@ Future<bool> deleteUser(BuildContext context) async {
     } catch (e) {
       // requires login again
 
-      ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-          "Bu kritik bir işlemdir, silmek icin hesabınıza tekrar giris yapınız."));
+      ScaffoldMessenger.of(context).showSnackBar(
+        MySnackbar.getSnackbar(
+            "This is a critical operation, please login to your account again to delete it."),
+      );
     }
   } else if (FirebaseAuth.instance.currentUser == null) {
-    ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-        "Oturum açmamış durumdasınız, uygulamayı kapatıp tekrar deneyiniz"));
+    // oturum açmadan buraya geldiyse zaten sıkıntı buyuk
+    ScaffoldMessenger.of(context).showSnackBar(
+      MySnackbar.getSnackbar(
+          "Oturum açmamış durumdasınız, uygulamayı kapatıp tekrar deneyiniz"),
+    );
     return false;
   }
   return false;
@@ -122,7 +131,7 @@ void changeMail(
     await auth.currentUser!.updateEmail(yeniMail);
     await auth.signOut();
     ScaffoldMessenger.of(context).showSnackBar(
-      MySnackbar.getSnackbar("İlk try Yeni mailinizle giris yapabilirsiniz"),
+      MySnackbar.getSnackbar("İlk try You can login with your new e-mail."),
     );
     Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
     // hassas islem, firebase bidaha oturum ac once diyo
@@ -137,7 +146,7 @@ void changeMail(
       await auth.currentUser!.updateEmail(yeniMail);
       await auth.signOut();
       ScaffoldMessenger.of(context).showSnackBar(
-        MySnackbar.getSnackbar("Yeni mailinizle giris yapabilirsiniz"),
+        MySnackbar.getSnackbar("You can login with your new e-mail."),
       );
       Navigator.of(context).pushNamed(Constants.LOGIN_CONTROL_PATH);
     }
@@ -153,9 +162,15 @@ changeProfileImgGallery(BuildContext context, String userId) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Uyarı"),
-        content: const Text("Profil resminiz değiştirmek ister misiniz ?"),
+        title: const Text("Warning"),
+        content: const Text("Change profile picture ?"),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("No"),
+          ),
           TextButton(
             onPressed: () async {
               final ImagePicker picker = ImagePicker();
@@ -178,13 +193,7 @@ changeProfileImgGallery(BuildContext context, String userId) async {
               });
               Navigator.of(context).pushNamed(Constants.HOME_PAGE_PATH);
             },
-            child: const Text("Evet"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Hayır"),
+            child: const Text("Yes"),
           ),
         ],
       );
@@ -193,25 +202,27 @@ changeProfileImgGallery(BuildContext context, String userId) async {
 }
 
 changeCoverImgGallery(String userId) async {
-  // firestore'a id ile isimlendirip resmi atsın
-  // firebase de userin profileImg download urlsini degistrisin
-  final ImagePicker picker = ImagePicker();
-  // image quality max 100
-  XFile? file =
-      await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+  try {
+    // firestore'a id ile isimlendirip resmi atsın
+    // firebase de userin profileImg download urlsini degistrisin
+    final ImagePicker picker = ImagePicker();
+    // image quality max 100
+    XFile? file =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
 
-  var profileRef = FirebaseStorage.instance.ref("users/coverPics/${userId}");
+    var profileRef = FirebaseStorage.instance.ref("users/coverPics/${userId}");
 
-  var task = profileRef.putFile(File(file!.path));
+    var task = profileRef.putFile(File(file!.path));
 
-  task.whenComplete(() async {
-    var url = await profileRef.getDownloadURL();
-    // dbye url yi yazdircaz
+    task.whenComplete(() async {
+      var url = await profileRef.getDownloadURL();
+      // dbye url yi yazdircaz
 
-    FirebaseFirestore.instance
-        .doc("users/${userId}")
-        .update({"coverImg": url.toString()});
-  });
+      FirebaseFirestore.instance
+          .doc("users/${userId}")
+          .update({"coverImg": url.toString()});
+    });
+  } catch (e) {}
 }
 
 // user fieldalrinda kayitli olan coverImg ve profileImg aliyor
