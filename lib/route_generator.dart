@@ -64,7 +64,8 @@ class RouteGenerator {
       case Constants.IMG_PAGE_PATH:
         return _generateRoute(
             ImgPage(
-              imgUrl: settings.arguments as String,
+              imgUrl: (settings.arguments as List<String>)[0],
+              sendDate: (settings.arguments as List<String>)[1],
             ),
             settings);
 

@@ -558,69 +558,87 @@ class _PersonalChatState extends State<PersonalChat> {
                   ),
             */
             isImg == "true"
-                ? GestureDetector(
-                    onLongPress: () {
-                      setState(() {
-                        hoverd = !hoverd;
-                      });
-                    },
-                    onTap: () {
-                      if (hoverd) {
-                        setState(() {
-                          hoverd = !hoverd;
-                        });
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                  Constants.IMG_PAGE_PATH,
-                                  arguments: imgUrl);
-                            },
-                            child: Hero(
-                              tag: imgUrl,
-                              child: Container(
-                                padding: isSender
-                                    ? const EdgeInsets.fromLTRB(48, 8, 0, 8)
-                                    : const EdgeInsets.fromLTRB(0, 8, 48, 8),
-                                decoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                ),
-                                child: Image.network(
-                                  imgUrl,
+                ? Column(
+                    crossAxisAlignment: isSender
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onLongPress: () {
+                          setState(() {
+                            hoverd = !hoverd;
+                          });
+                        },
+                        onTap: () {
+                          if (hoverd) {
+                            setState(() {
+                              hoverd = !hoverd;
+                            });
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                    Constants.IMG_PAGE_PATH,
+                                    arguments: [imgUrl, date],
+                                  );
+                                },
+                                child: Hero(
+                                  tag: imgUrl,
+                                  child: Container(
+                                    padding: isSender
+                                        ? const EdgeInsets.fromLTRB(48, 8, 0, 0)
+                                        : const EdgeInsets.fromLTRB(
+                                            0, 8, 48, 0),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.transparent,
+                                    ),
+                                    child: Image.network(
+                                      imgUrl,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            hoverd
+                                ? StatefulBuilder(builder: (context, setState) {
+                                    return isSender
+                                        ? Checkbox(
+                                            value: checkboxValue,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                checkboxValue = val!;
+                                                if (checkboxValue) {
+                                                  selectedMessagesId
+                                                      .add(messageId);
+                                                  selectedMessagesImgUrl
+                                                      .add(imgUrl);
+                                                } else {
+                                                  selectedMessagesId
+                                                      .remove(messageId);
+                                                  selectedMessagesImgUrl
+                                                      .remove(imgUrl);
+                                                }
+                                              });
+                                            })
+                                        : const SizedBox();
+                                  })
+                                : const SizedBox(),
+                          ],
                         ),
-                        hoverd
-                            ? StatefulBuilder(builder: (context, setState) {
-                                return isSender
-                                    ? Checkbox(
-                                        value: checkboxValue,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            checkboxValue = val!;
-                                            if (checkboxValue) {
-                                              selectedMessagesId.add(messageId);
-                                              selectedMessagesImgUrl
-                                                  .add(imgUrl);
-                                            } else {
-                                              selectedMessagesId
-                                                  .remove(messageId);
-                                              selectedMessagesImgUrl
-                                                  .remove(imgUrl);
-                                            }
-                                          });
-                                        })
-                                    : const SizedBox();
-                              })
-                            : const SizedBox(),
-                      ],
-                    ),
+                      ),
+                      Text(
+                        date,
+                        style: const TextStyle(
+                          //color: Colors.grey,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
                   )
                 : Column(
                     crossAxisAlignment: isSender
@@ -745,7 +763,8 @@ class _PersonalChatState extends State<PersonalChat> {
 
   _sendImageOnTap(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: source);
+    // image quality 100: original quality
+    XFile? file = await picker.pickImage(source: source, imageQuality: 100);
 
     var profileRef = FirebaseStorage.instance.ref(
         "users/messagePics/${FirebaseAuth.instance.currentUser!.uid}/${firestore.collection("users").doc().id}");

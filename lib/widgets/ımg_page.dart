@@ -6,8 +6,10 @@ import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ImgPage extends StatefulWidget {
-  const ImgPage({required this.imgUrl, Key? key}) : super(key: key);
+  const ImgPage({required this.imgUrl, required this.sendDate, Key? key})
+      : super(key: key);
   final String imgUrl;
+  final String sendDate;
 
   @override
   State<ImgPage> createState() => _ImgPageState();
@@ -20,13 +22,18 @@ class _ImgPageState extends State<ImgPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+        title: Text(
+          widget.sendDate,
+          style: const TextStyle(color: Colors.white),
+        ),
         elevation: 0,
         actions: [
           Padding(

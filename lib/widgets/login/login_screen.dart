@@ -31,10 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
     auth.authStateChanges().listen((User? user) {
       // giris yaptıyda yolla uygulama sayfasına
       // yoksa burdan giris yapsın
+
       if (user == null) {
-        print("User is currently signed out.");
+        print(" -------- User is currently signed out.");
       } else {
-        print("User signed in ${user.email} - ${user.emailVerified}");
+        print(" -------- User signed in ${user.email} - ${user.emailVerified}");
       }
     });
   }
