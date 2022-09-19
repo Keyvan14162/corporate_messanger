@@ -90,9 +90,10 @@ class _GroupsState extends State<Groups> {
                                             color: Colors.white),
                                       ),
                                       subtitle: Text(
-                                        "sdadasdad",
+                                        "Grup uyeleri isimleri gelsin ",
                                         style: const TextStyle(
-                                            color: Colors.white),
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),

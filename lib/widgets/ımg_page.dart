@@ -19,6 +19,14 @@ class _ImgPageState extends State<ImgPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
         elevation: 0,
         actions: [
           Padding(
@@ -31,6 +39,7 @@ class _ImgPageState extends State<ImgPage> {
               },
               icon: const Icon(
                 Icons.share,
+                color: Colors.white,
               ),
             ),
           )

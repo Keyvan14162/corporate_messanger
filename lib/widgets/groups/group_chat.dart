@@ -287,6 +287,7 @@ class _GroupChatState extends State<GroupChat> {
                   color: Colors.white,
                 ),
               ),
+              // group members names
               Row(
                 children: [
                   for (int i = 0; i < widget.groupUserIdList.length; i++)

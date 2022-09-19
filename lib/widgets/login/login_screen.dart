@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           labelText: "Password",
                           hintText: "Password",
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                         ),
                         onSaved: (deger) {
                           _pass = deger!;

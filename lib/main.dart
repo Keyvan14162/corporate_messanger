@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      // home defined here
       onGenerateRoute: RouteGenerator.routeGenrator,
       title: "corporate-messaging",
       theme: ThemeData(
@@ -34,6 +35,17 @@ class MyApp extends StatelessWidget {
 
         // primaryColor: Colors.blue,
         // secondaryHeaderColor: Colors.green,
+
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.black),
+          color: Colors.teal,
+          foregroundColor: Colors.black,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.teal,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+        ),
       ),
     );
   }

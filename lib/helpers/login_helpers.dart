@@ -180,7 +180,8 @@ chooseProfileImg(String userId, ImageSource source) async {
   // firestore'a id ile isimlendirip resmi atsın
   // firebase de userin profileImg download urlsini degistrisin
   final ImagePicker picker = ImagePicker();
-  XFile? file = await picker.pickImage(source: source);
+  // image quality max 100
+  XFile? file = await picker.pickImage(source: source, imageQuality: 25);
 
   var profileRef = FirebaseStorage.instance.ref("users/profilePics/${userId}");
 

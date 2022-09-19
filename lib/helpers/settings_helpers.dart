@@ -159,7 +159,9 @@ changeProfileImgGallery(BuildContext context, String userId) async {
           TextButton(
             onPressed: () async {
               final ImagePicker picker = ImagePicker();
-              XFile? file = await picker.pickImage(source: ImageSource.gallery);
+              // image quality max 100
+              XFile? file = await picker.pickImage(
+                  source: ImageSource.gallery, imageQuality: 25);
 
               var profileRef =
                   FirebaseStorage.instance.ref("users/profilePics/${userId}");
@@ -194,7 +196,9 @@ changeCoverImgGallery(String userId) async {
   // firestore'a id ile isimlendirip resmi atsın
   // firebase de userin profileImg download urlsini degistrisin
   final ImagePicker picker = ImagePicker();
-  XFile? file = await picker.pickImage(source: ImageSource.gallery);
+  // image quality max 100
+  XFile? file =
+      await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
 
   var profileRef = FirebaseStorage.instance.ref("users/coverPics/${userId}");
 
