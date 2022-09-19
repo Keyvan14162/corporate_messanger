@@ -605,8 +605,17 @@ class _GroupChatState extends State<GroupChat> {
                                     decoration: const BoxDecoration(
                                       color: Colors.transparent,
                                     ),
-                                    child: Image.network(
-                                      imgUrl,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2.0),
+                                      decoration: BoxDecoration(
+                                        color: isSender
+                                            ? Theme.of(context)
+                                                .secondaryHeaderColor
+                                            : Theme.of(context).primaryColor,
+                                      ),
+                                      child: Image.network(
+                                        imgUrl,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -688,8 +697,8 @@ class _GroupChatState extends State<GroupChat> {
                                     bottomRight: const Radius.circular(8),
                                   ),
                                   color: (isSender
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.blueGrey.shade600),
+                                      ? Theme.of(context).secondaryHeaderColor
+                                      : Theme.of(context).primaryColor),
                                 ),
                                 child: Container(
                                   margin: const EdgeInsets.only(
