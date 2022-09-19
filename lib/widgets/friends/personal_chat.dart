@@ -590,8 +590,17 @@ class _PersonalChatState extends State<PersonalChat> {
                                     decoration: const BoxDecoration(
                                       color: Colors.transparent,
                                     ),
-                                    child: Image.network(
-                                      imgUrl,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2.0),
+                                      decoration: BoxDecoration(
+                                        color: isSender
+                                            ? Theme.of(context)
+                                                .secondaryHeaderColor
+                                            : Theme.of(context).primaryColor,
+                                      ),
+                                      child: Image.network(
+                                        imgUrl,
+                                      ),
                                     ),
                                   ),
                                 ),
