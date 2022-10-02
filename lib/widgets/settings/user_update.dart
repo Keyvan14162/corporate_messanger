@@ -54,7 +54,7 @@ class _UserUpdateState extends State<UserUpdate> {
                 color: Theme.of(context).primaryColor,
               )),
           title: Text(
-            "Edit the fields",
+            "Change User Informations",
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
         ),
@@ -127,6 +127,9 @@ class _UserUpdateState extends State<UserUpdate> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            controller: TextEditingController(
+                              text: (snapshot.data as DocumentSnapshot)["name"],
+                            ),
                             decoration: InputDecoration(
                               labelText:
                                   (snapshot.data as DocumentSnapshot)["name"],
@@ -195,6 +198,9 @@ class _UserUpdateState extends State<UserUpdate> {
                     stream: getUserStream(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
+                        _textEditingController.text =
+                            (snapshot.data as DocumentSnapshot)["birthdate"];
+
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(

@@ -550,7 +550,6 @@ class _PersonalChatState extends State<PersonalChat> {
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            // SENDER NAME
             isImg == "true"
                 ? Column(
                     crossAxisAlignment: isSender
@@ -643,6 +642,7 @@ class _PersonalChatState extends State<PersonalChat> {
                       ),
                     ],
                   )
+                // img degilse text
                 : Column(
                     crossAxisAlignment: isSender
                         ? CrossAxisAlignment.end
