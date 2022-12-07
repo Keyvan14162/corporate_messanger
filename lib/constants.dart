@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:image_picker/image_picker.dart';
-
 const String LOGIN_SCREEN_PATH = "/loginScreen"; // girisEkrani
 const String PASSWORD_CHANGE_PATH = "/passwordChange"; // sifreDegistir
 const String MAIL_CHNAGE_PATH = "/mailChange"; // mailDegistr

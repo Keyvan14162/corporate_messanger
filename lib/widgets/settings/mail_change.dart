@@ -35,8 +35,8 @@ class _MailChangeState extends State<MailChange> {
                     keyboardType: TextInputType.emailAddress,
                     autofocus: true,
                     decoration: const InputDecoration(
-                      labelText: "Yeni mail",
-                      hintText: "Yeni mail",
+                      labelText: "New mail",
+                      hintText: "New mail",
                       border: OutlineInputBorder(),
                     ),
                     onSaved: (deger) {
@@ -44,7 +44,7 @@ class _MailChangeState extends State<MailChange> {
                     },
                     validator: (deger) {
                       if (deger!.length < 10) {
-                        return "Mail 10 karakterdne kucuk olamaz";
+                        return "Mail can't be smaller than 10 chracters";
                       } else {
                         return null;
                       }
@@ -68,29 +68,29 @@ class _MailChangeState extends State<MailChange> {
                         showDialog(
                           context: context,
                           builder: (_) => AlertDialog(
-                            title: Text("Uyarı"),
+                            title: Text("Alert"),
                             content: Text(
-                                "Mailinizi değiştirmek istediğinizden emin misiniz ?"),
+                                "Are you sure taht you want to change your mail?"),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context)
                                       .pushNamed(Constants.SETTINGS_PATH);
                                 },
-                                child: const Text("Hayır"),
+                                child: const Text("No"),
                               ),
                               TextButton(
                                 onPressed: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     MySnackbar.getSnackbar(
-                                        "Yeni mail : $_yeniMail"),
+                                        "New mail : $_yeniMail"),
                                   );
 
                                   changeMail(_yeniMail, widget.auth, context);
                                   Navigator.of(context)
                                       .pushNamed(Constants.SETTINGS_PATH);
                                 },
-                                child: const Text("Evet"),
+                                child: const Text("Yes"),
                               ),
                             ],
                           ),
@@ -102,7 +102,7 @@ class _MailChangeState extends State<MailChange> {
                       children: const [
                         Icon(Icons.login, color: Colors.white),
                         Text(
-                          "Degistir",
+                          "Change",
                           maxLines: 1,
                           style: TextStyle(color: Colors.white),
                         ),

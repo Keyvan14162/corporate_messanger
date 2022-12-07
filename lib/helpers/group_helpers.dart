@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -113,14 +112,14 @@ leaveGroup(String groupId, BuildContext context) async {
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text("Uyarı"),
-      content: Text("Gruptan ayrılınsın mı ?"),
+      title: Text("Alert"),
+      content: Text("Leave group ?"),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Hayır"),
+          child: const Text("No"),
         ),
         TextButton(
           onPressed: () async {
@@ -159,9 +158,9 @@ leaveGroup(String groupId, BuildContext context) async {
             Navigator.of(context).pop();
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context)
-                .showSnackBar(MySnackbar.getSnackbar("Gruptan ayrıldın."));
+                .showSnackBar(MySnackbar.getSnackbar("You leaved from group."));
           },
-          child: const Text("Evet"),
+          child: const Text("Yes"),
         ),
       ],
     ),

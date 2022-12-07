@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/widgets/friends/friends.dart';
 import 'package:flutter_firebase_auth/widgets/groups/groups.dart';
 import 'package:flutter_firebase_auth/widgets/settings/settings.dart';
-import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -170,10 +170,10 @@ class _GroupAddFriendState extends State<GroupAddFriend> {
                   Navigator.of(context).pop();
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                      MySnackbar.getSnackbar("Kişiler gruba eklendi."));
+                      MySnackbar.getSnackbar("Persons added to group"));
                 }
               },
-              label: const Text('Gruba Ekle'),
+              label: const Text('Add to Group'),
               icon: const Icon(Icons.group),
               backgroundColor: Colors.pink,
             ),

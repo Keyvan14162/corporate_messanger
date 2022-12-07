@@ -91,7 +91,7 @@ Future<bool> deleteUser(BuildContext context) async {
     // oturum açmadan buraya geldiyse zaten sıkıntı buyuk
     ScaffoldMessenger.of(context).showSnackBar(
       MySnackbar.getSnackbar(
-          "Oturum açmamış durumdasınız, uygulamayı kapatıp tekrar deneyiniz"),
+          "You are logged in, close the application and try again"),
     );
     return false;
   }
@@ -130,9 +130,11 @@ void changeMail(
   try {
     await auth.currentUser!.updateEmail(yeniMail);
     await auth.signOut();
+    /*
     ScaffoldMessenger.of(context).showSnackBar(
       MySnackbar.getSnackbar("İlk try You can login with your new e-mail."),
     );
+    */
     Navigator.of(context).pushNamed(Constants.LOGIN_SCREEN_PATH);
     // hassas islem, firebase bidaha oturum ac once diyo
     // hata fırlatıyo bunun icin

@@ -79,7 +79,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
                     children: const [
                       Icon(Icons.login, color: Colors.white),
                       Text(
-                        "Doğrulama Kodu Gönder",
+                        "Send Verification Code",
                         maxLines: 1,
                         style: TextStyle(color: Colors.white),
                       ),
@@ -110,7 +110,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
         await firebaseUserConfig(auth, context);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          MySnackbar.getSnackbar("Doğrulama tamamlandı."),
+          MySnackbar.getSnackbar("Verification complated."),
         );
 
         // Navigator.of(context).pushNamed(Constants.LOGIN_USER_CONFIG_PATH);
@@ -118,8 +118,8 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
       // hata
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          ScaffoldMessenger.of(context).showSnackBar(
-              MySnackbar.getSnackbar("Girilen numara uygun değil."));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(MySnackbar.getSnackbar("Number is not valid"));
         }
       },
       // kullaniciya 6 karakterli numara yollaniyo, burda o kodu iste
@@ -129,8 +129,8 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
           // ui ile kulanicidan girilen kodu al, bu kullanicin girdigi kod
           String smsCode = "";
 
-          ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-              "Lütfen numaranıza gönderilen kodu giriniz."));
+          ScaffoldMessenger.of(context).showSnackBar(
+              MySnackbar.getSnackbar("Please enter verification code"));
 
           await Navigator.of(context)
               .pushNamed(Constants.PHONE_NO_VERIFICATION_PATH)
@@ -145,7 +145,7 @@ class _PhoneNoLoginState extends State<PhoneNoLogin> {
           await auth.signInWithCredential(credential);
 
           ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-              "${auth.currentUser!.phoneNumber} kayıt oldu."));
+              "${auth.currentUser!.phoneNumber} entered."));
 
           firebaseUserConfig(auth, context);
 

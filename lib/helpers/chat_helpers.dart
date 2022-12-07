@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/models/message_model.dart';
-import 'package:flutter_firebase_auth/constants.dart' as Constants;
 
 //
 getAllUsers() {
@@ -119,14 +118,14 @@ removeFriend(String senderId, String reciverId, BuildContext context,
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text("Uyarı"),
-      content: Text("Seçilen Mesajlar silinsin mi ?"),
+      title: Text("Alert"),
+      content: Text("Delete selected messages ?"),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Hayır"),
+          child: const Text("No"),
         ),
         TextButton(
           onPressed: () async {
@@ -177,7 +176,7 @@ removeFriend(String senderId, String reciverId, BuildContext context,
               Navigator.of(context).pop();
             }
           },
-          child: const Text("Evet"),
+          child: const Text("Yes"),
         ),
       ],
     ),

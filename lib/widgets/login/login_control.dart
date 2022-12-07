@@ -40,7 +40,7 @@ class _LoginControlState extends State<LoginControl> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text("Bilgiler Kontrol Ediliyor..."),
+        child: Text("Controlling Informations..."),
       ),
     );
   }

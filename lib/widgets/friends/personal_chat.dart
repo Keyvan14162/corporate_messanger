@@ -462,7 +462,7 @@ class _PersonalChatState extends State<PersonalChat> {
                                     Icons.photo_camera,
                                     color: Theme.of(context).primaryColor,
                                   ),
-                                  const Text("Kamera"),
+                                  const Text("Camera"),
                                 ],
                               ),
                             ),
@@ -478,7 +478,7 @@ class _PersonalChatState extends State<PersonalChat> {
                                     Icons.image,
                                     color: Theme.of(context).primaryColor,
                                   ),
-                                  const Text("Galeri"),
+                                  const Text("Gallery"),
                                 ],
                               ),
                             )
@@ -807,14 +807,14 @@ class _PersonalChatState extends State<PersonalChat> {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text("Uyarı"),
-          content: Text("Seçilen Mesajlar silinsin mi ?"),
+          title: Text("Alert"),
+          content: Text("Delete selected messages ?"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Hayır"),
+              child: const Text("No"),
             ),
             TextButton(
               onPressed: () {
@@ -850,7 +850,7 @@ class _PersonalChatState extends State<PersonalChat> {
 
                 Navigator.of(context).pop();
               },
-              child: const Text("Evet"),
+              child: const Text("Yes"),
             ),
           ],
         ),

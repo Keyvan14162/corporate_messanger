@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/helpers/settings_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
 import 'package:flutter_firebase_auth/widgets/my_snackbar.dart';
 
@@ -36,8 +35,8 @@ class _PasswordChangeState extends State<PasswordChange> {
                     keyboardType: TextInputType.emailAddress,
                     autofocus: true,
                     decoration: const InputDecoration(
-                      labelText: "Yeni sifre",
-                      hintText: "Yeni sifre",
+                      labelText: "New password",
+                      hintText: "New password",
                       border: OutlineInputBorder(),
                     ),
                     onSaved: (deger) {
@@ -45,7 +44,7 @@ class _PasswordChangeState extends State<PasswordChange> {
                     },
                     validator: (deger) {
                       if (deger!.length < 5) {
-                        return "Sifre 5 karakterdne kucuk olamaz";
+                        return "Password can't be smaller than 5 chracters";
                       } else {
                         return null;
                       }
@@ -57,8 +56,8 @@ class _PasswordChangeState extends State<PasswordChange> {
                   // yeni sifre tekrar
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: "Yeni sifre tekrar",
-                      hintText: "Yeni sifre tekrar",
+                      labelText: "New password again",
+                      hintText: "New password again",
                       border: OutlineInputBorder(),
                     ),
                     onSaved: (deger) {
@@ -67,7 +66,7 @@ class _PasswordChangeState extends State<PasswordChange> {
                     validator: (deger) {
                       // email var ise true don
                       if (deger!.length < 5) {
-                        return "Sifre 5 karakterdne kucuk olamaz";
+                        return "Password can't be smaller than 5 chracters";
                       } else {
                         return null;
                       }
@@ -90,27 +89,28 @@ class _PasswordChangeState extends State<PasswordChange> {
                         showDialog(
                           context: context,
                           builder: (_) => AlertDialog(
-                            title: Text("Uyarı"),
+                            title: Text("Alert"),
                             content: Text(
-                                "Şifrenizi değiştirmek istediğinizden emin misiniz ?"),
+                                "Are you sure taht you want to change your password?"),
                             actions: [
                               TextButton(
                                   onPressed: () {
                                     Navigator.of(context)
                                         .pushNamed(Constants.SETTINGS_PATH);
                                   },
-                                  child: const Text("Hayır")),
+                                  child: const Text("No")),
                               TextButton(
-                                  onPressed: () {
-                                    changePassword(_yeniSifre);
+                                onPressed: () {
+                                  changePassword(_yeniSifre);
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        MySnackbar.getSnackbar(
-                                            "Yeni şifre : $_yeniSifre"));
-                                    Navigator.of(context)
-                                        .pushNamed(Constants.SETTINGS_PATH);
-                                  },
-                                  child: const Text("Evet")),
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      MySnackbar.getSnackbar(
+                                          "New password : $_yeniSifre"));
+                                  Navigator.of(context)
+                                      .pushNamed(Constants.SETTINGS_PATH);
+                                },
+                                child: const Text("Yes"),
+                              ),
                             ],
                           ),
                         );
@@ -121,7 +121,7 @@ class _PasswordChangeState extends State<PasswordChange> {
                       children: const [
                         Icon(Icons.login, color: Colors.white),
                         Text(
-                          "Degistir",
+                          "Change",
                           maxLines: 1,
                           style: TextStyle(color: Colors.white),
                         ),

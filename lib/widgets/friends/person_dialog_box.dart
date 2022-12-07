@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth/helpers/chat_helpers.dart';
 import 'package:flutter_firebase_auth/constants.dart' as Constants;
-import 'package:flutter_firebase_auth/widgets/settings/profile_img.dart';
 
 class PersonDialogBox extends StatelessWidget {
   const PersonDialogBox(

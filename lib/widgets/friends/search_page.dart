@@ -62,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
                     });
                   },
                 ),
-                hintText: 'Ara...',
+                hintText: 'Search...',
                 border: InputBorder.none,
               ),
             ),
@@ -112,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
                           ]);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        MySnackbar.getSnackbar("Önce arkadaş eklemelisiniz"),
+                        MySnackbar.getSnackbar("Sirst you should add a friend"),
                       );
                     }
                   },
@@ -156,7 +156,7 @@ class _SearchPageState extends State<SearchPage> {
                                                               context)
                                                           .showSnackBar(MySnackbar
                                                               .getSnackbar(
-                                                                  "$name arkadaş olarak eklendi"));
+                                                                  "$name added as friend"));
                                                     },
                                                     icon: const Icon(
                                                       Icons.person_add_alt,

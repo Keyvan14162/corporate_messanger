@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // PASSWORD
                       TextFormField(
-                        initialValue: "kamilkoc14162",
+                        initialValue: "123456789",
                         obscureText: hidePass, // gizle
                         // sifre gizle
                         decoration: InputDecoration(
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     children: const [
                                       Icon(Icons.login, color: Colors.white),
                                       Text(
-                                        "Kayıt Ol",
+                                        "Sign in",
                                         maxLines: 1,
                                         style: TextStyle(color: Colors.white),
                                       ),
@@ -264,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Theme.of(context).primaryColor,
                                       ),
                                       Text(
-                                        "Giriş Yap",
+                                        "Login",
                                         maxLines: 1,
                                         style: TextStyle(
                                           color: Theme.of(context).primaryColor,
@@ -354,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Colors.white,
                                       ),
                                       Text(
-                                        "Google ile Giriş Yap",
+                                        "Login with Google",
                                         maxLines: 1,
                                         style: TextStyle(
                                           color: Colors.white,
@@ -402,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Colors.white,
                                       ),
                                       Text(
-                                        "Telefon Numarası ile Giriş Yap",
+                                        "Login with Phone Number",
                                         maxLines: 1,
                                         style: TextStyle(
                                           color: Colors.white,

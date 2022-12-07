@@ -146,7 +146,7 @@ class _FriendsState extends State<Friends> {
                                         // O DA SON MESAJIN OLDUGU SNAPSHOTU DONSUN
 
                                         subtitle: Text(
-                                          "Son gonderilen mesaj gelsin",
+                                          "-",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),

@@ -26,7 +26,7 @@ class _GroupsState extends State<Groups> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
-            'Grups',
+            'Groups',
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           backgroundColor: Colors.white,
@@ -94,7 +94,7 @@ class _GroupsState extends State<Groups> {
                                         subtitle: Row(
                                           children: [
                                             const Text(
-                                              "Grup members :  ",
+                                              "Group members :  ",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,

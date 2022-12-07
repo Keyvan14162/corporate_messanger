@@ -14,7 +14,7 @@ class MySnackbar {
         ),
       ),
       action: SnackBarAction(
-        label: 'Tamam',
+        label: 'Ok',
         onPressed: () {},
       ),
     );

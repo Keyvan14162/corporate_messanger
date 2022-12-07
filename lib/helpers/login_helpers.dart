@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -91,7 +90,7 @@ Future<User?> loginEmailAndPass(
   } catch (e) {
     // print(e.toString());
     ScaffoldMessenger.of(context).showSnackBar(MySnackbar.getSnackbar(
-        "Email: $email \n Şifre: $pass\n  ${e.toString()}."));
+        "E-mail: $email \n Password: $pass\n  ${e.toString()}."));
   }
   return null;
 }

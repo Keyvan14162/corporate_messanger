@@ -37,7 +37,7 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
           child: TextFormField(
             autofocus: true,
             decoration: const InputDecoration.collapsed(
-              hintText: "Grup ismi giriniz",
+              hintText: "Enter a group name",
               hintStyle: TextStyle(color: Colors.grey),
             ),
             onChanged: (value) {
@@ -45,9 +45,9 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
             },
             validator: (value) {
               if (value!.isEmpty) {
-                return "Lütfen Grup İsmini Belirtiniz";
+                return "Please Provide a Group Name";
               } else if (value.length > 40) {
-                return "En fazla 40 karakter girebilirsiniz";
+                return "Max 40 chracters";
               } else {
                 return null;
               }
@@ -60,7 +60,7 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
         children: [
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text("Grup Kişilerini Ekleyiniz"),
+            child: Text("Add Group Members"),
           ),
           Flexible(
             child: StreamBuilder(
@@ -167,7 +167,7 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
               onPressed: () async {
                 createGroup();
               },
-              label: const Text('Grup Oluştur'),
+              label: const Text('Create Group'),
               icon: const Icon(Icons.add),
               backgroundColor: Colors.pink,
             ),
@@ -210,12 +210,12 @@ class _GroupCreatePageState extends State<GroupCreatePage> {
 
       formKey.currentState!.reset();
       ScaffoldMessenger.of(context).showSnackBar(
-        MySnackbar.getSnackbar("$groupName grubu oluşturuldu."),
+        MySnackbar.getSnackbar("$groupName group created"),
       );
       Navigator.of(context).pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        MySnackbar.getSnackbar("Grup Oluşturulamadı"),
+        MySnackbar.getSnackbar("Grup could'nt created"),
       );
     }
   }
