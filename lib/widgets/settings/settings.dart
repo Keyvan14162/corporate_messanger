@@ -46,10 +46,10 @@ class _SettingsState extends State<Settings> {
                   userName: getUserName(auth.currentUser!.uid),
                 ),
                 SizedBox(height: profileHeight / 2 + 10),
-                Text("Name : ${auth.currentUser!.uid}"),
+                Text("Id : ${auth.currentUser!.uid}"),
                 Text("Email : ${auth.currentUser!.email}"),
                 Text("Mail verified : ${auth.currentUser!.emailVerified}"),
-                Text("Telefon : ${auth.currentUser!.phoneNumber}"),
+                Text("Phone number : ${auth.currentUser!.phoneNumber}"),
                 const SettingsMenuItems(),
                 /*
                 Text(
