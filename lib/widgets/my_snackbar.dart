@@ -65,14 +65,17 @@ class MySnackbar {
                         ),
                         child: IconButton(
                           onPressed: () {
-                            chooseProfileImg(
-                              FirebaseAuth.instance.currentUser!.uid,
-                              ImageSource.camera,
-                            );
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              getSnackbar("Image Succesfully Changed."),
-                            );
+                            try {
+                              chooseProfileImg(
+                                FirebaseAuth.instance.currentUser!.uid,
+                                ImageSource.camera,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                getSnackbar("Image Succesfully Changed."),
+                              );
+                            } catch (e) {}
                           },
                           icon: const Icon(
                             Icons.camera_alt,
@@ -105,14 +108,17 @@ class MySnackbar {
                         ),
                         child: IconButton(
                           onPressed: () {
-                            chooseProfileImg(
-                              FirebaseAuth.instance.currentUser!.uid,
-                              ImageSource.gallery,
-                            );
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              getSnackbar("Image Succesfully Changed."),
-                            );
+                            try {
+                              chooseProfileImg(
+                                FirebaseAuth.instance.currentUser!.uid,
+                                ImageSource.gallery,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                getSnackbar("Image Succesfully Changed."),
+                              );
+                            } catch (e) {}
                           },
                           icon: const Icon(
                             Icons.browse_gallery,
