@@ -8,13 +8,16 @@ A messaging application that allows you to message other people in the applicati
 <a href="https://github.com/Keyvan14162/corporate_messanger/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Keyvan14162/awesome-github-profile-readme?color=2b9348"></a>
 <a href="https://github.com/Keyvan14162/corporate_messanger/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Keyvan14162/corporate_messanger?color=2b9348" alt="License Badge"/></a>
 
+
+[![Promotion Video](https://img.youtube.com/vi/o_Eret0jVSg/maxresdefault.jpg)](https://youtu.be/o_Eret0jVSg)
+
 > Frebase Realtime Databese, Storage, Authentication
 
 # Login Page
 - [x] Login with Email
 - [x] Login with Google
 - [x] Login with Phone Number
-<p> <img src="./assets/1.png" width="356" title="hover text"> </p>
+<p> <img src="./assets/1.png" width="356" title="login page"> </p>
 
 
 # Settings Page
@@ -25,15 +28,15 @@ A messaging application that allows you to message other people in the applicati
 - [x] Change Password (if u logged with email)
 - [x] Sign Out
 - [x] Delete Account and All Messages (from other users to)
-<p> <img src="./assets/2.png" width="356" title="hover text"> </p>
+<p> <img src="./assets/2.png" width="356" title="settings page"> </p>
 
 
 # Message Page
 - [x] Search by Username
 - [x] Add Other Users as Friend
 - [x] Chat with Them
-<p> <img src="./assets/3.a.png" width="356" title="hover text">
-<img src="./assets/3.b.png" width="356" title="hover text"> </p>
+<p> <img src="./assets/3.a.png" width="356" title="message page">
+<img src="./assets/3.b.png" width="356" title="message page"> </p>
 
 
 # Personal Chat Page
@@ -41,8 +44,8 @@ A messaging application that allows you to message other people in the applicati
 - [x] Send Imgaes from Camera and Gallery
 - [x] Press and Hold Messages to Delete (also deletes from your friend)
 - [x] Click Image to Zoom In
-<p> <img src="./assets/4.a.png" width="356" title="hover text"> 
-<img src="./assets/4.b.png" width="356" title="hover text"> </p>
+<p> <img src="./assets/4.a.png" width="356" title="personal chat page"> 
+<img src="./assets/4.b.png" width="356" title="personal chat page"> </p>
 
 
 # Group Chat Page
@@ -50,6 +53,6 @@ A messaging application that allows you to message other people in the applicati
 - [x] Same Chat Features with Personal Chat Pgae 
 - [x] Add a Friend to Group After Creating Group
 - [x] Leave Group
-<p> <img src="./assets/5.a.png" width="356" title="hover text"> 
-<img src="./assets/5.b.png" width="356" title="hover text"> </p>
+<p> <img src="./assets/5.a.png" width="356" title="group chat page"> 
+<img src="./assets/5.b.png" width="356" title="grup chat page"> </p>
 
