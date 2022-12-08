@@ -93,8 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       // input projesin 2. den bakip email validator kullanabilin
                       TextFormField(
-                        initialValue:
-                            "ismailkyvsn2000@gmail.com", // starting value
                         keyboardType: TextInputType.emailAddress,
                         autofocus: false,
                         decoration: const InputDecoration(
@@ -124,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // PASSWORD
                       TextFormField(
-                        initialValue: "123456789",
                         obscureText: hidePass, // gizle
                         // sifre gizle
                         decoration: InputDecoration(

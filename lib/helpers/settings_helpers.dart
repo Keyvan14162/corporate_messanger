@@ -142,8 +142,8 @@ void changeMail(
   } on FirebaseAuthException catch (e) {
     if (e.code == "requires-recent-login") {
       // eski email_sifre_girisde aldıgımız email sifre, tekrar giris yapmış gibi
-      var credietial = EmailAuthProvider.credential(
-          email: "ismailkyvsn2000@gmail.com", password: "123456789");
+      var credietial =
+          EmailAuthProvider.credential(email: "new_email", password: "pass");
       await auth.currentUser!.reauthenticateWithCredential(credietial);
       await auth.currentUser!.updateEmail(yeniMail);
       await auth.signOut();

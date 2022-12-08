@@ -155,8 +155,8 @@ class _PasswordChangeState extends State<PasswordChange> {
         var credietial = EmailAuthProvider.credential(
             // KULLANICI EPOSTA VEYA SIFRE DEGISTIRDIYSE PATLIYO BURASI
             // KULLANICIDAN EMAIL VE ESKI SIFRESINI DE ISTEYEBILIN ONCE
-            email: "ismailkyvsn2000@gmail.com",
-            password: "123456789");
+            email: "email",
+            password: "new_pass");
         await widget.auth.currentUser!.reauthenticateWithCredential(credietial);
         await widget.auth.currentUser!.updatePassword(_yeniSifre);
         await widget.auth.signOut();
