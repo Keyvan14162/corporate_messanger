@@ -156,7 +156,7 @@ class _PasswordChangeState extends State<PasswordChange> {
             // KULLANICI EPOSTA VEYA SIFRE DEGISTIRDIYSE PATLIYO BURASI
             // KULLANICIDAN EMAIL VE ESKI SIFRESINI DE ISTEYEBILIN ONCE
             email: "ismailkyvsn2000@gmail.com",
-            password: "kamilkoc14162");
+            password: "123456789");
         await widget.auth.currentUser!.reauthenticateWithCredential(credietial);
         await widget.auth.currentUser!.updatePassword(_yeniSifre);
         await widget.auth.signOut();
